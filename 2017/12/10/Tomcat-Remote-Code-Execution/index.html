@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,远程代码执行," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01概述&amp;emsp;&amp;emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。 0x0">
+<meta name="keywords" content="java,远程代码执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat-Remote-Code-Execution">
+<meta property="og:url" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01概述&amp;emsp;&amp;emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。 0x0">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/1.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/2.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/3.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/4.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/5.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/6.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/7.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/8.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/9.png">
+<meta property="og:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/10.png">
+<meta property="og:updated_time" content="2018-03-05T14:03:02.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat-Remote-Code-Execution">
+<meta name="twitter:description" content="0x01概述&amp;emsp;&amp;emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。 0x0">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/"/>
+
+
+
+
+
+  <title>Tomcat-Remote-Code-Execution | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/10/Tomcat-Remote-Code-Execution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tomcat-Remote-Code-Execution</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-10T21:18:15+08:00">
+                2017-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/奇淫技巧/" itemprop="url" rel="index">
+                    <span itemprop="name">奇淫技巧</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01概述"><a href="#0x01概述" class="headerlink" title="0x01概述"></a>0x01概述</h1><p>&emsp;&emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。</p>
+<h1 id="0x02漏洞信息"><a href="#0x02漏洞信息" class="headerlink" title="0x02漏洞信息"></a>0x02漏洞信息</h1><ul>
+<li>漏洞名称:CVE-2017-12615-远程代码执行漏洞</li>
+<li>漏洞评级：影响范围不是很广，因为这个漏洞的默认配置文件都是不会受影响。</li>
+<li>漏洞利用条件：CVE-2017-12615漏洞利用需要在Windows环境，且需要将 readonly 初始化参数由默认值设置为 false。但是经过实际测试，在linux平台以及tomcat 8 9这个漏洞依然通杀。</li>
+<li>影响范围：CVE-2017-12615影响范围： Apache Tomcat 7 8 9 全版本</li>
+</ul>
+<h1 id="0x03漏洞环境搭建"><a href="#0x03漏洞环境搭建" class="headerlink" title="0x03漏洞环境搭建"></a>0x03漏洞环境搭建</h1><p>&emsp;&emsp;在/conf/web.xml文件中加入false，开启PUT模式。</p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/1.png" alt="1"></p>
+<h1 id="0x04原理分析"><a href="#0x04原理分析" class="headerlink" title="0x04原理分析"></a>0x04原理分析</h1><p>&emsp;&emsp;我们可以看到PUT模式默认是关闭的。</p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/2.png" alt="2"></p>
+<p>&emsp;&emsp;从这里可以看到处理jsp文件和静态文件涉及到了及到 DefaultServlet和 JspServlet。<br>&emsp;&emsp;DefaultServlet作用是处理静态文件，而JspServlet是用来处理jsp和jspx的请求。本次漏洞的根本原因是因为JspServlet不支持PUT，而DefaultServlet支持PUT方法，通过构造特殊后缀名字段绕过JspServlet,让DefaultServlet来处理这个文件，从而达到上传的效果。</p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/3.png" alt="3"></p>
+<p>&emsp;&emsp;定位DefaultServlet.java，重点看doPut，若readonly为true，直接抛出error，所以要触发漏洞必须将，readonly设置为false。</p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/4.png" alt="4"></p>
+<p>&emsp;&emsp;而且看到调用了resources.bind。</p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/5.png" alt="5"></p>
+<p>&emsp;&emsp;往下看看FileDirContext.java中的bind函数。调用rebind创建文件。</p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/6.png" alt="6"></p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/7.png" alt="7"></p>
+<h1 id="0x05漏洞复现"><a href="#0x05漏洞复现" class="headerlink" title="0x05漏洞复现"></a>0x05漏洞复现</h1><p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/8.png" alt="8"></p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/9.png" alt="9"></p>
+<p><img src="/2017/12/10/Tomcat-Remote-Code-Execution/10.png" alt="10"></p>
+<h1 id="0x06修复建议"><a href="#0x06修复建议" class="headerlink" title="0x06修复建议"></a>0x06修复建议</h1><p>&emsp;&emsp;禁用PUT！</p>
+<h1 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h1><p><a href="https://xianzhi.aliyun.com/forum/read.php?tid=2135&amp;displayMode=1&amp;page=1&amp;toread=1#tpc" target="_blank" rel="noopener">https://xianzhi.aliyun.com/forum/read.php?tid=2135&amp;displayMode=1&amp;page=1&amp;toread=1#tpc</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/远程代码执行/" rel="tag"># 远程代码执行</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/10/OnePlus-One-Nethunter/" rel="next" title="OnePlus-One-Nethunter">
+                <i class="fa fa-chevron-left"></i> OnePlus-One-Nethunter
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/03/PHP运算优先级小Tips/" rel="prev" title="PHP运算优先级小Tips">
+                PHP运算优先级小Tips <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01概述"><span class="nav-text">0x01概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02漏洞信息"><span class="nav-text">0x02漏洞信息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03漏洞环境搭建"><span class="nav-text">0x03漏洞环境搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04原理分析"><span class="nav-text">0x04原理分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05漏洞复现"><span class="nav-text">0x05漏洞复现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06修复建议"><span class="nav-text">0x06修复建议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考连接"><span class="nav-text">参考连接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
