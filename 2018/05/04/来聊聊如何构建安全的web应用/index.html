@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php,经验," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。 第一章 安全策略首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。 0x01 良好正确的心态最近经常">
+<meta name="keywords" content="php,经验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="来聊聊如何构建安全的web应用">
+<meta property="og:url" content="http://yoursite.com/2018/05/04/来聊聊如何构建安全的web应用/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。 第一章 安全策略首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。 0x01 良好正确的心态最近经常">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/05/04/来聊聊如何构建安全的web应用/1.png">
+<meta property="og:image" content="http://yoursite.com/2018/05/04/来聊聊如何构建安全的web应用/2.png">
+<meta property="og:updated_time" content="2018-05-04T14:39:34.379Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="来聊聊如何构建安全的web应用">
+<meta name="twitter:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。 第一章 安全策略首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。 0x01 良好正确的心态最近经常">
+<meta name="twitter:image" content="http://yoursite.com/2018/05/04/来聊聊如何构建安全的web应用/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/04/来聊聊如何构建安全的web应用/"/>
+
+
+
+
+
+  <title>来聊聊如何构建安全的web应用 | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/04/来聊聊如何构建安全的web应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">来聊聊如何构建安全的web应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T22:35:39+08:00">
+                2018-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/经验总结/" itemprop="url" rel="index">
+                    <span itemprop="name">经验总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。</p>
+<h1 id="第一章-安全策略"><a href="#第一章-安全策略" class="headerlink" title="第一章 安全策略"></a>第一章 安全策略</h1><p>首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。</p>
+<h2 id="0x01-良好正确的心态"><a href="#0x01-良好正确的心态" class="headerlink" title="0x01 良好正确的心态"></a>0x01 良好正确的心态</h2><p>最近经常遇到一个问题，业务重要还是安全重要。这个问题不知道怎么回答，安全的产出真的从眼睛上看不到，而且经常作为一个背锅位的存在。但是安全并不是一个特性，它其实不是一个简单的发现一个漏洞，安排程序员在规定时间做修复，就能搞定的事。它应该出现这个系统，这个程序刚开始规划设计的时候，就该把这个问题考虑进来，当然目前感觉安全的现状还是不太乐观，一直觉得安全是程序测试的一个分支，这只是个人觉得，大佬们如果觉得不对，欢迎指正。所以，安全总的来说是个从系统开始设计，系统运行，系统下线这几个阶段过程中，一个长期对抗的过程。如果作为业务开发者的你没有一个良好正确的心态，是我的话我肯定会崩溃，内心OS:”每天叫我修代码，修漏洞，又不是什么业务bug，有什么影响嘛“。</p>
+<h2 id="0x02-安全与可用之间的选择"><a href="#0x02-安全与可用之间的选择" class="headerlink" title="0x02 安全与可用之间的选择"></a>0x02 安全与可用之间的选择</h2><p>这个问题举个简单例子，就是我们登陆过程中的账号密码。互联网现在这么普及，受众肯定上有老，下有小。那么对于密码策略来说，对于记忆力不好的人，可能方便记忆经常使用一些123456，admin之类的密码。但是这些密码在攻击者眼里，就是我们常说的弱口令。那攻击者那弱口令暴力破解的时候，用户可能账号的密码就被破解了，破解之后账号就被攻击者盗取了。那么系统开发人员为了应对这些攻击，设计在注册的时候要求密码在大写、小写、数字、字符之间选择3个来，且保证密码长度为8位以上来的密码策略来应对，并且在登陆端设置了验证码，来预防暴力破解。对于用户端可惨了，又要记自己的密码，又要每次登陆输入验证码。即使有了验证码，也不一定安全，验证码绕过，验证码识别等。所以啊，就出现了12306的反人类验证码。</p>
+<p>一个系统如果我们设计过程中，用上各种手段来保证系统安全，势必会让这个系统的可用性下降，这两者之间如何选择，我觉得是门很深的学问。</p>
+<h2 id="0x03-安全监控"><a href="#0x03-安全监控" class="headerlink" title="0x03 安全监控"></a>0x03 安全监控</h2><p>当然，当系统上线之后，对于系统开发者工作丝毫停止。系统运行过程之中，需要通过系统日志监控其运行状态、安全状况，并且要保证系统出现安全问题时，能做到及时响应。</p>
+<p>所以啊，安全是个长期对抗的过程，每个人都不敢说自己的系统绝对安全，绝对没漏洞。而且当前大环境下似乎，攻击大于防御？</p>
+<h1 id="第二章-代码安全"><a href="#第二章-代码安全" class="headerlink" title="第二章 代码安全"></a>第二章 代码安全</h1><p>上面说了一堆废话，这里开始聊点其他的吧。作为开发人员，我觉得有一点一定要切记，不要相信用户的输入。所以第一步就是过滤用户的输入。</p>
+<h2 id="0x01-过滤用户输入"><a href="#0x01-过滤用户输入" class="headerlink" title="0x01 过滤用户输入"></a>0x01 过滤用户输入</h2><p>作为开发人员应该过滤所有来自外部的输入。如果能有效的过滤外部的输入，当然可以减少相当数量的安全威胁。</p>
+<h3 id="1-检查输入的期望值"><a href="#1-检查输入的期望值" class="headerlink" title="1. 检查输入的期望值"></a>1. 检查输入的期望值</h3><p>有的时候我们会设计一个表单，给用户提供一些选择方式。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>水果<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>请选择水果<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"test.php"</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"fruit"</span> <span class="attr">id</span>=<span class="string">"apple"</span> <span class="attr">value</span>=<span class="string">"apple"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"apple"</span>&gt;</span>apple<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"fruit"</span> <span class="attr">id</span>=<span class="string">"orange"</span> <span class="attr">value</span>=<span class="string">"orange"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"orange"</span>&gt;</span>orange<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"radio"</span> <span class="attr">name</span>=<span class="string">"fruit"</span> <span class="attr">id</span>=<span class="string">"other"</span> <span class="attr">value</span>=<span class="string">"other"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"other"</span>&gt;</span>other<span class="tag">&lt;/<span class="name">label</span>&gt;</span><span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">name</span>=<span class="string">"submit"</span>&gt;</span>submit<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们对于水果的期望值时apple、orange、other。但是如果我们的服务端输出是如下所示，可能我们就像错了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=$_POST[<span class="string">'fruit'</span>];</span><br><span class="line"><span class="keyword">echo</span> $a</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>首先PHP是门动态语言，所有的交互过程要经过客户端提交，服务端处理这个过程，但是在服务端处理的时候，我们直接信任用户的输入，这时候就可能会出现一些问题。因为传输过程中走的是HTTP协议，所以我们先看看HTTP数据包长什么样。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /test.php HTTP/1.1</span><br><span class="line">Host: localhost:8081</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://localhost:8081/form.html</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 19</span><br><span class="line"></span><br><span class="line">fruit=apple&amp;submit=</span><br></pre></td></tr></table></figure>
+<p>首先在这个HTTP数据包没有任何手段防止数据包传输过程中被篡改，我们可以尝试这样改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /test.php HTTP/1.1</span><br><span class="line">Host: localhost:8081</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://localhost:8081/form.html</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 19</span><br><span class="line"></span><br><span class="line">fruit=&lt;script&gt;alert(1)&lt;/script&gt;&amp;submit=</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/04/来聊聊如何构建安全的web应用/1.png" alt="1"></p>
+<p>这里就会产生一个叫跨站脚本攻击的漏洞，且期望值并不是我们想要的，所以有时候需要做一些处理。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=$_POST[<span class="string">'fruit'</span>];</span><br><span class="line"><span class="keyword">switch</span> ($a)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"apple"</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"orange"</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"other"</span>;</span><br><span class="line">        <span class="keyword">echo</span> $a;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"false"</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们假设用户提交的都不是我们期望的值，我们通过switch方法先检查用户的提交值，如果正确就输出，不正确就返回输入错误。这样我们就能保证数据在入库的时候，是我们想要的数据。</p>
+<h3 id="2-过滤基本值"><a href="#2-过滤基本值" class="headerlink" title="2. 过滤基本值"></a>2. 过滤基本值</h3><p>HTML表单元素没有类型定义，只能向服务器传递简单的字符串。因此即使表单设计出来只是为了传递一个简单的数字的时候，我们也不能相信用户输入了正确数据。即使你在前端，通过js等一些手段判断了数据是否是你想要的，但是在数据发送出来的那一刻，数据包是可以做修改的。所以在我们无法判断是否传入的是我们期望的值的时候，我们可以通过强制类型转换，将其输入转换为我们想要的期望值。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$number = (int)$_GET[<span class="string">"num"</span>];</span><br><span class="line"><span class="keyword">if</span> ($number == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"false"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> $number;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="3-确保字符串SQL语句的安全"><a href="#3-确保字符串SQL语句的安全" class="headerlink" title="3. 确保字符串SQL语句的安全"></a>3. 确保字符串SQL语句的安全</h3><p>所谓的SQL注入的产生原因是因为，SQL语句的拼接造成的，攻击者可以利用安全性较低的代码以及用户权限来执行一些不被期望的SQL语句。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$sql = <span class="string">"SELECT * FROM users where name='"</span>;</span><br><span class="line">$sql .= $_GET[<span class="string">"name"</span>].<span class="string">"'"</span>;</span><br></pre></td></tr></table></figure>
+<p>上面这一串代码由于将sql语句进行拼接，所以导致了sql注入的产生。如果避免SQL注入，个人理解主要是有两种办法。</p>
+<ul>
+<li>尽可能使用参数化查询语句，这种查询语句将SQL语句与数据隔离。但是对于列名称与表名称，无法实现隔离，因为无法通过参数查询传递列名称和表名称。其实这点也很好处理，作为开发者自然已经知道了数据库模式，因此可以使用白名单建立名称列表。</li>
+<li>确认所有的输入值符合期望值。比如我们通过数字id查询的时候，通过int强行转换输入的数据。假设我们输入了用户名和密码，用户名中最多只能是10个字符，且只能有数字和字母，这时候我们就可以确认”;select * from xxx”不是我们想要的数据了。在编写代码的时候，在数据入库检查的时候，我们可以尝试先判断输入值是否符合我们的预期。</li>
+</ul>
+<p>当然PHP针对SQL注入也做了努力：</p>
+<ul>
+<li><p>比如mysqli扩展增加了允许单查询执行的安全方法，单查询必须通过<code>mysqli_query()</code>或<code>myqli::query</code>方法执行。</p>
+</li>
+<li><p>要执行多个查询，比如使用<code>mysqli_multi_query()</code>或<code>mysql::multi_query</code>方法。</p>
+</li>
+<li><p>比如提供PDO预处理sql语句：</p>
+<p>提供给预处理语句的参数不需要用引号括起来，驱动程序会自动处理。如果应用程序只使用预处理语句，可以确保不会发生SQL 注入。（然而，如果查询的其他部分是由未转义的输入来构建的，则仍存在 SQL 注入的风险）。</p>
+</li>
+</ul>
+<h2 id="0x02-转义输出"><a href="#0x02-转义输出" class="headerlink" title="0x02 转义输出"></a>0x02 转义输出</h2><p>转义输出其实和过滤是有差别的，我的个人理解，过滤是当用于提交一些非期望值的时候，直接将其丢弃。而转义是当服务器接收到用户提交的值之后，通过几个特定函数将其转义之后，可以确保在客户端web浏览器上正确的输出，而不是被web浏览器所执行。</p>
+<p>举个例子，假设有个留言板功能，我们可以进行留言，如果使用过滤，我们提交过程中带有非期望值的时候，就无法提交数据。如果使用转义，即使提交恶意的HTML标签，我们也可以通过转义的方法，保证其以文本方式输出，而不被浏览器所解析。</p>
+<p>上面方法最简单解决方法就是通过<code>htmlspecialchars()</code>或者<code>htmlentities()</code>函数来解决。这些函数会检查用户的输入的字符串，当遇到特定字符时，就会将其转换为HTML实体。</p>
+<p>通常HTML所有的标签元素都是通过”&lt;”和”&gt;”来划分的。这里我们可以通过<code>&amp;lt;</code>和<code>&amp;gt;</code>来替换。同样”&amp;”这个字符可以通过<code>&amp;amp;</code>替换。单引号和双引号可以使用<code>&amp;#39;</code>和<code>&amp;qout;</code>来替换。</p>
+<p><code>htmlspecialchars()</code>和<code>htmlentities()</code>的区别在于，前者默认情况只替换”&amp;”，”&lt;”和”&gt;”，此外还有一个可选的开关设置用来确定是否替换单引号和双引号。而后者将替换所有由命名实体所表示的字符串。</p>
+<p>这两个函数的第二个参数将控制如何处理引号和无效代码序列：</p>
+<ul>
+<li>ENT_COMPAT(默认值)：双引号被转换为”&qout;”，但单引号不被转换。</li>
+<li>ENT_QUOTES：单引号和双引号都被转换，被分别转换为<code>&amp;#39;</code>和<code>&amp;qout;</code>。</li>
+<li>ENT_NOGUOYES：不转换单引号和双引号。</li>
+<li>ENT_IGNORE：无效代码序列将被静默方式忽略，即不报错。</li>
+<li>ENT_SUSTITUTE：无效代码序列将被替换成Unicode代替字符，不会返回空字符。</li>
+<li>ENT_DISALLOWED：无效代码序列将被替换成Unicode代替字符，不会保持原样。</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$input_str = <span class="string">"&lt;p align=\"center\"&gt;The user gave us \"€15000\".&lt;/p&gt;</span></span><br><span class="line"><span class="string">             &lt;script type=\"text/javascript\"&gt;</span></span><br><span class="line"><span class="string">             // malicious JavaScript code goes here.</span></span><br><span class="line"><span class="string">             &lt;/script&gt;"</span>;</span><br><span class="line"></span><br><span class="line">$str = htmlspecialchars($input_str,ENT_NOQUOTES,<span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="keyword">echo</span> nl2br($str);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"&lt;br /&gt;"</span>;</span><br><span class="line">$str = htmlentities($input_str,ENT_NOQUOTES,<span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="keyword">echo</span> nl2br($str);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>通过右键查看源代码<code>htmlspecialchars()</code>函数的输出是</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;p align="center"&amp;gt;The user gave us "€15000".&amp;lt;/p&amp;gt;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             &amp;lt;script type="text/javascript"&amp;gt;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             // malicious JavaScript code goes here.<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             &amp;lt;/script&amp;gt;</span><br></pre></td></tr></table></figure>
+<p><code>htmlentities()</code>函数的输出是</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;p align="center"&amp;gt;The user gave us "&amp;euro;15000".&amp;lt;/p&amp;gt;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             &amp;lt;script type="text/javascript"&amp;gt;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             // malicious JavaScript code goes here.<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             &amp;lt;/script&amp;gt;</span><br></pre></td></tr></table></figure>
+<p>而浏览器显示是这样</p>
+<p><img src="/2018/05/04/来聊聊如何构建安全的web应用/2.png" alt="2"></p>
+<p>这里两个函数的区别很明显了<code>€</code>在<code>htmlentities()</code>函数下转换成了<code>&amp;euro;</code>。</p>
+<h2 id="0x03-代码组织结构"><a href="#0x03-代码组织结构" class="headerlink" title="0x03 代码组织结构"></a>0x03 代码组织结构</h2><p>在一个开发过程中，任何不能被用户直接访问的文件都不应该保存在Web站点的文档树结构中。例如，所有的web源代码我可以放在/home/httpd/www中，那么我觉得所有的配置文件，应该放在/home/httpd/config之中。如果需要引用的时候，通过以下代码引入：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require_once</span>(<span class="string">'../config/config.php'</span>);</span><br></pre></td></tr></table></figure>
+<p>任何其他文件，例如，密码文件、文本文件、配置文件或特殊目录，都必须与一些公共的文档树目录隔离。当然不推荐一下的文件引入方式。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require_once</span>($_GET[<span class="string">'flag'</span>]);</span><br></pre></td></tr></table></figure>
+<p>这种情况下存在文件包含漏洞，如果在php.ini文件中启用了allow_url_fopen选项（该选项默认关闭），还可能存在远程包含漏洞。这些漏洞可能随时会让你的服务器沦陷。</p>
+<h2 id="0x04-代码自身问题"><a href="#0x04-代码自身问题" class="headerlink" title="0x04 代码自身问题"></a>0x04 代码自身问题</h2><p>所有访问数据库的代码，都直接明文写了数据库名称、用户名以及用明文表示的用户密码。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$conn = <span class="keyword">new</span> mysqli(<span class="string">"localhost"</span>,<span class="string">"root"</span>,<span class="string">"root"</span>,<span class="string">"test"</span>);</span><br></pre></td></tr></table></figure>
+<p>尽管这样写很方便，但是如果攻击者攻陷了web服务器，那么数据库的密码自然就泄漏了。所以啊，最好不要将用户名和密码的文件保存在web应用的文档树目录结构中，然后通过文件引入的方式，在脚本中引入文件。</p>
+<p>当然对于敏感数据，我个人认为前端或者客户端的加密很重要，你可能不知道程序员会犯何种错误。就拿今天刚发生的twitter事情来说，程序员失误将密码输出到调试的log日志中，并且密码是明文，这个如果被利用，那么影响真的是不容乐观。</p>
+<h2 id="0x05-文件系统因素"><a href="#0x05-文件系统因素" class="headerlink" title="0x05 文件系统因素"></a>0x05 文件系统因素</h2><p>PHP设计的过程中需要注意两个问题：</p>
+<ul>
+<li>写到硬盘的任何文件是否可以被其他人看到</li>
+<li>如果对于其他用户开放此功能，他们是否能够访问我们不希望别人访问的文件，例如/etc/passwd呢。</li>
+</ul>
+<p>当然写入文件的还需要考虑，写入文件的权限。如果代码存在缺陷，暴露了物理路径。在用户输入的时候没有执行严格过滤，用户可以输入”../../“等格式问题存在的时候，就会出现代码目录遍历的问题了。</p>
+<h2 id="0x06-代码稳定性和缺陷"><a href="#0x06-代码稳定性和缺陷" class="headerlink" title="0x06 代码稳定性和缺陷"></a>0x06 代码稳定性和缺陷</h2><p>任何文件上线前的安全评估，测试都是很重要的，但是现在往往一个程序开发商，没办法做到同步的产品安全测试，只能做产品的功能测试，这里如果我们在应用开始设计阶段就这么做的话，可能会好点。</p>
+<ul>
+<li>完成完整的产品设计阶段，可能的话还要设计原型。</li>
+<li>为所有项目分配尽可能多的测试人员，这样能保证交付到用户那边，能减少很多问题。</li>
+<li>当然人力的力量是有限的，我建议开发人员可以先使用自动化工具先进行测试，然后再交付给测试人员测试。</li>
+<li>部署应用交付之后，需要监视其允许，并且定期查看应用日志、用户/客户反馈等，并及时关注可能出现的漏洞。</li>
+</ul>
+<h2 id="0x07-执行命令"><a href="#0x07-执行命令" class="headerlink" title="0x07 执行命令"></a>0x07 执行命令</h2><p>很多时候，可能系统需要执行一些命令，要完成自己的操作，例如以下代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">  system(<span class="string">"ping -c 2 "</span>.$_GET[<span class="string">'ip'</span>]);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>该代码原先我们只想用户传入ip地址，但是这里没有任何过滤，用户可以通过传入ip+命令的方式进行命令执行。但是通常情况下我们都希望web服务器和PHP在较低的权限环境下运行，但是如果要允许命令需要一些其他权限，所以为了安全，需要尽可能过滤用户的输入。</p>
+<h1 id="第三章-Web服务器和PHP的安全"><a href="#第三章-Web服务器和PHP的安全" class="headerlink" title="第三章 Web服务器和PHP的安全"></a>第三章 Web服务器和PHP的安全</h1><h2 id="0x01-保持软件更新"><a href="#0x01-保持软件更新" class="headerlink" title="0x01 保持软件更新"></a>0x01 保持软件更新</h2><h3 id="1-设置新版本"><a href="#1-设置新版本" class="headerlink" title="1.设置新版本"></a>1.设置新版本</h3><p>来软件的安装和配置过程中，需要很多时间，尤其是在linux/unix下，经常需要通过源码的方式编译。这里并不是说一定要装最新版本，但是如果最新版本不影响系统执行的话，那么就安装吧，为了节省时间，自动化了解一下？</p>
+<h3 id="2-部署新版本"><a href="#2-部署新版本" class="headerlink" title="2.部署新版本"></a>2.部署新版本</h3><p>部署新版本的时候，建议安装测试环境，而不是直接在生产环境上部署。确保测试环境新版不影响系统正常运行的情况下，就可以将其部署到生产环境下了。</p>
+<h2 id="0x02-查看php-ini文件"><a href="#0x02-查看php-ini文件" class="headerlink" title="0x02 查看php.ini文件"></a>0x02 查看php.ini文件</h2><p>有的时候PHP.ini文件很重要，因为默认情况下，其实很多东西都是其实是禁止的，但是如果启用了，可能就有安全风险了。所以建议定期检查PHP.ini文件，并且进行备份，确保PHP.ini文件不被其他人所修改。</p>
+<h2 id="0x03-Web服务器配置"><a href="#0x03-Web服务器配置" class="headerlink" title="0x03 Web服务器配置"></a>0x03 Web服务器配置</h2><p>这里拿apache做例子。</p>
+<p>httpd其实具有大量关于安全的默认配置，且其配置项都存在于httpd.conf中。</p>
+<ul>
+<li>确认httpd不是以具有超级权限的用户身份运行的。这可以通过httpd.conf文件下的User和Group设置实现。在Linux系统中，httpd将以root身份启动，然后再变成httpd.conf指定的用户。</li>
+<li>确认apache安装目录的权限是否正确设置。在UNIX系统，这包括了除了文档根目录（默认htdocs/子目录）以外的所有目录的写权限都属于”root”。</li>
+<li>在httpd.conf中我们做些设置，隐藏一些不希望被用户看到文件。例如，”.inc”文件。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Files ~ &quot;\.inc$&quot;&gt;</span><br><span class="line">  Order allow, deny</span><br><span class="line">  Deny from all</span><br><span class="line">&lt;/Files&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="第四章-数据库服务器安全"><a href="#第四章-数据库服务器安全" class="headerlink" title="第四章 数据库服务器安全"></a>第四章 数据库服务器安全</h1><h2 id="0x01-用户和权限系统"><a href="#0x01-用户和权限系统" class="headerlink" title="0x01 用户和权限系统"></a>0x01 用户和权限系统</h2><p>这里很重要的一件事，就是确认root用户的密码不是弱口令，且尽量不允许root用户直接ssh登陆。</p>
+<p>当然这里涉及到测试权限的一些方法：</p>
+<ul>
+<li>不指定用户名和密码连接数据库。</li>
+<li>不指定root用户的密码连接数据库。</li>
+<li>使用root的错误密码连接数据库。</li>
+<li>以特定用户身份连接数据库，尝试访问该用户不能访问的表。</li>
+<li>以特定用户身份连接数据库，尝试访问系统数据库或权限表。</li>
+</ul>
+<h2 id="0x02-发送数据至服务器"><a href="#0x02-发送数据至服务器" class="headerlink" title="0x02 发送数据至服务器"></a>0x02 发送数据至服务器</h2><p>这里我们一再强调，不要直接向服务器发送所有未经过过滤的数据，所以在这个情况下不仅仅要通过数据库过滤来实现，还需要依靠验证表单输入是否是自己的预期值来实现。</p>
+<h2 id="0x03-运行服务器"><a href="#0x03-运行服务器" class="headerlink" title="0x03 运行服务器"></a>0x03 运行服务器</h2><p>这类当然我们不希望所有的软件的都是以root或者administrator等超级用户权限去运行。然后再设置好用户目录的权限，这样可以防止非法的读写操作。</p>
+<p>在设计权限的时候，尽量创建只有最少权限的用户，而且切记一点，不能因为用户图方便，而授予这个最少权限用户更多的权限。</p>
+<h1 id="第五章-计算机和操作系统的安全"><a href="#第五章-计算机和操作系统的安全" class="headerlink" title="第五章 计算机和操作系统的安全"></a>第五章 计算机和操作系统的安全</h1><ul>
+<li><p>保持操作系统的更新，确保更新之前有个测试环境可以进行测试。</p>
+</li>
+<li><p>只运行必需的软件。</p>
+</li>
+<li><p>服务器的物理安全。</p>
+</li>
+<li><p>灾备计划。</p>
+<p>1.确保所有数据都有一个异地灾备计划。</p>
+<p>2.确保定期进行灾难恢复演练，并且保留如何创建服务器环境以及如何设置web的操作手册。</p>
+<p>3.保证web源代码的备份。</p>
+<p>4.使用自动化工具确认服务器运行状态，并且设置专门的”应急人员”负责处突发问题。</p>
+<p>5.与硬件提供厂商商量灾备替换服务，防止硬件故障，当然在设计的时候建议使用热备保证系统高可用的运行。</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/经验/" rel="tag"># 经验</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/03/php-unserialize-初识/" rel="next" title="php-unserialize-初识">
+                <i class="fa fa-chevron-left"></i> php-unserialize-初识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-安全策略"><span class="nav-text">第一章 安全策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-良好正确的心态"><span class="nav-text">0x01 良好正确的心态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-安全与可用之间的选择"><span class="nav-text">0x02 安全与可用之间的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-安全监控"><span class="nav-text">0x03 安全监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-代码安全"><span class="nav-text">第二章 代码安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-过滤用户输入"><span class="nav-text">0x01 过滤用户输入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-检查输入的期望值"><span class="nav-text">1. 检查输入的期望值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-过滤基本值"><span class="nav-text">2. 过滤基本值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-确保字符串SQL语句的安全"><span class="nav-text">3. 确保字符串SQL语句的安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-转义输出"><span class="nav-text">0x02 转义输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-代码组织结构"><span class="nav-text">0x03 代码组织结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-代码自身问题"><span class="nav-text">0x04 代码自身问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-文件系统因素"><span class="nav-text">0x05 文件系统因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-代码稳定性和缺陷"><span class="nav-text">0x06 代码稳定性和缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-执行命令"><span class="nav-text">0x07 执行命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Web服务器和PHP的安全"><span class="nav-text">第三章 Web服务器和PHP的安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-保持软件更新"><span class="nav-text">0x01 保持软件更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-设置新版本"><span class="nav-text">1.设置新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-部署新版本"><span class="nav-text">2.部署新版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-查看php-ini文件"><span class="nav-text">0x02 查看php.ini文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Web服务器配置"><span class="nav-text">0x03 Web服务器配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-数据库服务器安全"><span class="nav-text">第四章 数据库服务器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-用户和权限系统"><span class="nav-text">0x01 用户和权限系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-发送数据至服务器"><span class="nav-text">0x02 发送数据至服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-运行服务器"><span class="nav-text">0x03 运行服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-计算机和操作系统的安全"><span class="nav-text">第五章 计算机和操作系统的安全</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
