@@ -90,7 +90,9 @@
 <meta property="og:image" content="http://yoursite.com/2018/05/11/蜜罐学习/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/05/11/蜜罐学习/2.png">
 <meta property="og:image" content="http://yoursite.com/2018/05/11/蜜罐学习/3.png">
-<meta property="og:updated_time" content="2018-05-11T04:00:41.159Z">
+<meta property="og:image" content="http://yoursite.com/2018/05/11/蜜罐学习/4.png">
+<meta property="og:image" content="http://yoursite.com/2018/05/11/蜜罐学习/5.png">
+<meta property="og:updated_time" content="2018-05-15T07:52:09.971Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蜜罐学习">
 <meta name="twitter:description" content="部署cowrie蜜罐为什么会突然想到部署蜜罐呢。主要是某天看到了一些东西，然后想着自己也搞个蜜罐，抓点有用的数据，恶意样本，然后学习下。 前期准备 系统：ubuntu 16.04  安装python虚拟环境所需要的相关包： 1sudo apt-get install git python-virtualenv libssl-dev libffi-dev build-essential libpyt">
@@ -389,6 +391,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use cowrie;</span><br><span class="line">mysql&gt; source /home/cowrie/cowrie/doc/sql/mysql.sql;</span><br><span class="line">cowrie@VM-233-226-ubuntu:~/cowrie$ vim cowrie.cfg</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/05/11/蜜罐学习/3.png" alt="3"></p>
 <h1 id="后续的蜜罐日志分析"><a href="#后续的蜜罐日志分析" class="headerlink" title="后续的蜜罐日志分析"></a>后续的蜜罐日志分析</h1><p>回头做一些蜜罐日志的分析，该页面做为长期更新项目。</p>
+<ul>
+<li>2018年5月15日，抓到了一些样本，以及ip地址，还有弱口令字典，美滋滋，样本分析有空做做。</li>
+</ul>
+<p><img src="/2018/05/11/蜜罐学习/4.png" alt="4"></p>
+<p><img src="/2018/05/11/蜜罐学习/5.png" alt="5"></p>
 <h1 id="Refer："><a href="#Refer：" class="headerlink" title="Refer："></a>Refer：</h1><p><a href="https://github.com/micheloosterhof/cowrie/blob/master/INSTALL.md#step-1-install-dependencies" target="_blank" rel="noopener">Installing Cowrie in seven steps.</a></p>
 
       
@@ -517,7 +524,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -539,7 +546,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">14</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
