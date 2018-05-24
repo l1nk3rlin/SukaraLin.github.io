@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。 0x01 异常权限列表某些权限对于这个app来说有点异常 1234567891011121314151617android.permission.RECEIVE_USER_PRESENTandroid.permission.INTERNETandroid.permission.WAKE_LOCKandroid">
+<meta name="description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。正经写文章是不可能写文章的，只能靠水文章了。 0x01 异常权限列表某些权限对于这个app来说有点异常 1234567891011121314151617android.permission.RECEIVE_USER_PRESENTandroid.permission.INTERNETandroid.permi">
 <meta name="keywords" content="java,安卓">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次恶意安卓app分析">
 <meta property="og:url" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/index.html">
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
-<meta property="og:description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。 0x01 异常权限列表某些权限对于这个app来说有点异常 1234567891011121314151617android.permission.RECEIVE_USER_PRESENTandroid.permission.INTERNETandroid.permission.WAKE_LOCKandroid">
+<meta property="og:description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。正经写文章是不可能写文章的，只能靠水文章了。 0x01 异常权限列表某些权限对于这个app来说有点异常 1234567891011121314151617android.permission.RECEIVE_USER_PRESENTandroid.permission.INTERNETandroid.permi">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/1.png">
 <meta property="og:image" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/2.jpg">
@@ -101,10 +101,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/12.jpg">
 <meta property="og:image" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/14.png">
 <meta property="og:image" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/15.png">
-<meta property="og:updated_time" content="2018-05-24T14:40:16.437Z">
+<meta property="og:updated_time" content="2018-05-24T14:47:26.450Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次恶意安卓app分析">
-<meta name="twitter:description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。 0x01 异常权限列表某些权限对于这个app来说有点异常 1234567891011121314151617android.permission.RECEIVE_USER_PRESENTandroid.permission.INTERNETandroid.permission.WAKE_LOCKandroid">
+<meta name="twitter:description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。正经写文章是不可能写文章的，只能靠水文章了。 0x01 异常权限列表某些权限对于这个app来说有点异常 1234567891011121314151617android.permission.RECEIVE_USER_PRESENTandroid.permission.INTERNETandroid.permi">
 <meta name="twitter:image" content="http://yoursite.com/2018/05/24/记一次恶意安卓app分析/1.png">
 
 
@@ -367,7 +367,7 @@
       
 
       
-        <h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h1><p>嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。</p>
+        <h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h1><p>嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。正经写文章是不可能写文章的，只能靠水文章了。</p>
 <h2 id="0x01-异常权限列表"><a href="#0x01-异常权限列表" class="headerlink" title="0x01 异常权限列表"></a>0x01 异常权限列表</h2><p>某些权限对于这个app来说有点异常</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">android.permission.RECEIVE_USER_PRESENT</span><br><span class="line">android.permission.INTERNET</span><br><span class="line">android.permission.WAKE_LOCK</span><br><span class="line">android.permission.READ_PHONE_STATE                       //读取电话状态</span><br><span class="line">android.permission.WRITE_EXTERNAL_STORAGE</span><br><span class="line">android.permission.READ_EXTERNAL_STORAGE</span><br><span class="line">android.permission.WRITE_SETTINGS                   //读写系统设置项</span><br><span class="line">android.permission.VIBRATE</span><br><span class="line">android.permission.MOUNT_UNMOUNT_FILESYSTEMS</span><br><span class="line">android.permission.ACCESS_NETWORK_STATE</span><br><span class="line">android.permission.ACCESS_WIFI_STATE</span><br><span class="line">android.permission.SYSTEM_ALERT_WINDOW</span><br><span class="line">android.permission.ACCESS_COARSE_LOCATION            //获取粗略的位置（通过wifi、基站）</span><br><span class="line">android.permission.CHANGE_WIFI_STATE</span><br><span class="line">android.permission.WRITE_EXTERNAL_STORAGE</span><br><span class="line">android.permission.CHANGE_NETWORK_STATE</span><br><span class="line">android.permission.GET_TASKS             //获取有关当前或最近运行的任务信息</span><br></pre></td></tr></table></figure>
 <h2 id="0x02-获取手机sim卡序列号"><a href="#0x02-获取手机sim卡序列号" class="headerlink" title="0x02 获取手机sim卡序列号"></a>0x02 获取手机sim卡序列号</h2><p><img src="/2018/05/24/记一次恶意安卓app分析/1.png" alt="1"></p>
