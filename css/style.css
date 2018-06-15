@@ -335,14 +335,14 @@
   display: block;
   margin-top: 2rem;
   margin-bottom: 0.5rem;
-  color: #eee;
+  color: #383838;
   text-transform: none;
   letter-spacing: normal;
   font-weight: bold;
   font-size: 1rem;
 }
 .content h3 {
-  color: #eee;
+  color: #383838;
   text-decoration: underline;
   font-weight: bold;
   font-size: 0.9rem;
@@ -351,8 +351,8 @@
 .content h5,
 .content h6 {
   display: inline;
-  border-bottom: 1px dashed #ccc;
-  color: #ccc;
+  border-bottom: 1px dashed #8c8c8c;
+  color: #8c8c8c;
   text-decoration: none;
   font-weight: normal;
   font-size: 0.9rem;
@@ -365,7 +365,7 @@
   margin-bottom: 0.5rem;
 }
 .content hr {
-  border: 1px dashed #ccc;
+  border: 1px dashed #8c8c8c;
 }
 .content strong {
   font-weight: bold;
@@ -421,13 +421,29 @@
 .content th {
   padding: 8px;
   border-bottom: 1px dashed $color-code-border;
-  color: #eee;
+  color: #383838;
   font-weight: bold;
   font-size: 13px;
 }
 .content td {
   padding: 9px 8px 0;
   border-bottom: none;
+}
+.content .more {
+  position: relative;
+  display: block;
+  color: #2bbc8a;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.content .more a {
+  background: none;
+  color: inherit;
+  text-decoration: none;
+}
+.content .more a:hover {
+  background: none;
+  text-decoration: underline;
 }
 @font-face {
   font-style: normal;
@@ -441,15 +457,14 @@
 }
 html {
   height: 100%;
-  border-top: 2px solid #c9cacc;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
 body {
   display: flex;
   flex-direction: column;
-  background-color: #1d1f21;
-  color: #c9cacc;
+  background-color: #fff;
+  color: #383838;
   font-weight: 400;
   font-size: 14px;
   font-family: "Menlo", "Meslo LG", monospace;
@@ -474,9 +489,9 @@ body {
   -webkit-hyphens: manual;
 }
 .content a {
-  color: #c9cacc;
+  color: #383838;
   text-decoration: none;
-  background-image: linear-gradient(transparent, transparent 5px, #c9cacc 5px, #c9cacc);
+  background-image: linear-gradient(transparent, transparent 5px, #383838 5px, #383838);
   background-position: bottom;
   background-size: 100% 6px;
   background-repeat: repeat-x;
@@ -563,7 +578,7 @@ body {
 #header .h1 {
   margin-top: 0;
   margin-bottom: 0;
-  color: #c9cacc;
+  color: #383838;
   letter-spacing: 0.01em;
   font-weight: 700;
   font-style: normal;
@@ -792,7 +807,7 @@ body {
   overflow: auto;
   margin-top: 1rem;
   padding-right: 2rem;
-  max-width: 20em;
+  max-width: 18em;
   max-height: calc(95vh - 7rem);
   text-align: right;
 }
@@ -803,7 +818,7 @@ body {
   display: none;
 }
 #header-post #toc .toc-level-2 {
-  color: #c9cacc;
+  color: #383838;
   font-size: 0.8rem;
 }
 #header-post #toc .toc-level-2:before {
@@ -840,7 +855,7 @@ body {
     display: none;
   }
 }
-@media screen and (max-width: 1199px) {
+@media screen and (max-width: 1050px) {
   #header-post #toc {
     display: none;
   }
@@ -876,7 +891,7 @@ body {
   z-index: 5000000;
   width: 100%;
   border-top: 1px solid #666;
-  background: #212326;
+  background: #fafafa;
   transition: opacity 0.2s;
 }
 #footer-post a {
@@ -893,7 +908,7 @@ body {
 #footer-post #nav-footer {
   padding-right: 1rem;
   padding-left: 1rem;
-  background: #323539;
+  background: #e6e6e6;
   text-align: center;
 }
 #footer-post #nav-footer a {
@@ -937,7 +952,7 @@ body {
 #footer-post #share-footer {
   padding-right: 1rem;
   padding-left: 1rem;
-  background: #323539;
+  background: #e6e6e6;
   text-align: center;
 }
 #footer-post #share-footer ul {
@@ -957,7 +972,7 @@ body {
   clear: both;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  background: #323539;
+  background: #e6e6e6;
   text-align: left;
 }
 #footer-post #toc-footer ol {
@@ -975,7 +990,7 @@ body {
   display: none;
 }
 #footer-post #toc-footer .toc-level-2 {
-  color: #c9cacc;
+  color: #383838;
   font-size: 0.8rem;
 }
 #footer-post #toc-footer .toc-level-2:before {
@@ -1035,9 +1050,6 @@ body {
 .project-list .project-item {
   margin-bottom: 5px;
 }
-.project-list .project-item p {
-  display: inline;
-}
 article header .posttitle {
   margin-top: 0;
   margin-bottom: 0;
@@ -1050,7 +1062,7 @@ article header .meta {
   margin-bottom: 1rem;
 }
 article header .meta * {
-  color: #ccc;
+  color: #8c8c8c;
   font-size: 0.85rem;
 }
 article header .author {
@@ -1097,7 +1109,7 @@ article .content blockquote {
   margin: 1rem 10px;
   padding: 0.5em 10px;
   background: inherit;
-  color: #ccffb6;
+  color: #2bbc8a;
   quotes: "\201C" "\201D" "\2018" "\2019";
   font-weight: bold;
 }
@@ -1106,7 +1118,7 @@ article .content blockquote p {
 }
 article .content blockquote:before {
   margin-right: 0.25em;
-  color: #ccffb6;
+  color: #2bbc8a;
   content: "\201C";
   vertical-align: -0.4em;
   font-size: 2em;
@@ -1263,30 +1275,30 @@ article .content .caption {
   text-align: center;
 }
 .pagination .page-number {
-  color: #c9cacc;
+  color: #383838;
   font-size: 0.8rem;
 }
 .pagination a {
   padding: 4px 6px;
   border-radius: 5px;
   background-image: none;
-  color: #c9cacc;
+  color: #383838;
   text-decoration: none;
 }
 .pagination a:hover {
   background-image: none;
 }
 .pagination a:hover:not(.active) {
-  color: #eee;
+  color: #383838;
 }
 .search-input {
   padding: 4px 7px;
   width: 100%;
   outline: none;
-  border: solid 1px #ccc;
+  border: solid 1px #8c8c8c;
   border-radius: 5px;
-  background-color: #1d1f21;
-  color: #c9cacc;
+  background-color: #fff;
+  color: #383838;
   font-size: 1.2rem;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -1303,7 +1315,7 @@ article .content .caption {
 }
 #search-result a.search-result-title {
   background-image: none;
-  color: #c9cacc;
+  color: #383838;
   text-transform: capitalize;
   font-weight: bold;
   line-height: 1.2;
@@ -1323,70 +1335,178 @@ article .content .caption {
 .search-no-result {
   display: none;
   padding-bottom: 0.5em;
-  color: #c9cacc;
+  color: #383838;
 }
-.highlight {
-  background: #474949;
-  color: #d1d9e1;
+.highlight.html .code:after,
+.highlight.js .code:after,
+.highlight.javascript .code:after,
+.highlight.bash .code:after,
+.highlight.css .code:after,
+.highlight.scss .code:after,
+.highlight.diff .code:after,
+.highlight.java .code:after,
+.highlight.xml .code:after,
+.highlight.python .code:after,
+.highlight.json .code:after,
+.highlight.swift .code:after,
+.highlight.ruby .code:after,
+.highlight.perl .code:after,
+.highlight.php .code:after,
+.highlight.c .code:after,
+.highlight.cpp .code:after,
+.highlight.ts .code:after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #ccc;
+  text-align: right;
+  font-size: 0.75em;
+  padding: 5px 10px 0;
+  line-height: 15px;
+  height: 15px;
+  font-weight: 600;
 }
-.highlight .code .comment,
-.highlight .code .quote {
-  color: #969896;
-  font-style: italic;
+.highlight.html .code:after {
+  content: "HTML";
 }
-.highlight .code .keyword,
-.highlight .code .selector-tag,
-.highlight .code .literal,
-.highlight .code .type,
-.highlight .code .addition {
-  color: #c9c;
+.highlight.js .code:after,
+.highlight.javascript .code:after {
+  content: "JS";
 }
-.highlight .code .number,
-.highlight .code .selector-attr,
-.highlight .code .selector-pseudo {
-  color: #f99157;
+.highlight.bash .code:after {
+  content: "BASH";
 }
-.highlight .code .string,
-.highlight .code .doctag,
-.highlight .code .regexp {
-  color: #8abeb7;
+.highlight.css .code:after {
+  content: "CSS";
 }
-.highlight .code .title,
-.highlight .code .name,
-.highlight .code .section,
-.highlight .code .built_in {
-  color: #b5bd68;
+.highlight.scss .code:after {
+  content: "SCSS";
 }
-.highlight .code .variable,
-.highlight .code .template-variable,
-.highlight .code .selector-id,
-.highlight .code .class .title {
-  color: #fc6;
+.highlight.diff .code:after {
+  content: "DIFF";
 }
-.highlight .code .section,
-.highlight .code .name,
-.highlight .code .strong {
-  font-weight: bold;
+.highlight.java .code:after {
+  content: "JAVA";
 }
-.highlight .code .symbol,
-.highlight .code .bullet,
-.highlight .code .subst,
-.highlight .code .meta,
-.highlight .code .link {
-  color: #f99157;
+.highlight.xml .code:after {
+  content: "XML";
 }
-.highlight .code .deletion {
-  color: #dc322f;
+.highlight.python .code:after {
+  content: "PYTHON";
 }
-.highlight .code .formula {
-  background: #eee8d5;
+.highlight.json .code:after {
+  content: "JSON";
 }
-.highlight .code .attr,
-.highlight .code .attribute {
-  color: #81a2be;
+.highlight.swift .code:after {
+  content: "SWIFT";
 }
-.highlight .code .emphasis {
-  font-style: italic;
+.highlight.ruby .code:after {
+  content: "RUBY";
+}
+.highlight.perl .code:after {
+  content: "PERL";
+}
+.highlight.php .code:after {
+  content: "PHP";
+}
+.highlight.c .code:after {
+  content: "C";
+}
+.highlight.java .code:after {
+  content: "JAVA";
+}
+.highlight.cpp .code:after {
+  content: "CPP";
+}
+.highlight.ts .code:after {
+  content: "TS";
+}
+.highlight.cpp .code:after {
+  content: 'C++';
+}
+pre {
+  color: #525252;
+}
+pre .function .keyword,
+pre .constant {
+  color: #0092db;
+}
+pre .keyword,
+pre .attribute {
+  color: #e96900;
+}
+pre .number,
+pre .literal {
+  color: #ae81ff;
+}
+pre .tag,
+pre .tag .title,
+pre .change,
+pre .winutils,
+pre .flow,
+pre .lisp .title,
+pre .clojure .built_in,
+pre .nginx .title,
+pre .tex .special {
+  color: #2973b7;
+}
+pre .symbol,
+pre .symbol .string,
+pre .value,
+pre .regexp {
+  color: #42b983;
+}
+pre .title {
+  color: #83b917;
+}
+pre .tag .value,
+pre .string,
+pre .subst,
+pre .haskell .type,
+pre .preprocessor,
+pre .ruby .class .parent,
+pre .built_in,
+pre .sql .aggregate,
+pre .django .template_tag,
+pre .django .variable,
+pre .smalltalk .class,
+pre .javadoc,
+pre .django .filter .argument,
+pre .smalltalk .localvars,
+pre .smalltalk .array,
+pre .attr_selector,
+pre .pseudo,
+pre .addition,
+pre .stream,
+pre .envvar,
+pre .apache .tag,
+pre .apache .cbracket,
+pre .tex .command,
+pre .prompt {
+  color: #42b983;
+}
+pre .comment,
+pre .java .annotation,
+pre .python .decorator,
+pre .template_comment,
+pre .pi,
+pre .doctype,
+pre .shebang,
+pre .apache .sqbracket,
+pre .tex .formula {
+  color: #b3b3b3;
+}
+pre .deletion {
+  color: #ba4545;
+}
+pre .coffeescript .javascript,
+pre .javascript .xml,
+pre .tex .formula,
+pre .xml .javascript,
+pre .xml .vbscript,
+pre .xml .css,
+pre .xml .cdata {
+  opacity: 0.5;
 }
 pre {
   overflow-x: auto;
@@ -1405,29 +1525,38 @@ pre code {
   border: none;
 }
 code {
-  padding: 0 5px;
-  border: 1px dotted #666;
+  font-size: 0.8em;
+  background-color: #f8f8f8;
+  font-family: 'Roboto Mono', Monaco, courier, monospace;
+  margin: 0 2px;
+  padding: 3px 5px;
+  color: #e96900;
   border-radius: 2px;
-  -webkit-border-radius: 2px;
+  white-space: inherit;
+}
+.content>figure.highlight {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.125);
 }
 .highlight {
+  position: relative;
   overflow-x: auto;
   margin: 1rem 0;
   padding: 10px 15px;
   border-radius: 4px;
-  background: #212326;
+  background-color: #f8f8f8;
   font-family: "Menlo", "Meslo LG", monospace;
   -webkit-border-radius: 4px;
+  line-height: 1.1em;
 }
 .highlight figcaption {
   margin: -5px 0 5px;
-  color: #666;
+  color: #757575;
   font-size: 0.9em;
   zoom: 1;
 }
 .highlight figcaption a {
   float: right;
-  color: #666;
+  color: #757575;
   font-style: italic;
   font-size: 0.8em;
   background-image: linear-gradient(transparent, transparent 10px, #d480aa 10px, #d480aa);
@@ -1436,7 +1565,7 @@ code {
   background-repeat: repeat-x;
 }
 .highlight figcaption a:hover {
-  color: #858585;
+  color: #919191;
 }
 .highlight figcaption:before,
 .highlight figcaption content: "" {
@@ -1458,4 +1587,148 @@ code {
 }
 .highlight .line {
   height: 22px;
+}
+.content>figure.highlight.plain td.gutter {
+  display: none;
+}
+@media (max-width: 970px) {
+  #live2dcanvas {
+    display: none;
+  }
+}
+.content .danger {
+  position: relative;
+  margin: 2em 0;
+  padding: 12px 24px 12px 30px;
+  border-left: 4px solid #f66;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background-color: #f8f8f8;
+}
+.content .danger br:nth-child(1) {
+  display: none;
+}
+.content .danger:before {
+  position: absolute;
+  top: 14px;
+  left: -12px;
+  content: "!";
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  color: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #f66;
+  font-family: 'Dosis', 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+}
+.apple {
+  position: relative;
+  border-radius: 7px;
+  box-shadow: 0px 3px 20px 0.5px rgba(0,0,0,0.19);
+  background-color: #383737;
+  color: #fff;
+  padding: 48px 1.5em 1.5em 1.5em;
+}
+.apple br:nth-child(1) {
+  display: none;
+}
+.apple a {
+  color: #fff;
+}
+.apple:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background-color: #f8f8f8;
+  border-radius: 7px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.apple .btn {
+  position: absolute;
+  top: 24px;
+  left: 3em;
+  width: 1em;
+  height: 1em;
+  margin-top: -0.5em;
+  border-radius: 50%;
+  background-color: #fc615d;
+  cursor: pointer;
+}
+.apple .btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -1.5em;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background-color: #fdbc40;
+  cursor: pointer;
+}
+.apple .btn:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -1.5em;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background-color: #34c84a;
+  cursor: pointer;
+}
+.highlight.bash {
+  box-shadow: 0px 3px 20px 0.5px rgba(0,0,0,0.19) !important;
+}
+.highlight.bash figcaption {
+  position: relative;
+  height: 36px;
+  background-color: #d6d7d8;
+  margin: -10px -15px;
+}
+.highlight.bash figcaption span {
+  position: absolute;
+  top: 18px;
+  left: 3em;
+  width: 1em;
+  height: 1em;
+  margin-top: -0.5em;
+  border-radius: 50%;
+  background-color: #fc615d;
+  cursor: pointer;
+  text-indent: -9999px;
+}
+.highlight.bash figcaption span:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -1.5em;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background-color: #fdbc40;
+  cursor: pointer;
+}
+.highlight.bash figcaption span:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -1.5em;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  background-color: #34c84a;
+  cursor: pointer;
+}
+.highlight.bash .code:after {
+  color: #999;
+  padding: 0 10px;
+  line-height: 36px;
+  height: 36px;
 }

