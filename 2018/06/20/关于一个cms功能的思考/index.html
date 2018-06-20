@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php,任意文件操作," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 写在开头最近在审计cms的时候，遇到了一个一个功能，想借着这个平台，和大家讨论一下。 1. dedecmsdedecms最新版v5.7 SP2中有个功能，文件管理功能，这个功能存在一些问题。 1.1 任意文件上传1.1.1 原理分析漏洞点：dede/file_manage_control.php 112-137: 1234567891011121314151617181920212223">
+<meta name="keywords" content="php,任意文件操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于一个cms功能的思考">
+<meta property="og:url" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 写在开头最近在审计cms的时候，遇到了一个一个功能，想借着这个平台，和大家讨论一下。 1. dedecmsdedecms最新版v5.7 SP2中有个功能，文件管理功能，这个功能存在一些问题。 1.1 任意文件上传1.1.1 原理分析漏洞点：dede/file_manage_control.php 112-137: 1234567891011121314151617181920212223">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/14.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/13.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/11.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/12.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/ucms-1.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/ucms-2.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/ucms-3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/ucms-4.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/ucms-5.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/ucms-6.png">
+<meta property="og:updated_time" content="2018-06-20T02:43:32.344Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于一个cms功能的思考">
+<meta name="twitter:description" content="0x01 写在开头最近在审计cms的时候，遇到了一个一个功能，想借着这个平台，和大家讨论一下。 1. dedecmsdedecms最新版v5.7 SP2中有个功能，文件管理功能，这个功能存在一些问题。 1.1 任意文件上传1.1.1 原理分析漏洞点：dede/file_manage_control.php 112-137: 1234567891011121314151617181920212223">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/10.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/"/>
+
+
+
+
+
+  <title>关于一个cms功能的思考 | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/06/20/关于一个cms功能的思考/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于一个cms功能的思考</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T10:38:47+08:00">
+                2018-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+            
+              &nbsp; | &nbsp;
+              <span id="/2018/06/20/关于一个cms功能的思考/"class="leancloud_visitors" data-flag-title="关于一个cms功能的思考">
+              &nbsp;热度
+              </span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/代码审计/" itemprop="url" rel="index">
+                    <span itemprop="name">代码审计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/06/20/关于一个cms功能的思考/" class="leancloud_visitors" data-flag-title="关于一个cms功能的思考">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01-写在开头"><a href="#0x01-写在开头" class="headerlink" title="0x01 写在开头"></a>0x01 写在开头</h1><p>最近在审计cms的时候，遇到了一个一个功能，想借着这个平台，和大家讨论一下。</p>
+<h2 id="1-dedecms"><a href="#1-dedecms" class="headerlink" title="1. dedecms"></a>1. dedecms</h2><p>dedecms最新版v5.7 SP2中有个功能，文件管理功能，这个功能存在一些问题。</p>
+<h3 id="1-1-任意文件上传"><a href="#1-1-任意文件上传" class="headerlink" title="1.1 任意文件上传"></a>1.1 任意文件上传</h3><h4 id="1-1-1-原理分析"><a href="#1-1-1-原理分析" class="headerlink" title="1.1.1 原理分析"></a>1.1.1 原理分析</h4><p>漏洞点：dede/file_manage_control.php 112-137:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>($fmdo==<span class="string">"upload"</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $j=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>($i=<span class="number">1</span>; $i&lt;=<span class="number">50</span>; $i++)</span><br><span class="line">    &#123;</span><br><span class="line">        $upfile = <span class="string">"upfile"</span>.$i;</span><br><span class="line">        $upfile_name = <span class="string">"upfile"</span>.$i.<span class="string">"_name"</span>;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">isset</span>($&#123;$upfile&#125;) || !<span class="keyword">isset</span>($&#123;$upfile_name&#125;))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        $upfile = $&#123;$upfile&#125;;</span><br><span class="line">        $upfile_name = $&#123;$upfile_name&#125;;</span><br><span class="line">        <span class="keyword">if</span>(is_uploaded_file($upfile))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(!file_exists($cfg_basedir.$activepath.<span class="string">"/"</span>.$upfile_name))</span><br><span class="line">            &#123;</span><br><span class="line">                move_uploaded_file($upfile, $cfg_basedir.$activepath.<span class="string">"/"</span>.$upfile_name);</span><br><span class="line">            &#125;</span><br><span class="line">            @unlink($upfile);</span><br><span class="line">            $j++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ShowMsg(<span class="string">"成功上传 $j 个文件到: $activepath"</span>,<span class="string">"file_manage_main.php?activepath=$activepath"</span>);</span><br><span class="line">    <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里也是丝毫没有针对上传的任何内容做过滤嘛</p>
+<h4 id="1-1-2-poc构造"><a href="#1-1-2-poc构造" class="headerlink" title="1.1.2 poc构造"></a>1.1.2 poc构造</h4><p><img src="/2018/06/20/关于一个cms功能的思考/10.png" alt="10"></p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/9.png" alt="9"></p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/14.png" alt="14"></p>
+<h3 id="1-2-任意写入文件"><a href="#1-2-任意写入文件" class="headerlink" title="1.2 任意写入文件"></a>1.2 任意写入文件</h3><h4 id="1-2-1-原理分析"><a href="#1-2-1-原理分析" class="headerlink" title="1.2.1 原理分析"></a>1.2.1 原理分析</h4><p>漏洞点：dede/file_manage_control.php 69-87:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>($fmdo==<span class="string">"edit"</span>)</span><br><span class="line">&#123;</span><br><span class="line">    csrf_check();</span><br><span class="line">    $filename = str_replace(<span class="string">".."</span>, <span class="string">""</span>, $filename);</span><br><span class="line">    $file = <span class="string">"$cfg_basedir$activepath/$filename"</span>;</span><br><span class="line">    $str = stripslashes($str);</span><br><span class="line">    $fp = fopen($file, <span class="string">"w"</span>);</span><br><span class="line">    fputs($fp, $str);</span><br><span class="line">    fclose($fp);</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">empty</span>($backurl))</span><br><span class="line">    &#123;</span><br><span class="line">        ShowMsg(<span class="string">"成功保存一个文件！"</span>,<span class="string">"file_manage_main.php?activepath=$activepath"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ShowMsg(<span class="string">"成功保存文件！"</span>,$backurl);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里没有针对内容做丝毫的过滤处理，所以可以直接写入php脚本。</p>
+<h4 id="1-2-2-poc构造"><a href="#1-2-2-poc构造" class="headerlink" title="1.2.2 poc构造"></a>1.2.2 poc构造</h4><p><img src="/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/13.png" alt="13"></p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/11.png" alt="11"></p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/Users/l1nk3r/blog/php-code-audit-project/dedecms/pic/12.png" alt="12"></p>
+<h3 id="1-3-任意文件删除"><a href="#1-3-任意文件删除" class="headerlink" title="1.3 任意文件删除"></a>1.3 任意文件删除</h3><p>当然这里自然也存在任意文件删除的问题，大家看下以下代码就明白了吧。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>($fmdo==<span class="string">"del"</span>)</span><br><span class="line">&#123;</span><br><span class="line">    $fmm-&gt;DeleteFile($filename);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-ucms"><a href="#2-ucms" class="headerlink" title="2. ucms"></a>2. ucms</h2><p>在ucms 1.4.6（应该最新）下也存在这个文件管理功能，也存在任意文件上传。</p>
+<h3 id="2-1-任意文件上传"><a href="#2-1-任意文件上传" class="headerlink" title="2.1 任意文件上传"></a>2.1 任意文件上传</h3><h4 id="2-1-1-原理分析"><a href="#2-1-1-原理分析" class="headerlink" title="2.1.1 原理分析"></a>2.1.1 原理分析</h4><p>漏洞位置在：ucms/sadmin/file.php 第99-118行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">if(isset($_FILES[&apos;uploadfile&apos;])) &#123;</span><br><span class="line">	checktoken();</span><br><span class="line">	if(!isset($_SERVER[&quot;HTTP_REFERER&quot;])) &#123;</span><br><span class="line">		die(&apos;error&apos;);</span><br><span class="line">	&#125;</span><br><span class="line">	if(stripos($_GET[&apos;dir&apos;],&apos;..&apos;)===false) &#123;&#125;else &#123;die(&apos;error file&apos;);&#125;</span><br><span class="line">	if(is_uploaded_file($_FILES[&apos;uploadfile&apos;][&apos;tmp_name&apos;]))&#123;</span><br><span class="line">		$filaname=$alldir.$_FILES[&quot;uploadfile&quot;][&quot;name&quot;];</span><br><span class="line">		if(@move_uploaded_file($_FILES[&apos;uploadfile&apos;][&apos;tmp_name&apos;],$filaname)) &#123;</span><br><span class="line">			adminmsg($refererurl,&apos;上传成功&apos;,0);</span><br><span class="line">		&#125;else &#123;</span><br><span class="line">			adminmsg($refererurl,&apos;上传失败,无法写入文件,请确认目录权限&apos;,1);</span><br><span class="line">		&#125;</span><br><span class="line">		exit();</span><br><span class="line">	&#125;else &#123;</span><br><span class="line">		adminmsg($refererurl,&apos;未上传&apos;,1);</span><br><span class="line">		exit();</span><br><span class="line">	&#125;</span><br><span class="line">	exit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里很明显没有校验后缀名，非法之类的，除了这个<code>stripos($_GET[&#39;dir&#39;],&#39;..&#39;</code>，似乎是解决上传之后任意写入目录的问题。</p>
+<h4 id="2-1-2-poc-构造"><a href="#2-1-2-poc-构造" class="headerlink" title="2.1.2 poc 构造"></a>2.1.2 poc 构造</h4><p><img src="/2018/06/20/关于一个cms功能的思考/ucms-1.png" alt="ucms-1"></p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/ucms-2.png" alt="ucms-2"></p>
+<h3 id="2-2-任意文件写入"><a href="#2-2-任意文件写入" class="headerlink" title="2.2 任意文件写入"></a>2.2 任意文件写入</h3><p>当然这个cms也有任意文件写入问题</p>
+<h4 id="2-2-1-原理分析"><a href="#2-2-1-原理分析" class="headerlink" title="2.2.1 原理分析"></a>2.2.1 原理分析</h4><p>漏洞位置：ucms/sadmin/fileedit.php 31-43行</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">'co'</span>])) &#123;</span><br><span class="line">	checktoken();</span><br><span class="line">	$content=$_POST[<span class="string">'co'</span>];</span><br><span class="line">	$fp = @fopen($alldir.$filename,<span class="string">"w"</span>);</span><br><span class="line">	<span class="keyword">if</span>(!@fwrite($fp,$content) &amp;&amp; strlen($content)&lt;&gt;<span class="number">0</span>)&#123;</span><br><span class="line">		adminmsg(<span class="string">''</span>,<span class="string">'写入失败,请修改文件权限'</span>,<span class="number">1</span>);</span><br><span class="line">		<span class="keyword">exit</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	fclose($fp);</span><br><span class="line">	$refererurl=<span class="string">'?do=sadmin_fileedit&amp;dir='</span>.$_GET[<span class="string">'dir'</span>].<span class="string">'&amp;file='</span>.$_GET[<span class="string">'file'</span>].<span class="string">'&amp;pos='</span>.$_POST[<span class="string">'pos'</span>];</span><br><span class="line">	adminmsg($refererurl,<span class="string">'保存成功'</span>,<span class="number">1</span>,<span class="string">'编辑页'</span>);</span><br><span class="line">	<span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里可以直接写入，文件内容可控。</p>
+<h4 id="2-2-2-poc构造"><a href="#2-2-2-poc构造" class="headerlink" title="2.2.2 poc构造"></a>2.2.2 poc构造</h4><p>在新建文件处选择新建index.php。</p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/ucms-3.png" alt="ucms-3"></p>
+<p>所以这里由于后缀名没有进行限制，所以可以成功创建，然后点击编辑。</p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/ucms-4.png" alt="ucms-4"></p>
+<p>写入<code>&lt;?php phpinfo(); ?&gt;</code>。</p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/ucms-5.png" alt="ucms-5"></p>
+<p>你看就有问题了。</p>
+<p><img src="/2018/06/20/关于一个cms功能的思考/ucms-6.png" alt="ucms-6"></p>
+<h1 id="0x02-总结"><a href="#0x02-总结" class="headerlink" title="0x02 总结"></a>0x02 总结</h1><p>以上只是两个cms，我相信有很多cms也存在这个问题。虽然这个问题是在后台，除非有登陆绕过，或者注入跑出用户名密码，又或者未授权访问等先决条件才能访问的到。但是我觉得把这个其实是个风险。</p>
+<p>由于有时候因为安全可能会取舍掉很多功能的易用性，但是关于安全和功能的易用性之间的取舍作为开发应该一直是忽略不了的问题吧。作为安全从业者，这个功能即使没有，也不会大概影响这个系统的应用，只不过是在文件操作的时候，可能需要登陆服务器进行相关操作吧。</p>
+<p>作为开发角度来说，这个功能会很大程度方便一些小白用户，进行一些文件操作。所以我想问个问题：这个算漏洞吗。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          
+            <a href="/tags/任意文件操作/" rel="tag"><i class="fa fa-tag"></i> 任意文件操作</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/12/文件上传漏洞writeup/" rel="next" title="文件上传漏洞writeup">
+                <i class="fa fa-chevron-left"></i> 文件上传漏洞writeup
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在开头"><span class="nav-text">0x01 写在开头</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-dedecms"><span class="nav-text">1. dedecms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-任意文件上传"><span class="nav-text">1.1 任意文件上传</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-原理分析"><span class="nav-text">1.1.1 原理分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-poc构造"><span class="nav-text">1.1.2 poc构造</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-任意写入文件"><span class="nav-text">1.2 任意写入文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-1-原理分析"><span class="nav-text">1.2.1 原理分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-2-poc构造"><span class="nav-text">1.2.2 poc构造</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-任意文件删除"><span class="nav-text">1.3 任意文件删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ucms"><span class="nav-text">2. ucms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-任意文件上传"><span class="nav-text">2.1 任意文件上传</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-原理分析"><span class="nav-text">2.1.1 原理分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-poc-构造"><span class="nav-text">2.1.2 poc 构造</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-任意文件写入"><span class="nav-text">2.2 任意文件写入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-原理分析"><span class="nav-text">2.2.1 原理分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-poc构造"><span class="nav-text">2.2.2 poc构造</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-总结"><span class="nav-text">0x02 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+    
+      <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
