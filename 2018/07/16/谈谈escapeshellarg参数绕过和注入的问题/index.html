@@ -92,6 +92,7 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/3.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/4.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/5.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/18.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/6.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/7.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/8.png">
@@ -104,7 +105,7 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/15.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/16.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/17.png">
-<meta property="og:updated_time" content="2018-07-16T10:11:11.065Z">
+<meta property="og:updated_time" content="2018-07-16T13:03:57.368Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈谈escapeshellarg参数绕过和注入的问题">
 <meta name="twitter:description" content="0x01 知识铺垫我们先来看一下 escapeshellarg 函数的用法吧：  escapeshellarg — 把字符串转码为可以在 shell 命令里使用的参数 功能 ：escapeshellarg() 将给字符串增加一个单引号并且能引用或者转码任何已经存在的单引号，这样以确保能够直接将一个字符串传入 shell 函数，shell 函数包含 exec(), system() 执行运算符(反引">
@@ -426,11 +427,20 @@
 <p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/5.png" alt="23"></p>
 <p>详细分析一下这个过程：</p>
 <ol>
-<li>传入的参数是：<code>127.0.0.1&#39; -v -d a=1</code></li>
-<li>经过<code>escapeshellarg</code>处理后变成了<code>&#39;127.0.0.1&#39;\&#39;&#39; -v -d a=1&#39;</code>，即先对单引号转义，再用单引号将左右两部分括起来从而起到连接的作用。</li>
-<li>经过<code>escapeshellcmd</code>处理后变成<code>&#39;127.0.0.1&#39;\\&#39;&#39; -v -d a=1\&#39;</code>，这是因为<code>escapeshellcmd</code>对<code>\</code>以及最后那个<strong>不配对儿</strong>的引号进行了转义。</li>
-<li>最后执行的命令是<code>curl &#39;127.0.0.1&#39;\\&#39;&#39; -v -d a=1\&#39;</code>，由于中间的<code>\\</code>被解释为<code>\</code>而不再是转义字符，所以后面的<code>&#39;</code>没有被转义，与再后面的<code>&#39;</code>配对儿成了一个空白连接符。所以可以简化为<code>curl 127.0.0.1\ -v -d a=1&#39;</code>，即向<code>127.0.0.1\</code>发起请求，POST 数据为<code>a=1&#39;</code>。</li>
+<li><p>传入的参数是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1&apos; -v -d a=1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于<code>escapeshellarg</code>先对单引号转义，再用单引号将左右两部分括起来从而起到连接的作用。所以处理之后的效果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;127.0.0.1&apos;\&apos;&apos; -v -d a=1&apos;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>经过<code>escapeshellcmd</code>针对第二步处理之后的参数中的<code>\</code>以及<code>a=1&#39;</code>中的单引号进行处理转义之后的效果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos;127.0.0.1&apos;\\&apos;&apos; -v -d a=1\&apos;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>由于第三步处理之后的payload中的<code>\\</code>被解释位了<code>\</code>而不再是转义字符，所以单引号配对连接之后将payload分割为三个部分，具体如下所示：</p>
+<p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/18.png" alt="18"></p>
+</li>
 </ol>
+<p>所以这个payload可以简化为<code>curl 127.0.0.1\ -v -d a=1&#39;</code>，即向<code>127.0.0.1\</code>发起请求，POST 数据为<code>a=1&#39;</code>。</p>
 <p>但是如果是先用 <strong>escapeshellcmd</strong> 函数过滤,再用的 <strong>escapeshellarg</strong> 函数过滤,则没有这个问题。</p>
 <h1 id="0x02-漏洞分析"><a href="#0x02-漏洞分析" class="headerlink" title="0x02 漏洞分析"></a>0x02 漏洞分析</h1><p>这里实例分析选择 <strong>PHPMailer 命令执行漏洞</strong> （ <strong>CVE-2016-10045</strong> 和 <strong>CVE-2016-10033</strong> ）。项目代码可以通过以下方式下载：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/PHPMailer/PHPMailer</span><br><span class="line">cd PHPMailer</span><br><span class="line">git checkout -b CVE-2016-10033 v5.2.17</span><br></pre></td></tr></table></figure>
@@ -472,7 +482,7 @@
 <p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/7.png" alt="4"></p>
 <p>当然由于引入的特殊符号，虽然绕过了 <strong>filter_var()</strong> 针对邮箱的检测，但是由于PHP的 <strong>mail()</strong> 函数在底层实现中，调用了 <strong>escapeshellcmd()</strong> 函数对用户输入的邮箱地址进行检测，导致即使存在特殊符号，也会被 <strong>escapeshellcmd()</strong> 函数处理转义，这样可能没办法达到命令执行的作用了。</p>
 <p>那我们前面说过了PHP的 <strong>mail()</strong> 函数在底层调用了 <strong>escapeshellcmd()</strong> 函数对用户输入的邮箱地址进行处理，即使我们使用带有特殊字符的payload绕过了 <strong>filter_var()</strong> 的检测，但是还是会被 <strong>escapeshellcmd()</strong> 处理，但是 <strong>escapeshellcmd()</strong> 和 <strong>escapeshellarg</strong> 一起会发生很神奇的反应。</p>
-<h2 id="二-原理介绍"><a href="#二-原理介绍" class="headerlink" title="二. 原理介绍"></a>二. 原理介绍</h2><h3 id="1-cve-2016-10033"><a href="#1-cve-2016-10033" class="headerlink" title="1. cve-2016-10033"></a>1. cve-2016-10033</h3><p>在github上直接diff一下，对比一下不同版本的 <strong>class.phpmailer.php</strong> 文件，差异如下：</p>
+<h2 id="二-原理介绍"><a href="#二-原理介绍" class="headerlink" title="二. 原理介绍"></a>二. 原理介绍</h2><h3 id="1-CVE-2016-10033"><a href="#1-CVE-2016-10033" class="headerlink" title="1. CVE-2016-10033"></a>1. CVE-2016-10033</h3><p>在github上直接diff一下，对比一下不同版本的 <strong>class.phpmailer.php</strong> 文件，差异如下：</p>
 <p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/8.png" alt="5"></p>
 <p>这里在 <strong>sendmailSend</strong> 函数中加了 <strong>validateAddress</strong> 函数，来针对发送的数据进行判断，判断邮箱地址合法性。另外针对传入的数据，调用了 <strong>escapeshellarg</strong> 函数来转义特殊符号，防止注入参数。然而这样做，会引入一个新的问题。因为同时使用 <strong>escapeshellarg</strong> 函数和 <strong>escapeshellcmd()</strong> 函数，会导致单引号逃逸。由于程序没有对传命令参数的地方进行转义，所以我们可以结合 <strong>mail</strong> 函数的第五个参数 <strong>-X</strong> 写入 <strong>webshell</strong> 。</p>
 <p>下面详细看一下代码，漏洞具体位置在 <strong>class.phpmailer.php</strong> 中，我们截取部分相关代码，下图第12行 ：</p>
@@ -712,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-知识铺垫"><span class="nav-text">0x01 知识铺垫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-漏洞分析"><span class="nav-text">0x02 漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-前情提要"><span class="nav-text">一. 前情提要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-原理介绍"><span class="nav-text">二. 原理介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-cve-2016-10033"><span class="nav-text">1. cve-2016-10033</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-CVE-2016-10045"><span class="nav-text">2. CVE-2016-10045</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-后话"><span class="nav-text">0x03 后话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-相关文章"><span class="nav-text">0x04 相关文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-知识铺垫"><span class="nav-text">0x01 知识铺垫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-漏洞分析"><span class="nav-text">0x02 漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-前情提要"><span class="nav-text">一. 前情提要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-原理介绍"><span class="nav-text">二. 原理介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-CVE-2016-10033"><span class="nav-text">1. CVE-2016-10033</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-CVE-2016-10045"><span class="nav-text">2. CVE-2016-10045</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-后话"><span class="nav-text">0x03 后话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-相关文章"><span class="nav-text">0x04 相关文章</span></a></li></ol></div>
             
 
           </div>
