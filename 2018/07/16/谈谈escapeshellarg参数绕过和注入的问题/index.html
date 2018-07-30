@@ -95,6 +95,7 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/18.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/6.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/Users/l1nk3r/blog/blog/source/_posts/%E8%B0%88%E8%B0%88escapeshellarg%E5%8F%82%E6%95%B0%E7%BB%95%E8%BF%87%E5%92%8C%E6%B3%A8%E5%85%A5%E7%9A%84%E9%97%AE%E9%A2%98/16.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/8.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/9.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/10.png">
@@ -105,7 +106,7 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/15.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/16.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/17.png">
-<meta property="og:updated_time" content="2018-07-17T01:46:48.553Z">
+<meta property="og:updated_time" content="2018-07-17T16:10:10.606Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈谈escapeshellarg参数绕过和注入的问题">
 <meta name="twitter:description" content="0x01 知识铺垫我们先来看一下 escapeshellarg 函数的用法吧：  escapeshellarg — 把字符串转码为可以在 shell 命令里使用的参数 功能 ：escapeshellarg() 将给字符串增加一个单引号并且能引用或者转码任何已经存在的单引号，这样以确保能够直接将一个字符串传入 shell 函数，shell 函数包含 exec(), system() 执行运算符(反引">
@@ -480,8 +481,10 @@
 </blockquote>
 <p>关于 <strong>filter_var()</strong> 中 <strong>FILTER_VALIDATE_EMAIL</strong> 这个选项作用，我们可以看看这个帖子 <a href="https://stackoverflow.com/questions/19220158/php-filter-validate-email-does-not-work-correctly" target="_blank" rel="noopener">PHP FILTER_VALIDATE_EMAIL</a> 。这里面有个结论引起了我的注意： <strong>none of the special characters in this local part are allowed outside quotation marks</strong> ，表示所有的特殊符号必须放在双引号中。 <strong>filter_var()</strong> 问题在于，我们能够在双引号中嵌套转义空格仍然能够通过检测。同时由于底层正则表达式的原因，我们通过重叠单引号和双引号，欺骗 <strong>filter_val()</strong> 使其认为我们仍然在双引号中，我们就可以绕过检测。下面举个简单的例子，方便理解：</p>
 <p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/7.png" alt="4"></p>
-<p>当然由于引入的特殊符号，虽然绕过了 <strong>filter_var()</strong> 针对邮箱的检测，但是由于PHP的 <strong>mail()</strong> 函数在底层实现中，调用了 <strong>escapeshellcmd()</strong> 函数对用户输入的邮箱地址进行检测，导致即使存在特殊符号，也会被 <strong>escapeshellcmd()</strong> 函数处理转义，这样可能没办法达到命令执行的作用了。</p>
-<p>那我们前面说过了PHP的 <strong>mail()</strong> 函数在底层调用了 <strong>escapeshellcmd()</strong> 函数对用户输入的邮箱地址进行处理，即使我们使用带有特殊字符的payload绕过了 <strong>filter_var()</strong> 的检测，但是还是会被 <strong>escapeshellcmd()</strong> 处理，但是 <strong>escapeshellcmd()</strong> 和 <strong>escapeshellarg</strong> 一起会发生很神奇的反应。</p>
+<p>当然由于引入的特殊符号，虽然绕过了 <strong>filter_var()</strong> 针对邮箱的检测，但是由于PHP的 <strong>mail()</strong> 函数在底层实现中，调用了 <strong>escapeshellcmd()</strong> 函数对用户输入的邮箱地址进行检测，具体代码在<a href="https://github.com/php/php-src/blob/PHP-5.6.29/ext/standard/mail.c" target="_blank" rel="noopener">https://github.com/php/php-src/blob/PHP-5.6.29/ext/standard/mail.c</a> ，其中第167-177行如下：</p>
+<p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/Users/l1nk3r/blog/blog/source/_posts/%E8%B0%88%E8%B0%88escapeshellarg%E5%8F%82%E6%95%B0%E7%BB%95%E8%BF%87%E5%92%8C%E6%B3%A8%E5%85%A5%E7%9A%84%E9%97%AE%E9%A2%98/16.png" alt="14"></p>
+<p>所以导致即使存在特殊符号，也会被 <strong>escapeshellcmd()</strong> 函数处理转义，这样可能没办法达到命令执行的作用了。</p>
+<p>那我们前面说过了PHP的 <strong>mail()</strong> 函数在底层调用了 <strong>escapeshellcmd()</strong> 函数对用户输入的邮箱地址进行处理，即使我们使用带有特殊字符的payload绕过了 <strong>filter_var()</strong> 的检测，但是还是会被 <strong>escapeshellcmd()</strong> 处理，这时候如果按照先用 <strong>escapeshellarg()</strong> 函数过滤,再用的 <strong>escapeshellcmd()</strong> 函数过滤的顺序，则可能会发生参数逃逸的问题。</p>
 <h2 id="二-原理介绍"><a href="#二-原理介绍" class="headerlink" title="二. 原理介绍"></a>二. 原理介绍</h2><h3 id="1-CVE-2016-10033"><a href="#1-CVE-2016-10033" class="headerlink" title="1. CVE-2016-10033"></a>1. CVE-2016-10033</h3><p>在github上直接diff一下，对比一下不同版本的 <strong>class.phpmailer.php</strong> 文件，差异如下：</p>
 <p><img src="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/8.png" alt="5"></p>
 <p>这里在 <strong>sendmailSend</strong> 函数中加了 <strong>validateAddress</strong> 函数，来针对发送的数据进行判断，判断邮箱地址合法性。另外针对传入的数据，调用了 <strong>escapeshellarg</strong> 函数来转义特殊符号，防止注入参数。然而这样做，会引入一个新的问题。因为同时使用 <strong>escapeshellarg</strong> 函数和 <strong>escapeshellcmd()</strong> 函数，会导致单引号逃逸。由于程序没有对传命令参数的地方进行转义，所以我们可以结合 <strong>mail</strong> 函数的第五个参数 <strong>-X</strong> 写入 <strong>webshell</strong> 。</p>
@@ -570,6 +573,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/3018/07/30/php-code-audit-project/" rel="prev" title="php_code_audit_project">
+                php_code_audit_project <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -649,7 +656,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
