@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 起因有天在群里说起上传的%00截断的一些问题，就想起之前自己在这个问题踩过坑，想起了自己曾经的flag说要写文章，一直没写，现在来填坑了。 0x02 经过源码理解1234//test.php&amp;lt;?php    include &quot;1.txt\000.jpg&quot;;?&amp;gt; 1234//1.txt&amp;lt;?php    echo &apos;helloworld&apos;;?&amp;gt; 上面的示例代码在 ph">
+<meta name="keywords" content="php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊下php下的截断问题">
+<meta property="og:url" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 起因有天在群里说起上传的%00截断的一些问题，就想起之前自己在这个问题踩过坑，想起了自己曾经的flag说要写文章，一直没写，现在来填坑了。 0x02 经过源码理解1234//test.php&amp;lt;?php    include &quot;1.txt\000.jpg&quot;;?&amp;gt; 1234//1.txt&amp;lt;?php    echo &apos;helloworld&apos;;?&amp;gt; 上面的示例代码在 ph">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/13.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/14.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/1.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/15.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/4.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/16.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/17.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/5.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/18.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/2.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/6.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/19.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/20.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/12.png">
+<meta property="og:updated_time" content="2018-08-01T05:41:11.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊下php下的截断问题">
+<meta name="twitter:description" content="0x01 起因有天在群里说起上传的%00截断的一些问题，就想起之前自己在这个问题踩过坑，想起了自己曾经的flag说要写文章，一直没写，现在来填坑了。 0x02 经过源码理解1234//test.php&amp;lt;?php    include &quot;1.txt\000.jpg&quot;;?&amp;gt; 1234//1.txt&amp;lt;?php    echo &apos;helloworld&apos;;?&amp;gt; 上面的示例代码在 ph">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/13.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/"/>
+
+
+
+
+
+  <title>聊下php下的截断问题 | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/08/01/聊下php下的截断问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">聊下php下的截断问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T12:10:16+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+            
+              &nbsp; | &nbsp;
+              <span id="/2018/08/01/聊下php下的截断问题/"class="leancloud_visitors" data-flag-title="聊下php下的截断问题">
+              &nbsp;热度
+              </span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/代码审计/" itemprop="url" rel="index">
+                    <span itemprop="name">代码审计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/08/01/聊下php下的截断问题/" class="leancloud_visitors" data-flag-title="聊下php下的截断问题">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="0x01-起因"><a href="#0x01-起因" class="headerlink" title="0x01 起因"></a>0x01 起因</h1><p>有天在群里说起上传的%00截断的一些问题，就想起之前自己在这个问题踩过坑，想起了自己曾经的flag说要写文章，一直没写，现在来填坑了。</p>
+<h1 id="0x02-经过"><a href="#0x02-经过" class="headerlink" title="0x02 经过"></a>0x02 经过</h1><h2 id="源码理解"><a href="#源码理解" class="headerlink" title="源码理解"></a>源码理解</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//test.php</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="string">"1.txt\000.jpg"</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.txt</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">'helloworld'</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的示例代码在 <strong>php版本小于5.3.4</strong> 的情况下回输出 <strong>helloworld</strong> 。从php的内核执行过程来看，PHP通过 <strong>php_execute_script</strong> 来执行PHP的脚本，这里选取部分有关代码，具体可以看<a href="https://github.com/php/php-src/blob/PHP-5.2/main/main.c" target="_blank" rel="noopener">这里</a>：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/13.png" alt="13"></p>
+<p>在 <strong>第10行</strong> 我们看到，他调用 <strong>zend_execute_scripts</strong> 来针对脚本进行解析，而这个函数是在<a href="https://github.com/php/php-src/blob/PHP-5.2/Zend/zend.c" target="_blank" rel="noopener">Zend/zend.c</a>里面，截取部分相关代码如下：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/14.png" alt="14"></p>
+<p>从PHP内核开来实际上是分为两块部分，一个是 <strong>compile编译过程</strong> ，另一个是<strong>execute执行过程</strong>。</p>
+<p>第一部分：<strong>compile编译过程</strong></p>
+<p>我们可以看到这里的代码逻辑通过 <strong>zend_compile_file</strong> 获取文件的内容，<strong>zend_compile_file</strong>是一个函数指针，其声明在<a href="https://github.com/php/php-src/blob/PHP-5.2/Zend/zend_compile.c" target="_blank" rel="noopener">/Zend/zend_compile.c</a>中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZEND_API zend_op_array *(*zend_compile_file)(zend_file_handle *file_handle, <span class="keyword">int</span> type TSRMLS_DC);</span><br></pre></td></tr></table></figure>
+<p>在引擎初始化的时候，会将 <strong>compile_file</strong> 函数的地址赋值给 <strong>zend_compile_file</strong> 。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/1.jpg" alt="1"></p>
+<p><strong>compile_file</strong> 函数定义在<a href="https://github.com/php/php-src/blob/PHP-5.2/Zend/zend_language_scanner.l" target="_blank" rel="noopener">/Zend/zend_language_scanner.l</a>，截取部分相关代码。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/15.png" alt="15"></p>
+<p>简单总结一下上面部分代码的逻辑：</p>
+<p><strong>zend_compile_file</strong> 函数首先调用 <strong>open_file_for_scanning</strong> 去读取文件，然后通过 <strong>第17行的zendparse</strong> 去进行语法和词法解析。而 <strong>zendparse</strong> 是通过 <strong>lex_scan</strong> 去扫描出token并进行语法分析。</p>
+<p>第二部分：<strong>execute执行过程</strong></p>
+<p> <strong>zend_execute</strong> 也是一个函数指针，其声明在<a href="https://github.com/php/php-src/blob/PHP-5.2/Zend/zend_execute.h" target="_blank" rel="noopener">/Zend/zend_execute.h</a>中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ZEND_API <span class="keyword">extern</span> <span class="title">void</span> <span class="params">(*zend_execute)</span><span class="params">(zend_op_array *op_array TSRMLS_DC)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>在引擎初始化的时候，会将 <strong>execute</strong> 函数的地址赋值给 <strong>zend_execute</strong> 。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/4.png" alt="4"></p>
+<p>而 <strong>execute</strong> 的定义在<a href="/Zend/zend_vm_execute.h">/Zend/zend_vm_execute.h</a></p>
+<p><img src="/2018/08/01/聊下php下的截断问题/16.png" alt="16"></p>
+<p>根据我们的了解，<strong>zend_execute</strong> 通过 <strong>ZEND_INCLUDE_OR_EVAL_SPEC_CONST_HANDLER</strong> 函数来进行include的实际处理，即包含要包含的文件。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/17.png" alt="17"></p>
+<p>对比修复代码找到漏洞触发点：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/5.jpg" alt="5"></p>
+<p>摘出部分修复代码：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/18.png" alt="18"></p>
+<p>我看下存在漏洞的调试运行结果：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/2.png" alt="2"></p>
+<p>修复代码的 <strong>Z_STRVAL_P(inc_filename)</strong> 即上图中的val，即”1.txt”，strlen取得长度为5，而 <strong>Z_STRLEN_P(inc_filename)</strong> 即上图中的len即10。这里实际上解析到的文件名是1.txt。</p>
+<p>不存在漏洞的调试运行结果：</p>
+<p>一旦出现%00截断，include的文件名经过url转码由”1.txt%00.jpg”变为”1.txt\000.jpg”，进入php语法词法分析器解析后会将这个字符串解析成一个字符串，并使用 <strong>zend_scan_escape_string</strong> 进行字符串转码，如图，进入 <strong>zend_scan_escape_string</strong> 的内容为：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/6.png" alt="6"></p>
+<p>只要比较发现文件名的strlen长度和语法分析出来的长度不一样，就说明内部存在截断的字符，因此输出了打开文件失败的信息。</p>
+<h2 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h2><p>划重点 <strong>PHP版本低于5.3.4</strong></p>
+<p>%00截断有这么2种利用状况</p>
+<ol>
+<li>在url中加入%00，如<a href="http://xxxx/shell.php%00.jpg" target="_blank" rel="noopener">http://xxxx/shell.php%00.jpg</a></li>
+<li>在burpsuite的16进制编辑工具将”shell.php .jpg”（带空格的）中间的空格由20改成00</li>
+</ol>
+<p>在1中，url中的%00（形如%xx）,web server会把它当作十六进制处理，然后将该十六进制数据hex（00）“翻译”成统一的ascii码值“NUL（null）”，实现了截断。</p>
+<p>在2中，burpsuite用burp自带的十六进制编辑工具将”shell.php .jpg”(中间有空格)中的空格由20改成00，如果burp中有二进制编辑工具。</p>
+<h3 id="延伸一下"><a href="#延伸一下" class="headerlink" title="延伸一下"></a>延伸一下</h3><p>其实关于截断相关问题，还有个很有趣的函数， <strong>iconv()</strong> 函数：</p>
+<p>在了解 <strong>iconv()</strong> 函数漏洞之前，可能需要一点前置知识</p>
+<p>在php中，所有的字符都是二进制的串，PHP本身并不认识任何编码，只是根据编码来显示内容。PHP中的chr() 函数从指定的 ASCII 值返回字符。ASCII 值可被指定为十进制值、八进制值或十六进制值。八进制值被定义为带前置 0，而十六进制值被定义为带前置 0x。</p>
+<p>而在php5.4之前， <strong>iconv()</strong> 函数在转换编码的时候，遇到不合法的字符串的时候会将其截断。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">for</span>($k=<span class="number">0</span>;$k&lt;=<span class="number">255</span>;$k++)</span><br><span class="line">&#123;</span><br><span class="line">$a=<span class="string">'shell.php'</span>.chr($k).<span class="string">"1.jpg"</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'k:'</span>.$k.<span class="string">'   '</span>.<span class="string">'$a:'</span>.$a.<span class="string">'   '</span>.<span class="string">'iconv("UTF-8","gbk",$a):'</span>.iconv(<span class="string">"UTF-8"</span>,<span class="string">"gbk"</span>,$a).<span class="string">"\n"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>通过fuzz发现，其中 <strong>iconv(“UTF-8”,”gbk”,\$a)</strong> 或是 <strong>iconv(“UTF-8”,”gb2313”,\$a)</strong> 都会在chr(128)到chr(255)之间截断，使结果为shell.php</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/7.png" alt="7"></p>
+<p>在php5.4.0版本的时候就不存在这个问题了。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/8.png" alt="8"></p>
+<h2 id="实际例子"><a href="#实际例子" class="headerlink" title="实际例子"></a>实际例子</h2><p>关于我们刚刚说的 <strong>iconv()</strong> 截断的问题，其实sitestar pro就是个典型例子，我们看个例子：</p>
+<p>漏洞触发点在 <strong>module/mod_tool.php</strong> 中的 <strong>img_create()</strong> 函数，截取部分代码如下：</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/19.png" alt="19"></p>
+<p>这部分中有段代码吸引了我的注意力</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(!preg_match(<span class="string">'/\.('</span>.PIC_ALLOW_EXT.<span class="string">')$/i'</span>, $file_info[<span class="string">"name"</span>])) &#123;</span><br><span class="line">			Notice::set(<span class="string">'mod_marquee/msg'</span>, __(<span class="string">'File type error!'</span>));</span><br><span class="line">			Content::redirect(Html::uriquery(<span class="string">'mod_marquee'</span>, <span class="string">'upload_img'</span>));</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<p>跟进一下这个 <strong>PIC_ALLOW_EXT</strong> 参数，发现其在数据库中写死了，只允许 <strong>gif|jpg|png|bmp</strong> 这类文件。即如果文件名最后不是 <strong>gif|jpg|png|bmp</strong> ,则提示文件类型错误。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/9.png" alt="9"></p>
+<p>所以这部分的正则表达式的功能应该是针对文件后缀名进行检查。</p>
+<p>继续跟进这部分代码，有一串代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!<span class="keyword">$this</span>-&gt;_savelinkimg($file_info)) &#123;</span><br><span class="line">			Notice::set(<span class="string">'mod_marquee/msg'</span>, __(<span class="string">'Link image upload failed!'</span>));</span><br><span class="line">			Content::redirect(Html::uriquery(<span class="string">'mod_marquee'</span>, <span class="string">'upload_img'</span>));</span><br><span class="line">		&#125;</span><br></pre></td></tr></table></figure>
+<p>这部分代码应该是进行文件保存的功能，这个有个核心函数 <strong>_savelinkimg</strong> ，跟进这个函数。</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/20.png" alt="20"></p>
+<p>第二行问题出现了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$struct_file[<span class="string">'name'</span>] = iconv(<span class="string">"UTF-8"</span>, <span class="string">"gb2312"</span>, $struct_file[<span class="string">'name'</span>]);</span><br></pre></td></tr></table></figure>
+<p>在 <strong>iconv</strong> 转码的过程中, <strong>utf-&gt;gb2312</strong> (其他部分编码之间转换同样存在这个问题)会导致字符串被截断，如：<code>$filename=&quot;shell.php(hex).jpg</code>; (hex为0x80-0x99)，经过 <strong>iconv</strong> 转码后会变成 <code>$filename=&quot;shell.php&quot;</code> ;</p>
+<p><img src="/2018/08/01/聊下php下的截断问题/12.png" alt="12"></p>
+<h1 id="0x03-结果"><a href="#0x03-结果" class="headerlink" title="0x03 结果"></a>0x03 结果</h1><p>总结一下截断大概可以在以下情况适用</p>
+<ul>
+<li>include(require)</li>
+<li>file_get_contents</li>
+<li>file_exists</li>
+<li>所有url中参数可以用%00控制</li>
+</ul>
+<h1 id="0x04-参考文献"><a href="#0x04-参考文献" class="headerlink" title="0x04 参考文献"></a>0x04 参考文献</h1><p><a href="https://blog.csdn.net/zhangzhuangtongxue/article/details/78198191" target="_blank" rel="noopener">从源码级别了解PHP %00截断原理</a></p>
+<p>潜伏在PHP Manual背后的特性及漏洞（看雪峰会议题）</p>
+<p>wooyun-2014-048293</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/16/谈谈escapeshellarg参数绕过和注入的问题/" rel="next" title="谈谈escapeshellarg参数绕过和注入的问题">
+                <i class="fa fa-chevron-left"></i> 谈谈escapeshellarg参数绕过和注入的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/3018/07/30/php-code-audit-project/" rel="prev" title="php_code_audit_project">
+                php_code_audit_project <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-起因"><span class="nav-text">0x01 起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-经过"><span class="nav-text">0x02 经过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#源码理解"><span class="nav-text">源码理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用方式"><span class="nav-text">利用方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#延伸一下"><span class="nav-text">延伸一下</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际例子"><span class="nav-text">实际例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-结果"><span class="nav-text">0x03 结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-参考文献"><span class="nav-text">0x04 参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+    
+      <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = '0 ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+}); 
+</script>
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("UK6XjHUbz1agzT32wU9TCYHNH-gzGzoHsz", "Qok6iqgiGgI7g4lDx8MdQVEu");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
