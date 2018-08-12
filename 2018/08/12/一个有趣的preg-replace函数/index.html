@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/08/12/一个有趣的preg-replace函数/8.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/08/12/一个有趣的preg-replace函数/10.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/08/12/一个有趣的preg-replace函数/9.png">
-<meta property="og:updated_time" content="2018-08-12T10:17:10.484Z">
+<meta property="og:updated_time" content="2018-08-12T10:19:17.993Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个有趣的preg_replace函数">
 <meta name="twitter:description" content="0x01 起因事情的起因是下午遇到了 preg_replace 函数，我们都知道 preg_replace 函数可能会导致命令执行。现在我们来一些情况。 0x02 经过踩坑1:测试代码大概是这样的： 123foreach ($_GET as $regex =&amp;gt; $value) &amp;#123;    preg_replace(&apos;/(&apos; . $regex . &apos;)/ei&apos;,&apos;strtolower(">
@@ -428,6 +428,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\S*()=&#123;$&#123;phpinfo()&#125;&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/2018/08/12/一个有趣的preg-replace函数/10.png" alt="9"></p>
 <p><img src="/2018/08/12/一个有趣的preg-replace函数/9.png" alt="9"></p>
+<h1 id="0x04-后记"><a href="#0x04-后记" class="headerlink" title="0x04 后记"></a>0x04 后记</h1><p>其实还有点小问题，我这边没有写，不过大家可以看看这个<a href="https://xz.aliyun.com/t/2557" target="_blank" rel="noopener">深入研究preg_replace与代码执行</a>。</p>
 
       
     </div>
@@ -630,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-起因"><span class="nav-text">0x01 起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-经过"><span class="nav-text">0x02 经过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑1"><span class="nav-text">踩坑1:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑2："><span class="nav-text">踩坑2：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑3"><span class="nav-text">踩坑3:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-解决"><span class="nav-text">0x03 解决</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-起因"><span class="nav-text">0x01 起因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-经过"><span class="nav-text">0x02 经过</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑1"><span class="nav-text">踩坑1:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑2："><span class="nav-text">踩坑2：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#踩坑3"><span class="nav-text">踩坑3:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-解决"><span class="nav-text">0x03 解决</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-后记"><span class="nav-text">0x04 后记</span></a></li></ol></div>
             
 
           </div>
