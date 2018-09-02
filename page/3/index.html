@@ -2,6 +2,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
@@ -9,10 +18,20 @@
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -38,10 +57,6 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -50,25 +65,19 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT" />
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
 
 
 
@@ -78,8 +87,35 @@
 
 
 
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
 
-<meta name="description" content="愿你出走半生，归来仍是少年">
+
+  
+
+
+
+
+  <meta name="description" content="愿你出走半生，归来仍是少年">
 <meta property="og:type" content="website">
 <meta property="og:title" content="l1nk3r&#39;s blog">
 <meta property="og:url" content="http://www.lmxspace.com/page/3/index.html">
@@ -92,29 +128,6 @@
 
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
 
 
 
@@ -122,7 +135,11 @@
 
 
 
-
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>l1nk3r's blog</title>
   
@@ -133,6 +150,34 @@
 
 
 
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
@@ -153,19 +198,17 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">l1nk3r's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="Toggle navigation bar">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -173,75 +216,69 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-friends">
-          <a href="/Friends" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            Friends
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -249,12 +286,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
@@ -267,6 +312,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -276,7 +323,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -291,25 +338,52 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/22/一道ctf题的总结/" itemprop="url">一道ctf题的总结</a></h1>
+                <a class="post-title-link" href="/2018/01/22/一道ctf题的总结/" itemprop="url">
+                  一道ctf题的总结
+                </a>
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T20:14:54+08:00">
-                2018-01-22
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-01-22 20:14:54" itemprop="dateCreated datePublished" datetime="2018-01-22T20:14:54+08:00">2018-01-22</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:01:33" itemprop="dateModified" datetime="2018-09-02T22:01:33+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -318,24 +392,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2018/01/22/一道ctf题的总结/"class="leancloud_visitors" data-flag-title="一道ctf题的总结">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WriteUp/" itemprop="url" rel="index">
-                    <span itemprop="name">WriteUp</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/WriteUp/" itemprop="url" rel="index"><span itemprop="name">WriteUp</span></a></span>
 
                 
                 
@@ -355,10 +419,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -382,20 +445,20 @@
 
       
         
-          
-            周末偶然看到学弟们在群里发的一道web题目，心血来潮决定做做，还是学到点东西，做个记录，题目地址。
-0x01Git源代码泄露  该站点存在git源代码泄露，通过githack直接跑出代码文件。关注点有三个文件，一个是index2.php，一个是class.php，一个是waf.php，贴下关键代
-          ...
+          <p>  周末偶然看到学弟们在群里发的一道web题目，心血来潮决定做做，还是学到点东西，做个记录，<a href="http://47.104.99.231:20003/" target="_blank" rel="noopener">题目地址</a>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/01/22/一道ctf题的总结/#more" rel="contents">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
@@ -434,6 +497,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -443,7 +508,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -458,25 +523,52 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/03/PHP运算优先级小Tips/" itemprop="url">PHP运算优先级小Tips</a></h1>
+                <a class="post-title-link" href="/2018/01/03/PHP运算优先级小Tips/" itemprop="url">
+                  PHP运算优先级小Tips
+                </a>
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T20:04:18+08:00">
-                2018-01-03
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-01-03 20:04:18" itemprop="dateCreated datePublished" datetime="2018-01-03T20:04:18+08:00">2018-01-03</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:02:48" itemprop="dateModified" datetime="2018-09-02T22:02:48+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -485,24 +577,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2018/01/03/PHP运算优先级小Tips/"class="leancloud_visitors" data-flag-title="PHP运算优先级小Tips">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/代码审计/" itemprop="url" rel="index">
-                    <span itemprop="name">代码审计</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
                 
                 
@@ -522,10 +604,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -549,20 +630,20 @@
 
       
         
-          
-            最近在学习php，刚好看到一串代码，代码内容，大概是这样。
-1234567891011&lt;?php@$a = $_GET['a'];@$b = $_GET['b'];$c = is_numeric($a) and is_numeric($b);if($c)&#123;    print "h
-          ...
+          <p>  最近在学习php，刚好看到一串代码，代码内容，大概是这样。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/01/03/PHP运算优先级小Tips/#more" rel="contents">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
@@ -601,6 +682,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -610,7 +693,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -625,25 +708,52 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/10/Tomcat-Remote-Code-Execution/" itemprop="url">Tomcat-Remote-Code-Execution</a></h1>
+                <a class="post-title-link" href="/2017/12/10/Tomcat-Remote-Code-Execution/" itemprop="url">
+                  Tomcat-Remote-Code-Execution
+                </a>
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-10T21:18:15+08:00">
-                2017-12-10
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2017-12-10 21:18:15" itemprop="dateCreated datePublished" datetime="2017-12-10T21:18:15+08:00">2017-12-10</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:03:00" itemprop="dateModified" datetime="2018-09-02T22:03:00+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -652,24 +762,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2017/12/10/Tomcat-Remote-Code-Execution/"class="leancloud_visitors" data-flag-title="Tomcat-Remote-Code-Execution">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/代码审计/" itemprop="url" rel="index">
-                    <span itemprop="name">代码审计</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
                 
                 
@@ -689,10 +789,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -716,19 +815,20 @@
 
       
         
-          
-          0x01概述&emsp;&emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的
-          ...
+          <h1 id="0x01概述"><a href="#0x01概述" class="headerlink" title="0x01概述"></a>0x01概述</h1><p>&emsp;&emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/12/10/Tomcat-Remote-Code-Execution/#more" rel="contents">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
@@ -767,6 +867,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -776,7 +878,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -791,25 +893,52 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/10/OnePlus-One-Nethunter/" itemprop="url">OnePlus-One-Nethunter</a></h1>
+                <a class="post-title-link" href="/2017/12/10/OnePlus-One-Nethunter/" itemprop="url">
+                  OnePlus-One-Nethunter
+                </a>
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-10T20:00:52+08:00">
-                2017-12-10
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2017-12-10 20:00:52" itemprop="dateCreated datePublished" datetime="2017-12-10T20:00:52+08:00">2017-12-10</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:02:24" itemprop="dateModified" datetime="2018-09-02T22:02:24+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -818,24 +947,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2017/12/10/OnePlus-One-Nethunter/"class="leancloud_visitors" data-flag-title="OnePlus-One-Nethunter">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/奇淫技巧/" itemprop="url" rel="index">
-                    <span itemprop="name">奇淫技巧</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/奇淫技巧/" itemprop="url" rel="index"><span itemprop="name">奇淫技巧</span></a></span>
 
                 
                 
@@ -855,10 +974,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -882,27 +1000,24 @@
 
       
         
-          
-          设备信息：
-设备名称：OnePlus One（一加1）
-OS：ColorOS 1.2
-设备型号：A0001
-
-操作流程：下载相关资源：
-
-TWRP——第三方Recovery：twrp-2.8.6.0-bacon.img。下载链接
-SuperSu——root软件：BETA-SuperSU-v2.60-
-          ...
+          <h1 id="设备信息："><a href="#设备信息：" class="headerlink" title="设备信息："></a>设备信息：</h1><ul>
+<li>设备名称：OnePlus One（一加1）</li>
+<li>OS：ColorOS 1.2</li>
+<li>设备型号：A0001</li>
+</ul>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/12/10/OnePlus-One-Nethunter/#more" rel="contents">
-              阅读全文 &raquo;
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
         
       
     </div>
+
+    
+
     
     
     
@@ -937,15 +1052,12 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
   </nav>
 
 
 
           </div>
-          
-
-
           
 
         </div>
@@ -980,66 +1092,127 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
               <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
+            </nav>
+          
 
           
 
           
             <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
-                      
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  </span>
-                
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
             </div>
           
 
@@ -1050,12 +1223,22 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
           
 
           
+            
+          
+          
 
         </div>
       </section>
 
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -1069,10 +1252,12 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
 
   
 </div>
@@ -1084,8 +1269,8 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
 
 
-
         
+
 
 
 
@@ -1098,10 +1283,9 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
     </footer>
 
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+
+    
+	
     
 
     
@@ -1123,10 +1307,12 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
 
 
-  
 
 
-  
+
+
+
+
 
 
 
@@ -1145,16 +1331,6 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
   
   
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
@@ -1163,23 +1339,13 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-  
-
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
 
 
 
@@ -1191,21 +1357,7 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
 
 
 
@@ -1213,11 +1365,7 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
 
 
-
-
   
-
-
 
 
 
@@ -1237,11 +1385,9 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
   <script>
+    
     function showTime(Counter) {
-      var query = new AV.Query(Counter);
       var entries = [];
       var $visitors = $(".leancloud_visitors");
 
@@ -1249,9 +1395,8 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
         entries.push( $(this).attr("id").trim() );
       });
 
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { "$in": entries } }) })
+        .done(function ({ results }) {
           var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
 
           if (results.length === 0) {
@@ -1261,8 +1406,8 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
           for (var i = 0; i < results.length; i++) {
             var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
+            var url = item.url;
+            var time = item.time;
             var element = document.getElementById(url);
 
             $(element).find(COUNT_CONTAINER_REF).text(time);
@@ -1276,68 +1421,33 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
             }
           }
         })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
+        .fail(function ({ responseJSON }) {
+          console.log("LeanCloud Counter Error: " + responseJSON.code + " " + responseJSON.error);
         });
     }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
-          } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          if ($('.post-title-link').length >= 1) {
+            showTime(Counter);
+          }
+          
+        })
     });
   </script>
 
@@ -1348,6 +1458,8 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
   
 
   
+
+  
   
 
   
@@ -1356,90 +1468,10 @@ SuperSu——root软件：BETA-SuperSU-v2.60-
 
   
 
-  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
   
-     <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
-<script>
-function showTime(Counter) {
-	var query = new AV.Query(Counter);
-	$(".leancloud_visitors").each(function() {
-		var url = $(this).attr("id").trim();
-		query.equalTo("url", url);
-		query.find({
-			success: function(results) {
-				if (results.length == 0) {
-					var content = $(document.getElementById(url)).text() + ': 0';
-					$(document.getElementById(url)).text(content);
-					return;
-				}
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-					$(document.getElementById(url)).text(content);
-				}
-			},
-			error: function(object, error) {
-				console.log("Error: " + error.code + " " + error.message);
-			}
-		});
 
-	});
-}
-
-function addCount(Counter) {
-	var Counter = AV.Object.extend("Counter");
-	url = $(".leancloud_visitors").attr('id').trim();
-	title = $(".leancloud_visitors").attr('data-flag-title').trim();
-	var query = new AV.Query(Counter);
-	query.equalTo("url", url);
-	query.find({
-		success: function(results) {
-			if (results.length > 0) {
-				var counter = results[0];
-				counter.fetchWhenSave(true);
-				counter.increment("time");
-				counter.save(null, {
-					success: function(counter) {
-						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(counter, error) {
-						console.log('Failed to save Visitor num, with error message: ' + error.message);
-					}
-				});
-			} else {
-				var newcounter = new Counter();
-				newcounter.set("title", title);
-				newcounter.set("url", url);
-				newcounter.set("time", 1);
-				newcounter.save(null, {
-					success: function(newcounter) {
-					    console.log("newcounter.get('time')="+newcounter.get('time'));
-						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(newcounter, error) {
-						console.log('Failed to create');
-					}
-				});
-			}
-		},
-		error: function(error) {
-			console.log('Error:' + error.code + " " + error.message);
-		}
-	});
-}
-$(function() {
-	var Counter = AV.Object.extend("Counter");
-	if ($('.leancloud_visitors').length == 1) {
-		addCount(Counter);
-	} else if ($('.post-title-link').length > 1) {
-		showTime(Counter);
-	}
-});
-</script>
   
+
 </body>
 </html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>

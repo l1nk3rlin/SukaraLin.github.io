@@ -2,6 +2,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
@@ -9,10 +18,20 @@
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -38,10 +57,6 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -50,25 +65,19 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="php,文件上传," />
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
 
 
 
@@ -78,14 +87,41 @@
 
 
 
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
 
-<meta name="description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。 0x02 开始做题pass 01代码分析从代码来看，第一关的校验是上传校验的方法是前端js校验。 12345678910111213141516171819&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;    function checkFile() &amp;#12">
+
+  
+
+
+
+
+  <meta name="description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。">
 <meta name="keywords" content="php,文件上传">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文件上传漏洞writeup">
 <meta property="og:url" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/index.html">
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
-<meta property="og:description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。 0x02 开始做题pass 01代码分析从代码来看，第一关的校验是上传校验的方法是前端js校验。 12345678910111213141516171819&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;    function checkFile() &amp;#12">
+<meta property="og:description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/1528721457500.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/1528721492517.png">
@@ -120,37 +156,14 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/1528808740705.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/1528809245482.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/1528809572834.png">
-<meta property="og:updated_time" content="2018-06-12T13:29:07.294Z">
+<meta property="og:updated_time" content="2018-09-02T14:01:25.243Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="文件上传漏洞writeup">
-<meta name="twitter:description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。 0x02 开始做题pass 01代码分析从代码来看，第一关的校验是上传校验的方法是前端js校验。 12345678910111213141516171819&amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;    function checkFile() &amp;#12">
+<meta name="twitter:description" content="0x01 写在前面之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。">
 <meta name="twitter:image" content="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/1528721457500.png">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
 
 
 
@@ -158,7 +171,11 @@
 
 
 
-
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>文件上传漏洞writeup | l1nk3r's blog</title>
   
@@ -169,6 +186,34 @@
 
 
 
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
@@ -188,19 +233,17 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">l1nk3r's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="Toggle navigation bar">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -208,75 +251,69 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-friends">
-          <a href="/Friends" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            Friends
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -284,12 +321,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -302,6 +347,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -311,7 +358,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -324,25 +371,50 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">文件上传漏洞writeup</h1>
+          <h1 class="post-title" itemprop="name headline">文件上传漏洞writeup
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T21:27:09+08:00">
-                2018-06-12
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-06-12 21:27:09" itemprop="dateCreated datePublished" datetime="2018-06-12T21:27:09+08:00">2018-06-12</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:01:25" itemprop="dateModified" datetime="2018-09-02T22:01:25+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -351,24 +423,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2018/06/12/文件上传漏洞writeup/"class="leancloud_visitors" data-flag-title="文件上传漏洞writeup">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WriteUp/" itemprop="url" rel="index">
-                    <span itemprop="name">WriteUp</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/WriteUp/" itemprop="url" rel="index"><span itemprop="name">WriteUp</span></a></span>
 
                 
                 
@@ -388,10 +450,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -415,6 +476,7 @@
 
       
         <h1 id="0x01-写在前面"><a href="#0x01-写在前面" class="headerlink" title="0x01 写在前面"></a>0x01 写在前面</h1><p>之前github上有个人总结了上传的漏洞类型，欠了好久，现在来补作业了。</p>
+<a id="more"></a> 
 <h1 id="0x02-开始做题"><a href="#0x02-开始做题" class="headerlink" title="0x02 开始做题"></a>0x02 开始做题</h1><h2 id="pass-01"><a href="#pass-01" class="headerlink" title="pass 01"></a>pass 01</h2><h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><p>从代码来看，第一关的校验是上传校验的方法是前端js校验。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">    function checkFile() &#123;</span><br><span class="line">        var file = document.getElementsByName(&apos;upload_file&apos;)[0].value;</span><br><span class="line">        if (file == null || file == &quot;&quot;) &#123;</span><br><span class="line">            alert(&quot;请选择要上传的文件!&quot;);</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        //定义允许上传的文件类型</span><br><span class="line">        var allow_ext = &quot;.jpg|.png|.gif&quot;;</span><br><span class="line">        //提取上传文件的类型</span><br><span class="line">        var ext_name = file.substring(file.lastIndexOf(&quot;.&quot;));</span><br><span class="line">        //判断上传文件类型是否允许上传</span><br><span class="line">        if (allow_ext.indexOf(ext_name) == -1) &#123;</span><br><span class="line">            var errMsg = &quot;该文件不允许上传，请上传&quot; + allow_ext + &quot;类型的文件,当前文件类型为：&quot; + ext_name;</span><br><span class="line">            alert(errMsg);</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="解题方法"><a href="#解题方法" class="headerlink" title="解题方法"></a>解题方法</h3><p>新建一个phpinfo.jpg的文件，直接上传通过前端js校验，然后通过burp抓包修改成php。</p>
@@ -548,6 +610,9 @@
 
       
     </div>
+
+    
+
     
     
     
@@ -556,6 +621,20 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>l1nk3r</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/" title="文件上传漏洞writeup">http://www.lmxspace.com/2018/06/12/文件上传漏洞writeup/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -605,17 +684,10 @@
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
-          
-
-
           
 
   
@@ -643,10 +715,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -663,66 +735,127 @@
               <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
+            </nav>
+          
 
           
 
           
             <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
-                      
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  </span>
-                
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
             </div>
           
 
@@ -732,6 +865,9 @@
           
           
 
+          
+            
+          
           
 
         </div>
@@ -747,7 +883,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在前面"><span class="nav-text">0x01 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-开始做题"><span class="nav-text">0x02 开始做题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-01"><span class="nav-text">pass 01</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-02"><span class="nav-text">pass 02</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-1"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-1"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-03"><span class="nav-text">pass 03</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-2"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-2"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-04"><span class="nav-text">pass 04</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-3"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-3"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-05"><span class="nav-text">pass 05</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-4"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-4"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-06"><span class="nav-text">pass 06</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-5"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法"><span class="nav-text">解题办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-07"><span class="nav-text">pass 07</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-6"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法-1"><span class="nav-text">解题办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-08"><span class="nav-text">pass 08</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-7"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-5"><span class="nav-text">解题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NTFS-交换数据流"><span class="nav-text">NTFS 交换数据流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-09"><span class="nav-text">pass 09</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-8"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-6"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-10"><span class="nav-text">pass 10</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-9"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-7"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-11"><span class="nav-text">pass 11</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-10"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-8"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-12"><span class="nav-text">pass 12</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-11"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-9"><span class="nav-text">解题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-00截断原理"><span class="nav-text">php %00截断原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-13"><span class="nav-text">pass 13</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-12"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-10"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-14"><span class="nav-text">pass 14</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-13"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-11"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-15"><span class="nav-text">pass 15</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-14"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-12"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-16"><span class="nav-text">pass 16</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-15"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-13"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-17"><span class="nav-text">pass 17</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-16"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-14"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-18"><span class="nav-text">pass 18</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-17"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-15"><span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-19"><span class="nav-text">pass 19</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-18"><span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法-2"><span class="nav-text">解题办法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在前面"><span class="nav-number">1.</span> <span class="nav-text">0x01 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-开始做题"><span class="nav-number">2.</span> <span class="nav-text">0x02 开始做题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-01"><span class="nav-number">2.1.</span> <span class="nav-text">pass 01</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-number">2.1.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法"><span class="nav-number">2.1.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-02"><span class="nav-number">2.2.</span> <span class="nav-text">pass 02</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-03"><span class="nav-number">2.3.</span> <span class="nav-text">pass 03</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-04"><span class="nav-number">2.4.</span> <span class="nav-text">pass 04</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-05"><span class="nav-number">2.5.</span> <span class="nav-text">pass 05</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-4"><span class="nav-number">2.5.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-4"><span class="nav-number">2.5.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-06"><span class="nav-number">2.6.</span> <span class="nav-text">pass 06</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-5"><span class="nav-number">2.6.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法"><span class="nav-number">2.6.2.</span> <span class="nav-text">解题办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-07"><span class="nav-number">2.7.</span> <span class="nav-text">pass 07</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-6"><span class="nav-number">2.7.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法-1"><span class="nav-number">2.7.2.</span> <span class="nav-text">解题办法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-08"><span class="nav-number">2.8.</span> <span class="nav-text">pass 08</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-7"><span class="nav-number">2.8.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-5"><span class="nav-number">2.8.2.</span> <span class="nav-text">解题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NTFS-交换数据流"><span class="nav-number">2.8.2.1.</span> <span class="nav-text">NTFS 交换数据流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-09"><span class="nav-number">2.9.</span> <span class="nav-text">pass 09</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-8"><span class="nav-number">2.9.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-6"><span class="nav-number">2.9.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-10"><span class="nav-number">2.10.</span> <span class="nav-text">pass 10</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-9"><span class="nav-number">2.10.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-7"><span class="nav-number">2.10.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-11"><span class="nav-number">2.11.</span> <span class="nav-text">pass 11</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-10"><span class="nav-number">2.11.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-8"><span class="nav-number">2.11.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-12"><span class="nav-number">2.12.</span> <span class="nav-text">pass 12</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-11"><span class="nav-number">2.12.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-9"><span class="nav-number">2.12.2.</span> <span class="nav-text">解题方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-00截断原理"><span class="nav-number">2.12.2.1.</span> <span class="nav-text">php %00截断原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-13"><span class="nav-number">2.13.</span> <span class="nav-text">pass 13</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-12"><span class="nav-number">2.13.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-10"><span class="nav-number">2.13.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-14"><span class="nav-number">2.14.</span> <span class="nav-text">pass 14</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-13"><span class="nav-number">2.14.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-11"><span class="nav-number">2.14.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-15"><span class="nav-number">2.15.</span> <span class="nav-text">pass 15</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-14"><span class="nav-number">2.15.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-12"><span class="nav-number">2.15.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-16"><span class="nav-number">2.16.</span> <span class="nav-text">pass 16</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-15"><span class="nav-number">2.16.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-13"><span class="nav-number">2.16.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-17"><span class="nav-number">2.17.</span> <span class="nav-text">pass 17</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-16"><span class="nav-number">2.17.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-14"><span class="nav-number">2.17.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-18"><span class="nav-number">2.18.</span> <span class="nav-text">pass 18</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-17"><span class="nav-number">2.18.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题方法-15"><span class="nav-number">2.18.2.</span> <span class="nav-text">解题方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pass-19"><span class="nav-number">2.19.</span> <span class="nav-text">pass 19</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析-18"><span class="nav-number">2.19.1.</span> <span class="nav-text">代码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题办法-2"><span class="nav-number">2.19.2.</span> <span class="nav-text">解题办法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-number">3.</span> <span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-number">4.</span> <span class="nav-text">Refer</span></a></li></ol></div>
             
 
           </div>
@@ -755,6 +891,13 @@
       <!--/noindex-->
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -768,10 +911,12 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
 
   
 </div>
@@ -783,8 +928,8 @@
 
 
 
-
         
+
 
 
 
@@ -797,10 +942,9 @@
     </footer>
 
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+
+    
+	
     
 
     
@@ -822,10 +966,12 @@
 
 
 
-  
 
 
-  
+
+
+
+
 
 
 
@@ -844,16 +990,6 @@
 
   
   
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
@@ -862,23 +998,13 @@
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-  
-
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
 
 
 
@@ -886,29 +1012,15 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
 
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
 
 
 
@@ -916,11 +1028,7 @@
 
 
 
-
-
   
-
-
 
 
 
@@ -940,107 +1048,64 @@
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
       var $visitors = $(".leancloud_visitors");
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
       });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
     });
   </script>
 
@@ -1051,6 +1116,8 @@
   
 
   
+
+  
   
 
   
@@ -1059,90 +1126,10 @@
 
   
 
-  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
   
-     <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
-<script>
-function showTime(Counter) {
-	var query = new AV.Query(Counter);
-	$(".leancloud_visitors").each(function() {
-		var url = $(this).attr("id").trim();
-		query.equalTo("url", url);
-		query.find({
-			success: function(results) {
-				if (results.length == 0) {
-					var content = $(document.getElementById(url)).text() + ': 0';
-					$(document.getElementById(url)).text(content);
-					return;
-				}
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-					$(document.getElementById(url)).text(content);
-				}
-			},
-			error: function(object, error) {
-				console.log("Error: " + error.code + " " + error.message);
-			}
-		});
 
-	});
-}
-
-function addCount(Counter) {
-	var Counter = AV.Object.extend("Counter");
-	url = $(".leancloud_visitors").attr('id').trim();
-	title = $(".leancloud_visitors").attr('data-flag-title').trim();
-	var query = new AV.Query(Counter);
-	query.equalTo("url", url);
-	query.find({
-		success: function(results) {
-			if (results.length > 0) {
-				var counter = results[0];
-				counter.fetchWhenSave(true);
-				counter.increment("time");
-				counter.save(null, {
-					success: function(counter) {
-						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(counter, error) {
-						console.log('Failed to save Visitor num, with error message: ' + error.message);
-					}
-				});
-			} else {
-				var newcounter = new Counter();
-				newcounter.set("title", title);
-				newcounter.set("url", url);
-				newcounter.set("time", 1);
-				newcounter.save(null, {
-					success: function(newcounter) {
-					    console.log("newcounter.get('time')="+newcounter.get('time'));
-						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(newcounter, error) {
-						console.log('Failed to create');
-					}
-				});
-			}
-		},
-		error: function(error) {
-			console.log('Error:' + error.code + " " + error.message);
-		}
-	});
-}
-$(function() {
-	var Counter = AV.Object.extend("Counter");
-	if ($('.leancloud_visitors').length == 1) {
-		addCount(Counter);
-	} else if ($('.post-title-link').length > 1) {
-		showTime(Counter);
-	}
-});
-</script>
   
+
 </body>
 </html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>

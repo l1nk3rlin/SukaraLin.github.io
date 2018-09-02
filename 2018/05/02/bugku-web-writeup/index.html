@@ -2,6 +2,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
@@ -9,10 +18,20 @@
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -38,10 +57,6 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -50,57 +65,25 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="php,ctf," />
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
 
 
 
 
 
 
-
-
-
-
-<meta name="description" content="web2F12了解一下，flag就在源码里了。 flag KEY{Web-2-bugKssNNikls9100} 文件上传测试直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.  Flag:42e97d465f962c53df9549377b513c7e 计算器这里将maxlength限制为了1，直接前端修改为3，口算点击提交即可获得flag">
-<meta name="keywords" content="php,ctf">
-<meta property="og:type" content="article">
-<meta property="og:title" content="bugku-web-writeup">
-<meta property="og:url" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/index.html">
-<meta property="og:site_name" content="l1nk3r&#39;s blog">
-<meta property="og:description" content="web2F12了解一下，flag就在源码里了。 flag KEY{Web-2-bugKssNNikls9100} 文件上传测试直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.  Flag:42e97d465f962c53df9549377b513c7e 计算器这里将maxlength限制为了1，直接前端修改为3，口算点击提交即可获得flag">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/3.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/4.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/11.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/10.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/9.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/8.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/6.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/7.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/12.png">
-<meta property="og:updated_time" content="2018-05-02T09:34:44.120Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bugku-web-writeup">
-<meta name="twitter:description" content="web2F12了解一下，flag就在源码里了。 flag KEY{Web-2-bugKssNNikls9100} 文件上传测试直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.  Flag:42e97d465f962c53df9549377b513c7e 计算器这里将maxlength限制为了1，直接前端修改为3，口算点击提交即可获得flag">
-<meta name="twitter:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/3.png">
 
 
 
@@ -109,15 +92,13 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -129,12 +110,48 @@
 </script>
 
 
+  
+
+
+
+
+  <meta name="description" content="web2F12了解一下，flag就在源码里了。 flag KEY{Web-2-bugKssNNikls9100} 文件上传测试直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.  Flag:42e97d465f962c53df9549377b513c7e 计算器这里将maxlength限制为了1，直接前端修改为3，口算点击提交即可获得fl">
+<meta name="keywords" content="php,ctf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bugku-web-writeup">
+<meta property="og:url" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="web2F12了解一下，flag就在源码里了。 flag KEY{Web-2-bugKssNNikls9100} 文件上传测试直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.  Flag:42e97d465f962c53df9549377b513c7e 计算器这里将maxlength限制为了1，直接前端修改为3，口算点击提交即可获得fl">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/4.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/11.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/6.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/12.png">
+<meta property="og:updated_time" content="2018-09-02T14:01:54.910Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bugku-web-writeup">
+<meta name="twitter:description" content="web2F12了解一下，flag就在源码里了。 flag KEY{Web-2-bugKssNNikls9100} 文件上传测试直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.  Flag:42e97d465f962c53df9549377b513c7e 计算器这里将maxlength限制为了1，直接前端修改为3，口算点击提交即可获得fl">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/3.png">
+
+
+
+
+
 
   <link rel="canonical" href="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/"/>
 
 
 
-
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>bugku-web-writeup | l1nk3r's blog</title>
   
@@ -145,6 +162,34 @@
 
 
 
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
@@ -164,19 +209,17 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">l1nk3r's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="Toggle navigation bar">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -184,75 +227,69 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-friends">
-          <a href="/Friends" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            Friends
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -260,12 +297,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -278,6 +323,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -287,7 +334,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -300,25 +347,50 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">bugku-web-writeup</h1>
+          <h1 class="post-title" itemprop="name headline">bugku-web-writeup
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T17:29:28+08:00">
-                2018-05-02
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-05-02 17:29:28" itemprop="dateCreated datePublished" datetime="2018-05-02T17:29:28+08:00">2018-05-02</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:01:54" itemprop="dateModified" datetime="2018-09-02T22:01:54+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -327,24 +399,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2018/05/02/bugku-web-writeup/"class="leancloud_visitors" data-flag-title="bugku-web-writeup">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WriteUp/" itemprop="url" rel="index">
-                    <span itemprop="name">WriteUp</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/WriteUp/" itemprop="url" rel="index"><span itemprop="name">WriteUp</span></a></span>
 
                 
                 
@@ -364,10 +426,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -390,7 +451,8 @@
       
 
       
-        <h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a><a href="http://120.24.86.145:8002/web2/" target="_blank" rel="noopener">web2</a></h2><p>F12了解一下，flag就在源码里了。</p>
+        <a id="more"></a> 
+<h2 id="web2"><a href="#web2" class="headerlink" title="web2"></a><a href="http://120.24.86.145:8002/web2/" target="_blank" rel="noopener">web2</a></h2><p>F12了解一下，flag就在源码里了。</p>
 <p><code>flag KEY{Web-2-bugKssNNikls9100}</code></p>
 <h2 id="文件上传测试"><a href="#文件上传测试" class="headerlink" title="文件上传测试"></a><a href="http://103.238.227.13:10085/" target="_blank" rel="noopener">文件上传测试</a></h2><p>直接上传报错，通过burp抓包，修改Content-Type为image/jpeg，成功上传获取flag.</p>
 <p><img src="/2018/05/02/bugku-web-writeup/3.png" alt="3"></p>
@@ -657,6 +719,9 @@
 
       
     </div>
+
+    
+
     
     
     
@@ -665,6 +730,20 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>l1nk3r</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.lmxspace.com/2018/05/02/bugku-web-writeup/" title="bugku-web-writeup">http://www.lmxspace.com/2018/05/02/bugku-web-writeup/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -714,17 +793,10 @@
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
-          
-
-
           
 
   
@@ -752,10 +824,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -772,66 +844,127 @@
               <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
+            </nav>
+          
 
           
 
           
             <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
-                      
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  </span>
-                
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
             </div>
           
 
@@ -841,6 +974,9 @@
           
           
 
+          
+            
+          
           
 
         </div>
@@ -856,7 +992,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#web2"><span class="nav-text">web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传测试"><span class="nav-text">文件上传测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算器"><span class="nav-text">计算器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web基础-GET"><span class="nav-text">web基础$_GET</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web基础-POST"><span class="nav-text">web基础$_POST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矛盾"><span class="nav-text">矛盾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web3"><span class="nav-text">Web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL注入"><span class="nav-text">SQL注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名解析"><span class="nav-text">域名解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL注入1"><span class="nav-text">SQL注入1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你必须让他停下"><span class="nav-text">你必须让他停下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地包含"><span class="nav-text">本地包含</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量1"><span class="nav-text">变量1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web5"><span class="nav-text">web5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#头等舱"><span class="nav-text">头等舱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4"><span class="nav-text">web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flag在index里"><span class="nav-text">flag在index里</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入密码查看flag"><span class="nav-text">输入密码查看flag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#点击一百万次"><span class="nav-text">点击一百万次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#备份是个好习惯"><span class="nav-text">备份是个好习惯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成绩查询"><span class="nav-text">成绩查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#秋名山老司机"><span class="nav-text">秋名山老司机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#速度要快"><span class="nav-text">速度要快</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cookies欺骗"><span class="nav-text">cookies欺骗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS"><span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#never-give-up"><span class="nav-text">never give up</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#welcome-to-bugkuctf"><span class="nav-text">welcome to bugkuctf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过狗一句话"><span class="nav-text">过狗一句话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符？正则？"><span class="nav-text">字符？正则？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前女友-SKCTF"><span class="nav-text">前女友(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#login1-SKCTF"><span class="nav-text">login1(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你从哪里来"><span class="nav-text">你从哪里来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#md5-collision-NUPT-CTF"><span class="nav-text">md5 collision(NUPT_CTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种绕过"><span class="nav-text">各种绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web8"><span class="nav-text">web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#细心"><span class="nav-text">细心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求getshell"><span class="nav-text">求getshell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INSERT-INTO注入"><span class="nav-text">INSERT INTO注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这是一个神奇的登陆框"><span class="nav-text">这是一个神奇的登陆框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多次"><span class="nav-text">多次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-encrypt-1-ISCCCTF"><span class="nav-text">PHP_encrypt_1(ISCCCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件包含2"><span class="nav-text">文件包含2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql注入2"><span class="nav-text">sql注入2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报错注入"><span class="nav-text">报错注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trim的日记本"><span class="nav-text">Trim的日记本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#login2-SKCTF"><span class="nav-text">login2(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#login3-SKCTF"><span class="nav-text">login3(SKCTF)</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#web2"><span class="nav-number">1.</span> <span class="nav-text">web2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件上传测试"><span class="nav-number">2.</span> <span class="nav-text">文件上传测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算器"><span class="nav-number">3.</span> <span class="nav-text">计算器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web基础-GET"><span class="nav-number">4.</span> <span class="nav-text">web基础$_GET</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web基础-POST"><span class="nav-number">5.</span> <span class="nav-text">web基础$_POST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矛盾"><span class="nav-number">6.</span> <span class="nav-text">矛盾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web3"><span class="nav-number">7.</span> <span class="nav-text">Web3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL注入"><span class="nav-number">8.</span> <span class="nav-text">SQL注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#域名解析"><span class="nav-number">9.</span> <span class="nav-text">域名解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL注入1"><span class="nav-number">10.</span> <span class="nav-text">SQL注入1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你必须让他停下"><span class="nav-number">11.</span> <span class="nav-text">你必须让他停下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地包含"><span class="nav-number">12.</span> <span class="nav-text">本地包含</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量1"><span class="nav-number">13.</span> <span class="nav-text">变量1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web5"><span class="nav-number">14.</span> <span class="nav-text">web5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#头等舱"><span class="nav-number">15.</span> <span class="nav-text">头等舱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web4"><span class="nav-number">16.</span> <span class="nav-text">web4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flag在index里"><span class="nav-number">17.</span> <span class="nav-text">flag在index里</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入密码查看flag"><span class="nav-number">18.</span> <span class="nav-text">输入密码查看flag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#点击一百万次"><span class="nav-number">19.</span> <span class="nav-text">点击一百万次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#备份是个好习惯"><span class="nav-number">20.</span> <span class="nav-text">备份是个好习惯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成绩查询"><span class="nav-number">21.</span> <span class="nav-text">成绩查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#秋名山老司机"><span class="nav-number">22.</span> <span class="nav-text">秋名山老司机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#速度要快"><span class="nav-number">23.</span> <span class="nav-text">速度要快</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cookies欺骗"><span class="nav-number">24.</span> <span class="nav-text">cookies欺骗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSS"><span class="nav-number">25.</span> <span class="nav-text">XSS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#never-give-up"><span class="nav-number">26.</span> <span class="nav-text">never give up</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#welcome-to-bugkuctf"><span class="nav-number">27.</span> <span class="nav-text">welcome to bugkuctf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过狗一句话"><span class="nav-number">28.</span> <span class="nav-text">过狗一句话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符？正则？"><span class="nav-number">29.</span> <span class="nav-text">字符？正则？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前女友-SKCTF"><span class="nav-number">30.</span> <span class="nav-text">前女友(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#login1-SKCTF"><span class="nav-number">31.</span> <span class="nav-text">login1(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你从哪里来"><span class="nav-number">32.</span> <span class="nav-text">你从哪里来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#md5-collision-NUPT-CTF"><span class="nav-number">33.</span> <span class="nav-text">md5 collision(NUPT_CTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各种绕过"><span class="nav-number">34.</span> <span class="nav-text">各种绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web8"><span class="nav-number">35.</span> <span class="nav-text">web8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#细心"><span class="nav-number">36.</span> <span class="nav-text">细心</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求getshell"><span class="nav-number">37.</span> <span class="nav-text">求getshell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#INSERT-INTO注入"><span class="nav-number">38.</span> <span class="nav-text">INSERT INTO注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这是一个神奇的登陆框"><span class="nav-number">39.</span> <span class="nav-text">这是一个神奇的登陆框</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多次"><span class="nav-number">40.</span> <span class="nav-text">多次</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP-encrypt-1-ISCCCTF"><span class="nav-number">41.</span> <span class="nav-text">PHP_encrypt_1(ISCCCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件包含2"><span class="nav-number">42.</span> <span class="nav-text">文件包含2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sql注入2"><span class="nav-number">43.</span> <span class="nav-text">sql注入2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报错注入"><span class="nav-number">44.</span> <span class="nav-text">报错注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trim的日记本"><span class="nav-number">45.</span> <span class="nav-text">Trim的日记本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#login2-SKCTF"><span class="nav-number">46.</span> <span class="nav-text">login2(SKCTF)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#login3-SKCTF"><span class="nav-number">47.</span> <span class="nav-text">login3(SKCTF)</span></a></li></ol></div>
             
 
           </div>
@@ -864,6 +1000,13 @@
       <!--/noindex-->
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -877,10 +1020,12 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
 
   
 </div>
@@ -892,8 +1037,8 @@
 
 
 
-
         
+
 
 
 
@@ -906,10 +1051,9 @@
     </footer>
 
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+
+    
+	
     
 
     
@@ -931,10 +1075,12 @@
 
 
 
-  
 
 
-  
+
+
+
+
 
 
 
@@ -953,16 +1099,6 @@
 
   
   
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
@@ -971,23 +1107,13 @@
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-  
-
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
 
 
 
@@ -995,29 +1121,15 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
 
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
 
 
 
@@ -1025,11 +1137,7 @@
 
 
 
-
-
   
-
-
 
 
 
@@ -1049,107 +1157,64 @@
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
       var $visitors = $(".leancloud_visitors");
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
       });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
     });
   </script>
 
@@ -1160,6 +1225,8 @@
   
 
   
+
+  
   
 
   
@@ -1168,90 +1235,10 @@
 
   
 
-  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
   
-     <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
-<script>
-function showTime(Counter) {
-	var query = new AV.Query(Counter);
-	$(".leancloud_visitors").each(function() {
-		var url = $(this).attr("id").trim();
-		query.equalTo("url", url);
-		query.find({
-			success: function(results) {
-				if (results.length == 0) {
-					var content = $(document.getElementById(url)).text() + ': 0';
-					$(document.getElementById(url)).text(content);
-					return;
-				}
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-					$(document.getElementById(url)).text(content);
-				}
-			},
-			error: function(object, error) {
-				console.log("Error: " + error.code + " " + error.message);
-			}
-		});
 
-	});
-}
-
-function addCount(Counter) {
-	var Counter = AV.Object.extend("Counter");
-	url = $(".leancloud_visitors").attr('id').trim();
-	title = $(".leancloud_visitors").attr('data-flag-title').trim();
-	var query = new AV.Query(Counter);
-	query.equalTo("url", url);
-	query.find({
-		success: function(results) {
-			if (results.length > 0) {
-				var counter = results[0];
-				counter.fetchWhenSave(true);
-				counter.increment("time");
-				counter.save(null, {
-					success: function(counter) {
-						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(counter, error) {
-						console.log('Failed to save Visitor num, with error message: ' + error.message);
-					}
-				});
-			} else {
-				var newcounter = new Counter();
-				newcounter.set("title", title);
-				newcounter.set("url", url);
-				newcounter.set("time", 1);
-				newcounter.save(null, {
-					success: function(newcounter) {
-					    console.log("newcounter.get('time')="+newcounter.get('time'));
-						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(newcounter, error) {
-						console.log('Failed to create');
-					}
-				});
-			}
-		},
-		error: function(error) {
-			console.log('Error:' + error.code + " " + error.message);
-		}
-	});
-}
-$(function() {
-	var Counter = AV.Object.extend("Counter");
-	if ($('.leancloud_visitors').length == 1) {
-		addCount(Counter);
-	} else if ($('.post-title-link').length > 1) {
-		showTime(Counter);
-	}
-});
-</script>
   
+
 </body>
 </html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>

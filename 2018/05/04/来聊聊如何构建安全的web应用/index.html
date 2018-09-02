@@ -2,6 +2,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
@@ -9,10 +18,20 @@
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -38,10 +57,6 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -50,50 +65,25 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="php,经验," />
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
 
 
 
 
 
 
-
-
-
-
-<meta name="description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。 第一章 安全策略首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。 0x01 良好正确的心态最近经常">
-<meta name="keywords" content="php,经验">
-<meta property="og:type" content="article">
-<meta property="og:title" content="来聊聊如何构建安全的web应用">
-<meta property="og:url" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/index.html">
-<meta property="og:site_name" content="l1nk3r&#39;s blog">
-<meta property="og:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。 第一章 安全策略首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。 0x01 良好正确的心态最近经常">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/1.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/2.png">
-<meta property="og:updated_time" content="2018-05-04T14:39:34.379Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="来聊聊如何构建安全的web应用">
-<meta name="twitter:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。 第一章 安全策略首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。 0x01 良好正确的心态最近经常">
-<meta name="twitter:image" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/1.png">
 
 
 
@@ -102,15 +92,13 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -122,12 +110,41 @@
 </script>
 
 
+  
+
+
+
+
+  <meta name="description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。">
+<meta name="keywords" content="php,经验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="来聊聊如何构建安全的web应用">
+<meta property="og:url" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/1.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/2.png">
+<meta property="og:updated_time" content="2018-09-02T14:00:37.763Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="来聊聊如何构建安全的web应用">
+<meta name="twitter:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/1.png">
+
+
+
+
+
 
   <link rel="canonical" href="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/"/>
 
 
 
-
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>来聊聊如何构建安全的web应用 | l1nk3r's blog</title>
   
@@ -138,6 +155,34 @@
 
 
 
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
@@ -157,19 +202,17 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">l1nk3r's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="Toggle navigation bar">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -177,75 +220,69 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-friends">
-          <a href="/Friends" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            Friends
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -253,12 +290,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -271,6 +316,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -280,7 +327,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -293,25 +340,50 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">来聊聊如何构建安全的web应用</h1>
+          <h1 class="post-title" itemprop="name headline">来聊聊如何构建安全的web应用
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T22:35:39+08:00">
-                2018-05-04
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-05-04 22:35:39" itemprop="dateCreated datePublished" datetime="2018-05-04T22:35:39+08:00">2018-05-04</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 22:00:37" itemprop="dateModified" datetime="2018-09-02T22:00:37+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -320,24 +392,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2018/05/04/来聊聊如何构建安全的web应用/"class="leancloud_visitors" data-flag-title="来聊聊如何构建安全的web应用">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/经验总结/" itemprop="url" rel="index">
-                    <span itemprop="name">经验总结</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/经验总结/" itemprop="url" rel="index"><span itemprop="name">经验总结</span></a></span>
 
                 
                 
@@ -357,10 +419,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -384,6 +445,7 @@
 
       
         <p>最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。</p>
+<a id="more"></a> 
 <h1 id="第一章-安全策略"><a href="#第一章-安全策略" class="headerlink" title="第一章 安全策略"></a>第一章 安全策略</h1><p>首先，随着互联网越来越庞大，近年来web应用越来越多，而且人们周围其实随处可见都是web，B/S架构极大程度上方便了每个人的日常出行。我觉得对于每个产品经理和每个开发人员来说，第一个很重要的是心态。</p>
 <h2 id="0x01-良好正确的心态"><a href="#0x01-良好正确的心态" class="headerlink" title="0x01 良好正确的心态"></a>0x01 良好正确的心态</h2><p>最近经常遇到一个问题，业务重要还是安全重要。这个问题不知道怎么回答，安全的产出真的从眼睛上看不到，而且经常作为一个背锅位的存在。但是安全并不是一个特性，它其实不是一个简单的发现一个漏洞，安排程序员在规定时间做修复，就能搞定的事。它应该出现这个系统，这个程序刚开始规划设计的时候，就该把这个问题考虑进来，当然目前感觉安全的现状还是不太乐观，一直觉得安全是程序测试的一个分支，这只是个人觉得，大佬们如果觉得不对，欢迎指正。所以，安全总的来说是个从系统开始设计，系统运行，系统下线这几个阶段过程中，一个长期对抗的过程。如果作为业务开发者的你没有一个良好正确的心态，是我的话我肯定会崩溃，内心OS:”每天叫我修代码，修漏洞，又不是什么业务bug，有什么影响嘛“。</p>
 <h2 id="0x02-安全与可用之间的选择"><a href="#0x02-安全与可用之间的选择" class="headerlink" title="0x02 安全与可用之间的选择"></a>0x02 安全与可用之间的选择</h2><p>这个问题举个简单例子，就是我们登陆过程中的账号密码。互联网现在这么普及，受众肯定上有老，下有小。那么对于密码策略来说，对于记忆力不好的人，可能方便记忆经常使用一些123456，admin之类的密码。但是这些密码在攻击者眼里，就是我们常说的弱口令。那攻击者那弱口令暴力破解的时候，用户可能账号的密码就被破解了，破解之后账号就被攻击者盗取了。那么系统开发人员为了应对这些攻击，设计在注册的时候要求密码在大写、小写、数字、字符之间选择3个来，且保证密码长度为8位以上来的密码策略来应对，并且在登陆端设置了验证码，来预防暴力破解。对于用户端可惨了，又要记自己的密码，又要每次登陆输入验证码。即使有了验证码，也不一定安全，验证码绕过，验证码识别等。所以啊，就出现了12306的反人类验证码。</p>
@@ -511,6 +573,9 @@
 
       
     </div>
+
+    
+
     
     
     
@@ -519,6 +584,20 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>l1nk3r</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/" title="来聊聊如何构建安全的web应用">http://www.lmxspace.com/2018/05/04/来聊聊如何构建安全的web应用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -568,17 +647,10 @@
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
-          
-
-
           
 
   
@@ -606,10 +678,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -626,66 +698,127 @@
               <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
+            </nav>
+          
 
           
 
           
             <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
-                      
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  </span>
-                
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
             </div>
           
 
@@ -695,6 +828,9 @@
           
           
 
+          
+            
+          
           
 
         </div>
@@ -710,7 +846,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-安全策略"><span class="nav-text">第一章 安全策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-良好正确的心态"><span class="nav-text">0x01 良好正确的心态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-安全与可用之间的选择"><span class="nav-text">0x02 安全与可用之间的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-安全监控"><span class="nav-text">0x03 安全监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-代码安全"><span class="nav-text">第二章 代码安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-过滤用户输入"><span class="nav-text">0x01 过滤用户输入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-检查输入的期望值"><span class="nav-text">1. 检查输入的期望值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-过滤基本值"><span class="nav-text">2. 过滤基本值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-确保字符串SQL语句的安全"><span class="nav-text">3. 确保字符串SQL语句的安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-转义输出"><span class="nav-text">0x02 转义输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-代码组织结构"><span class="nav-text">0x03 代码组织结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-代码自身问题"><span class="nav-text">0x04 代码自身问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-文件系统因素"><span class="nav-text">0x05 文件系统因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-代码稳定性和缺陷"><span class="nav-text">0x06 代码稳定性和缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-执行命令"><span class="nav-text">0x07 执行命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Web服务器和PHP的安全"><span class="nav-text">第三章 Web服务器和PHP的安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-保持软件更新"><span class="nav-text">0x01 保持软件更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-设置新版本"><span class="nav-text">1.设置新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-部署新版本"><span class="nav-text">2.部署新版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-查看php-ini文件"><span class="nav-text">0x02 查看php.ini文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Web服务器配置"><span class="nav-text">0x03 Web服务器配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-数据库服务器安全"><span class="nav-text">第四章 数据库服务器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-用户和权限系统"><span class="nav-text">0x01 用户和权限系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-发送数据至服务器"><span class="nav-text">0x02 发送数据至服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-运行服务器"><span class="nav-text">0x03 运行服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-计算机和操作系统的安全"><span class="nav-text">第五章 计算机和操作系统的安全</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-安全策略"><span class="nav-number">1.</span> <span class="nav-text">第一章 安全策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-良好正确的心态"><span class="nav-number">1.1.</span> <span class="nav-text">0x01 良好正确的心态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-安全与可用之间的选择"><span class="nav-number">1.2.</span> <span class="nav-text">0x02 安全与可用之间的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-安全监控"><span class="nav-number">1.3.</span> <span class="nav-text">0x03 安全监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-代码安全"><span class="nav-number">2.</span> <span class="nav-text">第二章 代码安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-过滤用户输入"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 过滤用户输入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-检查输入的期望值"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 检查输入的期望值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-过滤基本值"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 过滤基本值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-确保字符串SQL语句的安全"><span class="nav-number">2.1.3.</span> <span class="nav-text">3. 确保字符串SQL语句的安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-转义输出"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 转义输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-代码组织结构"><span class="nav-number">2.3.</span> <span class="nav-text">0x03 代码组织结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-代码自身问题"><span class="nav-number">2.4.</span> <span class="nav-text">0x04 代码自身问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-文件系统因素"><span class="nav-number">2.5.</span> <span class="nav-text">0x05 文件系统因素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-代码稳定性和缺陷"><span class="nav-number">2.6.</span> <span class="nav-text">0x06 代码稳定性和缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-执行命令"><span class="nav-number">2.7.</span> <span class="nav-text">0x07 执行命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-Web服务器和PHP的安全"><span class="nav-number">3.</span> <span class="nav-text">第三章 Web服务器和PHP的安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-保持软件更新"><span class="nav-number">3.1.</span> <span class="nav-text">0x01 保持软件更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-设置新版本"><span class="nav-number">3.1.1.</span> <span class="nav-text">1.设置新版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-部署新版本"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.部署新版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-查看php-ini文件"><span class="nav-number">3.2.</span> <span class="nav-text">0x02 查看php.ini文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Web服务器配置"><span class="nav-number">3.3.</span> <span class="nav-text">0x03 Web服务器配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四章-数据库服务器安全"><span class="nav-number">4.</span> <span class="nav-text">第四章 数据库服务器安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-用户和权限系统"><span class="nav-number">4.1.</span> <span class="nav-text">0x01 用户和权限系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-发送数据至服务器"><span class="nav-number">4.2.</span> <span class="nav-text">0x02 发送数据至服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-运行服务器"><span class="nav-number">4.3.</span> <span class="nav-text">0x03 运行服务器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五章-计算机和操作系统的安全"><span class="nav-number">5.</span> <span class="nav-text">第五章 计算机和操作系统的安全</span></a></li></ol></div>
             
 
           </div>
@@ -718,6 +854,13 @@
       <!--/noindex-->
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -731,10 +874,12 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
 
   
 </div>
@@ -746,8 +891,8 @@
 
 
 
-
         
+
 
 
 
@@ -760,10 +905,9 @@
     </footer>
 
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+
+    
+	
     
 
     
@@ -785,10 +929,12 @@
 
 
 
-  
 
 
-  
+
+
+
+
 
 
 
@@ -807,16 +953,6 @@
 
   
   
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
@@ -825,23 +961,13 @@
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-  
-
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
 
 
 
@@ -849,29 +975,15 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
 
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
 
 
 
@@ -879,11 +991,7 @@
 
 
 
-
-
   
-
-
 
 
 
@@ -903,107 +1011,64 @@
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
       var $visitors = $(".leancloud_visitors");
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
       });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
     });
   </script>
 
@@ -1014,6 +1079,8 @@
   
 
   
+
+  
   
 
   
@@ -1022,90 +1089,10 @@
 
   
 
-  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
   
-     <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
-<script>
-function showTime(Counter) {
-	var query = new AV.Query(Counter);
-	$(".leancloud_visitors").each(function() {
-		var url = $(this).attr("id").trim();
-		query.equalTo("url", url);
-		query.find({
-			success: function(results) {
-				if (results.length == 0) {
-					var content = $(document.getElementById(url)).text() + ': 0';
-					$(document.getElementById(url)).text(content);
-					return;
-				}
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-					$(document.getElementById(url)).text(content);
-				}
-			},
-			error: function(object, error) {
-				console.log("Error: " + error.code + " " + error.message);
-			}
-		});
 
-	});
-}
-
-function addCount(Counter) {
-	var Counter = AV.Object.extend("Counter");
-	url = $(".leancloud_visitors").attr('id').trim();
-	title = $(".leancloud_visitors").attr('data-flag-title').trim();
-	var query = new AV.Query(Counter);
-	query.equalTo("url", url);
-	query.find({
-		success: function(results) {
-			if (results.length > 0) {
-				var counter = results[0];
-				counter.fetchWhenSave(true);
-				counter.increment("time");
-				counter.save(null, {
-					success: function(counter) {
-						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(counter, error) {
-						console.log('Failed to save Visitor num, with error message: ' + error.message);
-					}
-				});
-			} else {
-				var newcounter = new Counter();
-				newcounter.set("title", title);
-				newcounter.set("url", url);
-				newcounter.set("time", 1);
-				newcounter.save(null, {
-					success: function(newcounter) {
-					    console.log("newcounter.get('time')="+newcounter.get('time'));
-						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(newcounter, error) {
-						console.log('Failed to create');
-					}
-				});
-			}
-		},
-		error: function(error) {
-			console.log('Error:' + error.code + " " + error.message);
-		}
-	});
-}
-$(function() {
-	var Counter = AV.Object.extend("Counter");
-	if ($('.leancloud_visitors').length == 1) {
-		addCount(Counter);
-	} else if ($('.post-title-link').length > 1) {
-		showTime(Counter);
-	}
-});
-</script>
   
+
 </body>
 </html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>

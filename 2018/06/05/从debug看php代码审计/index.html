@@ -2,6 +2,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
   
 
 
@@ -9,10 +18,20 @@
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
 <meta name="theme-color" content="#222">
 
 
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
 
 
 
@@ -38,10 +57,6 @@
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -50,58 +65,25 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
 
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="php,漏洞分析," />
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
 
 
 
 
 
 
-
-
-
-
-<meta name="description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。 0x02 进入正题这次拿的漏洞是PHPcms 9.6.0中的任意上传文件漏洞来说，其实准确来说应该是任意文件写入才对。 基础知识对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstu">
-<meta name="keywords" content="php,漏洞分析">
-<meta property="og:type" content="article">
-<meta property="og:title" content="从debug看php代码审计">
-<meta property="og:url" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/index.html">
-<meta property="og:site_name" content="l1nk3r&#39;s blog">
-<meta property="og:description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。 0x02 进入正题这次拿的漏洞是PHPcms 9.6.0中的任意上传文件漏洞来说，其实准确来说应该是任意文件写入才对。 基础知识对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstu">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/7.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/8.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/9.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/10.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/12.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/13.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/15.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/16.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/17.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/18.png">
-<meta property="og:updated_time" content="2018-06-05T09:58:11.622Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="从debug看php代码审计">
-<meta name="twitter:description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。 0x02 进入正题这次拿的漏洞是PHPcms 9.6.0中的任意上传文件漏洞来说，其实准确来说应该是任意文件写入才对。 基础知识对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstu">
-<meta name="twitter:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/7.png">
 
 
 
@@ -110,15 +92,13 @@
   var CONFIG = {
     root: '/',
     scheme: 'Mist',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: '博主'
-    },
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -130,12 +110,49 @@
 </script>
 
 
+  
+
+
+
+
+  <meta name="description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。">
+<meta name="keywords" content="php,漏洞分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从debug看php代码审计">
+<meta property="og:url" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/12.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/13.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/15.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/16.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/17.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/18.png">
+<meta property="og:updated_time" content="2018-09-02T13:37:01.894Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从debug看php代码审计">
+<meta name="twitter:description" content="0x01 写在前面最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/7.png">
+
+
+
+
+
 
   <link rel="canonical" href="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/"/>
 
 
 
-
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
 
   <title>从debug看php代码审计 | l1nk3r's blog</title>
   
@@ -146,6 +163,34 @@
 
 
 
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
 
 </head>
 
@@ -165,19 +210,17 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">l1nk3r's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
-      
-        <p class="site-subtitle"></p>
-      
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="Toggle navigation bar">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -185,75 +228,69 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-about">
-          <a href="/about/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-friends">
-          <a href="/Friends" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            Friends
-          </a>
-        </li>
-      
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
 
       
+      
     </ul>
+  
+
+  
+    
+
   
 
   
@@ -261,12 +298,20 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
           <div id="content" class="content">
             
 
@@ -279,6 +324,8 @@
   
   
 
+  
+
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
   
   
@@ -288,7 +335,7 @@
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
       <meta itemprop="image" content="/images/avatar.jpg">
     </span>
 
@@ -301,25 +348,50 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">从debug看php代码审计</h1>
+          <h1 class="post-title" itemprop="name headline">从debug看php代码审计
+              
+            
+          </h1>
         
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">发表于</span>
+                <span class="post-meta-item-text">Posted on</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-05T17:54:16+08:00">
-                2018-06-05
-              </time>
+
+              
+                
+              
+
+              <time title="Created: 2018-06-05 17:54:16" itemprop="dateCreated datePublished" datetime="2018-06-05T17:54:16+08:00">2018-06-05</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-09-02 21:37:01" itemprop="dateModified" datetime="2018-09-02T21:37:01+08:00">2018-09-02</time>
+              
             
           </span>
 
@@ -328,24 +400,14 @@
             
               <span class="post-meta-divider">|</span>
             
-            
-              &nbsp; | &nbsp;
-              <span id="/2018/06/05/从debug看php代码审计/"class="leancloud_visitors" data-flag-title="从debug看php代码审计">
-              &nbsp;热度
-              </span>
-            
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               
-                <span class="post-meta-item-text">分类于</span>
+                <span class="post-meta-item-text">In</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/代码审计/" itemprop="url" rel="index">
-                    <span itemprop="name">代码审计</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
 
                 
                 
@@ -365,10 +427,9 @@
                  <i class="fa fa-eye"></i>
                </span>
                
-                 <span class="post-meta-item-text">热度&#58;</span>
+                 <span class="post-meta-item-text">Views: </span>
                
                  <span class="leancloud-visitors-count"></span>
-                 <span>℃</span>
              </span>
           
 
@@ -392,6 +453,7 @@
 
       
         <h1 id="0x01-写在前面"><a href="#0x01-写在前面" class="headerlink" title="0x01 写在前面"></a>0x01 写在前面</h1><p>最近在啃漏洞代码，所以这篇文章新手向，主要的是结合漏洞讲讲如何通过debug的方式，通过已知poc了解漏洞原理。</p>
+<a id="more"></a> 
 <h1 id="0x02-进入正题"><a href="#0x02-进入正题" class="headerlink" title="0x02 进入正题"></a>0x02 进入正题</h1><p>这次拿的漏洞是PHPcms 9.6.0中的<del>任意上传文件漏洞</del>来说，其实准确来说应该是任意文件写入才对。</p>
 <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>对于php来说，debug的话，有个东西叫xdebug，当然配置这个时候，特别在mac下出了很多坑，这里强烈推荐一个mac下类似phpstudy的东西，叫做MxSrvs，了解一下？</p>
 <h3 id="Xdebug工作原理"><a href="#Xdebug工作原理" class="headerlink" title="Xdebug工作原理"></a>Xdebug工作原理</h3><p>1，IDE（如PhpStorm）已经集成了一个遵循BGDP的Xdebug插件，当开启它的时候， 会在本地开一个xdebug调试服务，监听在调试器中所设置的端口上，默认是9000，这个服务就会监听所有到9000端口的链接。在PhpStorm中，位于：工具栏 &gt; Run &gt; Start / Stop Listening for PHP Xdebug Connetions。</p>
@@ -445,6 +507,9 @@
 
       
     </div>
+
+    
+
     
     
     
@@ -453,6 +518,20 @@
 
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>l1nk3r</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.lmxspace.com/2018/06/05/从debug看php代码审计/" title="从debug看php代码审计">http://www.lmxspace.com/2018/06/05/从debug看php代码审计/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -502,17 +581,10 @@
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
-          
-
-
           
 
   
@@ -540,10 +612,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
+            Table of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
+            Overview
           </li>
         </ul>
       
@@ -560,66 +632,127 @@
               <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
           </div>
 
-          <nav class="site-state motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
 
-            
-              <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
               
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">日志</span>
-                </a>
-              </div>
-            
 
-            
               
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
               
-              <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">分类</span>
-                </a>
-              </div>
-            
-
-            
-              
-              
-              <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
-                  <span class="site-state-item-count">24</span>
-                  <span class="site-state-item-name">标签</span>
-                </a>
-              </div>
-            
-
-          </nav>
+            </nav>
+          
 
           
 
           
             <div class="links-of-author motion-element">
-                
-                  <span class="links-of-author-item">
-                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
-                      
-                        <i class="fa fa-fw fa-github"></i>GitHub</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
-                      
-                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  </span>
-                
-                  <span class="links-of-author-item">
-                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
-                      
-                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  </span>
-                
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
             </div>
           
 
@@ -629,6 +762,9 @@
           
           
 
+          
+            
+          
           
 
         </div>
@@ -644,7 +780,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在前面"><span class="nav-text">0x01 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-进入正题"><span class="nav-text">0x02 进入正题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Xdebug工作原理"><span class="nav-text">Xdebug工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞分析"><span class="nav-text">漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞原理"><span class="nav-text">漏洞原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些技巧"><span class="nav-text">一些技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一种"><span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二种"><span class="nav-text">第二种</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01-写在前面"><span class="nav-number">1.</span> <span class="nav-text">0x01 写在前面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02-进入正题"><span class="nav-number">2.</span> <span class="nav-text">0x02 进入正题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">2.1.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Xdebug工作原理"><span class="nav-number">2.1.1.</span> <span class="nav-text">Xdebug工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#漏洞分析"><span class="nav-number">2.2.</span> <span class="nav-text">漏洞分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞原理"><span class="nav-number">2.2.1.</span> <span class="nav-text">漏洞原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一些技巧"><span class="nav-number">2.2.2.</span> <span class="nav-text">一些技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一种"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">第一种</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二种"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">第二种</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03-总结"><span class="nav-number">3.</span> <span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-number">4.</span> <span class="nav-text">Refer</span></a></li></ol></div>
             
 
           </div>
@@ -652,6 +788,13 @@
       <!--/noindex-->
       
 
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
       
 
     </div>
@@ -665,10 +808,12 @@
     <footer id="footer" class="footer">
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
+  <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
 
   
 </div>
@@ -680,8 +825,8 @@
 
 
 
-
         
+
 
 
 
@@ -694,10 +839,9 @@
     </footer>
 
     
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
+
+    
+	
     
 
     
@@ -719,10 +863,12 @@
 
 
 
-  
 
 
-  
+
+
+
+
 
 
 
@@ -741,16 +887,6 @@
 
   
   
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
@@ -759,23 +895,13 @@
     <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
-  
-
 
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
 
 
 
@@ -783,29 +909,15 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
 
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
 
 
 
@@ -813,11 +925,7 @@
 
 
 
-
-
   
-
-
 
 
 
@@ -837,107 +945,64 @@
   
 
   
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
-  <script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
       var $visitors = $(".leancloud_visitors");
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
       });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
     });
   </script>
 
@@ -948,6 +1013,8 @@
   
 
   
+
+  
   
 
   
@@ -956,90 +1023,10 @@
 
   
 
-  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
   
-     <!-- custom analytics part create by xiamo -->
-<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-<script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
-<script>
-function showTime(Counter) {
-	var query = new AV.Query(Counter);
-	$(".leancloud_visitors").each(function() {
-		var url = $(this).attr("id").trim();
-		query.equalTo("url", url);
-		query.find({
-			success: function(results) {
-				if (results.length == 0) {
-					var content = $(document.getElementById(url)).text() + ': 0';
-					$(document.getElementById(url)).text(content);
-					return;
-				}
-				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
-					$(document.getElementById(url)).text(content);
-				}
-			},
-			error: function(object, error) {
-				console.log("Error: " + error.code + " " + error.message);
-			}
-		});
 
-	});
-}
-
-function addCount(Counter) {
-	var Counter = AV.Object.extend("Counter");
-	url = $(".leancloud_visitors").attr('id').trim();
-	title = $(".leancloud_visitors").attr('data-flag-title').trim();
-	var query = new AV.Query(Counter);
-	query.equalTo("url", url);
-	query.find({
-		success: function(results) {
-			if (results.length > 0) {
-				var counter = results[0];
-				counter.fetchWhenSave(true);
-				counter.increment("time");
-				counter.save(null, {
-					success: function(counter) {
-						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(counter, error) {
-						console.log('Failed to save Visitor num, with error message: ' + error.message);
-					}
-				});
-			} else {
-				var newcounter = new Counter();
-				newcounter.set("title", title);
-				newcounter.set("url", url);
-				newcounter.set("time", 1);
-				newcounter.save(null, {
-					success: function(newcounter) {
-					    console.log("newcounter.get('time')="+newcounter.get('time'));
-						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
-						$(document.getElementById(url)).text(content);
-					},
-					error: function(newcounter, error) {
-						console.log('Failed to create');
-					}
-				});
-			}
-		},
-		error: function(error) {
-			console.log('Error:' + error.code + " " + error.message);
-		}
-	});
-}
-$(function() {
-	var Counter = AV.Object.extend("Counter");
-	if ($('.leancloud_visitors').length == 1) {
-		addCount(Counter);
-	} else if ($('.post-title-link').length > 1) {
-		showTime(Counter);
-	}
-});
-</script>
   
+
 </body>
 </html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
