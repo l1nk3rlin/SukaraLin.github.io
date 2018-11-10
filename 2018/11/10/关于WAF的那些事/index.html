@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0x01什么是waf概念简述首先WAF（Web Application Firewall），俗称Web应用防火墙，主要的目的实际上是用来过滤不正常或者恶意请求包，以及为服务器打上临时补丁的作用。">
+<meta name="keywords" content="waf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于WAF的那些事">
+<meta property="og:url" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01什么是waf概念简述首先WAF（Web Application Firewall），俗称Web应用防火墙，主要的目的实际上是用来过滤不正常或者恶意请求包，以及为服务器打上临时补丁的作用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/1.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/2.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/3.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/4.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/5.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/6.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/7.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/8.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/9.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/10.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/11.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/12.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/21.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/13.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/14.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/15.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/19.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/18.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/17.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/16.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/20.jpg">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/23.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/24.png">
+<meta property="og:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/22.png">
+<meta property="og:updated_time" content="2018-11-10T13:18:37.985Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于WAF的那些事">
+<meta name="twitter:description" content="0x01什么是waf概念简述首先WAF（Web Application Firewall），俗称Web应用防火墙，主要的目的实际上是用来过滤不正常或者恶意请求包，以及为服务器打上临时补丁的作用。">
+<meta name="twitter:image" content="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>关于WAF的那些事 | l1nk3r's blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">l1nk3r's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-friends">
+    <a href="/Friends" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="l1nk3r">
+      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="l1nk3r's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于WAF的那些事
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-11-10 21:15:29 / Modified: 21:18:37" itemprop="dateCreated datePublished" datetime="2018-11-10T21:15:29+08:00">2018-11-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/经验总结/" itemprop="url" rel="index"><span itemprop="name">经验总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/11/10/关于WAF的那些事/" class="leancloud_visitors" data-flag-title="关于WAF的那些事">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views: </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="0x01什么是waf"><a href="#0x01什么是waf" class="headerlink" title="0x01什么是waf"></a>0x01什么是waf</h2><h3 id="概念简述"><a href="#概念简述" class="headerlink" title="概念简述"></a>概念简述</h3><p>首先WAF（Web Application Firewall），俗称Web应用防火墙，主要的目的实际上是用来过滤不正常或者恶意请求包，以及为服务器打上临时补丁的作用。</p>
+<a id="more"></a> 
+<p>1、云waf：</p>
+<blockquote>
+<p>在配置云waf时（通常是CDN包含的waf），DNS需要解析到CDN的ip上去，在请求uri时，数据包就会先经过云waf进行检测，如果通过再将数据包流给主机。常见产品：阿里云防护，腾讯云防护，创宇云之类等。</p>
+</blockquote>
+<p>2、主机防护软件：</p>
+<blockquote>
+<p>在主机上预先安装了这种防护软件，和监听web端口的流量是否有恶意的，所以这种从功能上讲较为全面。这里再插一嘴，mod_security、ngx-lua-waf这类开源waf虽然看起来不错，但是有个弱点就是升级的成本会高一些。常见产品：云锁，安全狗之类产品。</p>
+</blockquote>
+<p>3、硬件WAF：</p>
+<blockquote>
+<p>硬件WAF可以理解为流量代理，一般部署方式都需要流量经过它，针对数据包进行拆包-&gt;清洗-&gt;规则命中-&gt;放行/丢弃，当然现在更有甚者，给WAF上了一个头脑，采用深度学习，语义分析等操作，来减少本身WAF因为单调的规则导致可能被绕过的问题。常见产品：各产品铁盒子waf</p>
+</blockquote>
+<h3 id="为什么WAF可被绕过"><a href="#为什么WAF可被绕过" class="headerlink" title="为什么WAF可被绕过"></a>为什么WAF可被绕过</h3><ul>
+<li>业务与安全存在一定的冲突。</li>
+<li>WAF无法100%覆盖语言，中间件，数据库的特性。</li>
+<li>WAF本身漏洞。</li>
+</ul>
+<h2 id="0x02-waf绕过方式"><a href="#0x02-waf绕过方式" class="headerlink" title="0x02 waf绕过方式"></a>0x02 waf绕过方式</h2><h3 id="1、Web容器的特性"><a href="#1、Web容器的特性" class="headerlink" title="1、Web容器的特性"></a>1、Web容器的特性</h3><h4 id="特殊的百分号"><a href="#特殊的百分号" class="headerlink" title="特殊的百分号"></a>特殊的百分号</h4><p>在 <strong>IIS+ASP</strong> 的环境中，对于URL请求的参数值中的<code>%</code>，如果和后面的字符构成的字符串在 <strong>URL编码表</strong> 之外，ASP脚本处理时会将其忽略。</p>
+<p>假设现在有个url是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/test.asp?id=1 union se%lect 1,2,3,4 fro%m adm%in</span><br></pre></td></tr></table></figure>
+<p>再经过 <strong>IIS+ASP</strong> 中处理之后。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/1.jpg" alt="1"></p>
+<p>到达服务器上的实际是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/test.asp?id=1 union all select 1,2,3,4 from admin</span><br></pre></td></tr></table></figure>
+<p>原理是因为在WAF层，获取到的id参数值为<code>1 union all se%lect 1,2,3,4 fro%m adm%in</code>，此时waf因为 <strong>%</strong> 的分隔，无法检测出关键字 <strong>select</strong>  <strong>from</strong> 等。</p>
+<p>但是因为IIS的特性，最后在服务器上解析的时候， <strong>id</strong> 获取的实际参数就变为<code>1 union all select 1,2,3,4 from admin</code>，从而绕过了waf。</p>
+<p><strong>PS:这个特性仅在iis+asp上 asp.net并不存在</strong></p>
+<h4 id="unicode编码"><a href="#unicode编码" class="headerlink" title="unicode编码"></a>unicode编码</h4><p>IIS支持Unicode编码字符的解析，但是某些WAF却不一定具备这种能力。(已知 <strong>s</strong> 的unicode编码为: <strong>%u0053</strong> ,  <strong>f</strong> 的unicode编码为 <strong>%u0066</strong> )。</p>
+<p>假设现在有个链接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/test.asp?id=1 union %u0053elect 1,2,3,4 %u0066rom admin</span><br></pre></td></tr></table></figure>
+<p>当该请求到达WAF之后，WAF获取的数值是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 union %u0053elect 1,2,3,4 %u0066rom admin</span><br></pre></td></tr></table></figure>
+<p>由于数据清洗等其他原因，WAF取出脏数据，进行规则匹配的时候，可能理解只是一个 <strong>union</strong> ，不会将其阻断，那么经过到达 <strong>IIS中间件</strong> 的时候， <strong>IIS</strong> 会做如下处理：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/2.jpg" alt="2"></p>
+<p>最后服务器和数据库最终获取到的参数会是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 union select 1,2,3,4 from admin</span><br></pre></td></tr></table></figure>
+<p>此方法还存在另外一种情况，多个不同的widechar可能会被转换为同一个字符。例如：<a href="https://weibo.com/p/1001603843609647549905" target="_blank" rel="noopener">WideChar和MultiByte字符转换问题</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s%u0065lect-&gt;select</span><br><span class="line">s%u00f0lect-&gt;select</span><br></pre></td></tr></table></figure>
+<p>PS：</p>
+<p>其实不止这个，还有很多类似的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">字母a：</span><br><span class="line">%u0000</span><br><span class="line">%u0041</span><br><span class="line">%u0061</span><br><span class="line">%u00aa</span><br><span class="line">%u00e2</span><br><span class="line">单引号：</span><br><span class="line">%u0027</span><br><span class="line">%u02b9</span><br><span class="line">%u02bc</span><br><span class="line">%u02c8</span><br><span class="line">%u2032</span><br><span class="line">%uff07</span><br><span class="line">%c0%27</span><br><span class="line">%c0%a7</span><br><span class="line">%e0%80%a7</span><br><span class="line">空白：</span><br><span class="line">%u0020</span><br><span class="line">%uff00</span><br><span class="line">%c0%20</span><br><span class="line">%c0%a0</span><br><span class="line">%e0%80%a0</span><br><span class="line">左括号(：</span><br><span class="line">%u0028</span><br><span class="line">%uff08</span><br><span class="line">%c0%28</span><br><span class="line">%c0%a8</span><br><span class="line">%e0%80%a8</span><br><span class="line">右括号)：</span><br><span class="line">%u0029</span><br><span class="line">%uff09</span><br><span class="line">%c0%29</span><br><span class="line">%c0%a9</span><br><span class="line">%e0%80%a9</span><br></pre></td></tr></table></figure>
+<h4 id="HPP-HTTP-Parameter-Pollution-HTTP参数污染"><a href="#HPP-HTTP-Parameter-Pollution-HTTP参数污染" class="headerlink" title="HPP(HTTP Parameter Pollution): HTTP参数污染"></a>HPP(HTTP Parameter Pollution): HTTP参数污染</h4><p>在HTTP协议中是允许同样名称的参数出现多次的。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/test.asp?id=123&amp;id=456</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/10/关于WAF的那些事/3.jpg" alt="3"></p>
+<p>假设提交的参数即为：</p>
+<p>id=1&amp;id=2&amp;id=3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Asp.net + iis：id=1,2,3 </span><br><span class="line">Asp + iis：id=1,2,3 </span><br><span class="line">Php + apache/nginx：id=3</span><br></pre></td></tr></table></figure>
+<p>所以对于这类过滤规则，假设利用以下payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=union+select+password/*&amp;id=*/from+admin</span><br></pre></td></tr></table></figure>
+<p>来逃避对 <strong>select * from</strong> 的检测。因为HPP特性，id的参数值最终会变为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union select password/*,*/from admin</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/10/关于WAF的那些事/4.jpg" alt="4"></p>
+<p>上面的例子是一个ASP的，再举例一个PHP的例子，代码如下：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/5.png" alt="5"></p>
+<p>1、对于传入的非法的 <strong>$_GET</strong> 数组参数名，会将他们转换成 <strong>下划线</strong> 。经过fuzz，有以下这些字符。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/6.png" alt="5"></p>
+<p>2、php在遇到相同参数时接受的是第二个参数。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/7.png" alt="5"></p>
+<p>3、通过 <strong>$_SERVER[‘REQUEST_URI’]</strong> 方式获得的参数并不会对参数中的某些特殊字符进行转换。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/8.png" alt="5"></p>
+<p>这里的代码中有两个waf。</p>
+<p>第一个WAF在代码 <strong>第29行-第30行</strong> ，这里面采用了 <strong>dowith_sql()</strong> 函数，跟进一下 <strong>dowith_sql()</strong> 函数，该函数主要功能代码在 <strong>第19-第26行</strong> ，如果 <strong>$_REQUEST</strong> 数组中的数据存在 <strong>select|insert|update|delete</strong> 等敏感关键字或者是字符，则直接 <strong>exit()</strong> 。如果不存在，则原字符串返回。</p>
+<p>而第二个WAF在代码 <strong>第33行-第39行</strong> ，这部分代码通过 <strong>$_SERVER[‘REQUEST_URI’]</strong> 的方式获取参数，然后使用 <strong>explode</strong> 函数针对 <strong>&amp;</strong> 进行分割，获取到每个参数的参数名和参数值。然后针对每个参数值调用 <strong>dhtmlspecialchars()</strong> 函数进行过滤，跟进一下 <strong>dhtmlspecialchars()</strong> 函数，发现其相关功能代码在 <strong>第3行-第14行</strong> ，这个函数主要功能是针对 <strong>‘&amp;’, ‘“‘, ‘&lt;’, ‘&gt;’, ‘(‘, ‘)’</strong> 等特殊字符进行过滤替换，最后返回替换后的内容。</p>
+<p>由于 <strong>第44行和第45行</strong> 代码我们可以看到，这题的参数获取都是通过 <strong>REQUEST</strong> 方式，因此我们来看个例子。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/9.png" alt="5"></p>
+<p>第一次 <strong>$_REQUEST</strong> 仅仅只会输出 <strong>i_d=2</strong> 的原因是因为php自动将 <strong>i.d</strong> 替换成了 <strong>i_d</strong> 。而根据我们前面说的第二个特性，出现了两个 <strong>i_d</strong> ，php会自动使用第二个变量覆盖第一个，因此第一次 <strong>$_REQUEST</strong> 输出的是2。</p>
+<p>第二次 <strong>$_REQUEST</strong> 会输出 <strong>i_d=select&amp;i.d=2</strong> 是因为 <strong>\$_SERVER[‘REQUEST_URI’]</strong> 并不会对特殊的符号进行替换，因此结果会原封不动的输出。</p>
+<p>所以这题payload如何构造，我们可以先来看个思维导图。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/10.png" alt="5"></p>
+<ol>
+<li>我们通过页面请求 <strong>i_d=padyload&amp;i.d=123</strong> 。</li>
+<li>当数据流到达第一个WAF时，由于我们开始的第一个知识点已经介绍过了，php会将参数中的某些特殊符号替换为下划线。因此便得到了两个 <strong>i_d</strong> ，所以此时的payload变成了 <strong>i_d=payload&amp;i.d=123</strong> 。</li>
+<li>前面我们介绍了，如果参数相同的情况下，默认 <strong>第二个参数传入的值</strong> 会覆盖 <strong>第一个参数传入的值</strong> 。因此此时在第一个WAF中 <strong>i_d=123</strong> ，不存在其他特殊的字符，因此绕过了第一个WAF。</li>
+<li>当数据流到达进入到第二个WAF时，由于代码是通过 <strong>$_SERVER[‘REQUEST_URI’]</strong> 取参数，而我们前面开头的第三个知识点已经介绍过了 <strong>$_SERVER[‘REQUEST_URI’]</strong> 是不会将参数中的特殊符号进行转换，因此这里的 <strong>i.d</strong> 参数并不会被替换为 <strong>i_d</strong> ，所以此时正常来说 <strong>i.d</strong> 和 <strong>i_d</strong> 都能经过第二个WAF。</li>
+<li>第二个WAF中有一个 <strong>dhtmlspecialchars()</strong> 函数，作用前面我们已经介绍过了，这里需要绕过它，其实很好绕过。绕过之后 <strong>i_d=payload&amp;i.d=123</strong> 便会进入到业务层代码中，执行SQL语句，由于这里的SQL语句采用拼接的方式，因此存在SQL注入。</li>
+</ol>
+<p>因此最后payload如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//127.0.0.1/index.php?submit=&amp;i_d=-1/**/union/**/select/**/1,flag,3,4/**/from/**/ctf.users&amp;i.d=123</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/10/关于WAF的那些事/11.png" alt="5"></p>
+<h4 id="畸形HTTP请求"><a href="#畸形HTTP请求" class="headerlink" title="畸形HTTP请求"></a>畸形HTTP请求</h4><p>当前的HTTP服务依据的是RFC2616标准的HTTP请求，但是当我们向Web服务器发送畸形的，也就是并非这个标准的HTTP数据包的时候，由于Web服务器的一些兼容性的特性，会尽力解析这些畸形的数据包。但是如果Web服务器和WAF针对畸形数据包解析的差距，就可能会出现一些Bypass的情况。以下是正常的数据包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">POST /test.php?id=1%20union/**/select/**/1,2,3/**/from/**/admin  HTTP/1.1</span><br><span class="line">Host: 127.0.0.1</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: ECS[visit_times]=2</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>如果我们将数据包修改为这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">L1nk3r /test.php?id=1%20union/**/select/**/1,2,3/**/from/**/admin </span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9</span><br><span class="line">Cookie: ECS[visit_times]=2</span><br><span class="line">Connection: close</span><br><span class="line"></span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>由于 <strong>L1nk3r</strong> 并不是标准HTTP协议中的请求方法，也没有协议字段 <strong>HTTP/1.1</strong> ，也没有 <strong>host</strong> 字段。如果是在 <strong>HTTP/1.1</strong> 协议中，缺少 <strong>host</strong> 字段一般会返回 <strong>400 bad request</strong> 。但是某些版本的Apache在处理这个请求时，默认会设置协议为 <strong>HTTP/0.9</strong> ， <strong>host</strong> 则默认使用 <strong>apache</strong> 默认的 <strong>servername</strong> ，这种畸形的请求仍然能够被处理。</p>
+<p>如果某些WAF在处理数据的时候严格按照GET、POST等标准HTTP方法来获取数据，或者采用正则匹配的方式来处理数据，那么这个时候就有可能因为WAF和WEB服务解析的前后不对等，绕过了这个WAF。</p>
+<h3 id="2、-Web应用层的问题"><a href="#2、-Web应用层的问题" class="headerlink" title="2、    Web应用层的问题"></a>2、    Web应用层的问题</h3><h4 id="编码绕过"><a href="#编码绕过" class="headerlink" title="编码绕过"></a>编码绕过</h4><p>通过一般WAF会针对传来的数据包中带有的编码进行一次解码工作，如果WAF不能进行有效解码还原攻击向量，可能导致绕过，<strong>常见编码如URL编码、unicode编码（IIS）、宽字节编码等。</strong>例如我们用 <strong>url</strong> 的二次编码，而经过一次 <strong>url</strong> 解码的之后，WAF可能无法识别出它是恶意的数据，当把该恶意数据放行到Web服务器上时，Web服务器会再一次解码，最后导致了WAF绕过的结果。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/12.jpg" alt="12"></p>
+<p>看个实际例子：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/21.png" alt="21"></p>
+<h4 id="多数据来源的问题"><a href="#多数据来源的问题" class="headerlink" title="多数据来源的问题"></a>多数据来源的问题</h4><p>一般来说Web服务器从三个位置来获取用户传入的数据：</p>
+<ul>
+<li>从GET中获取</li>
+<li>如果GET中没有，尝试从POST中查找需要的值</li>
+<li>若GET和POST中都没有，尝试从Cookie中获取想要的值。</li>
+</ul>
+<p>典型的例子就如 <strong>ASP</strong> 和 <strong>ASP.NET</strong> ，这两种语言中的 <strong>Request</strong> 对象对于请求数据包的解析并没有按照RFC的标准来，一般开发者如果按照下面方式获取数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ID=Request(&apos;ID&apos;);</span><br><span class="line">ID=Request.Params(ID);</span><br></pre></td></tr></table></figure>
+<p>会出现以下这种情况：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/13.jpg" alt="13"></p>
+<p>在PHP情况下，我们看到是通过 <strong>request</strong> 方式传入数据，而php中<a href="http://php.net/manual/zh/reserved.variables.request.php" target="_blank" rel="noopener">REQUEST</a>变量默认情况下包含了 <strong>GET</strong> ，<strong>POST</strong> 和 <strong>COOKIE</strong> 的数组。在 <strong>php.ini</strong> 配置文件中，有一个参数 <strong>variables_order</strong> ，这参数有以下可选项目</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">; variables_order</span><br><span class="line">;   Default Value: &quot;EGPCS&quot;</span><br><span class="line">;   Development Value: &quot;GPCS&quot;</span><br><span class="line">;   Production Value: &quot;GPCS&quot;</span><br></pre></td></tr></table></figure>
+<p>这些字母分别对应的是 <strong>E: Environment</strong> ，<strong>G:Get</strong>，<strong>P:Post</strong>，<strong>C:Cookie</strong>，<strong>S:Server</strong>。这些字母的出现顺序，表明了数据的加载顺序。而 <strong>php.ini</strong> 中这个参数默认的配置是 <strong>GPCS</strong> ，也就是说如果有 <strong>POST</strong> 方式传入相同的数组，就覆盖掉 <strong>GET</strong> 方式传入的。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/14.png" alt="14"></p>
+<p>我们看个简单的例子</p>
+<p><img src="/2018/11/10/关于WAF的那些事/15.png" alt="15"></p>
+<p>那个利用这个特性呢，实际上也可以bypasswaf，我们看下图中的例子：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/19.png" alt="19"></p>
+<h3 id="3、WAF自身的问题"><a href="#3、WAF自身的问题" class="headerlink" title="3、WAF自身的问题"></a>3、WAF自身的问题</h3><h4 id="白名单机制"><a href="#白名单机制" class="headerlink" title="白名单机制"></a>白名单机制</h4><p>WAF存在某些机制，不处理和拦截白名单中的请求数据：</p>
+<p>1、指定IP或IP段的数据。</p>
+<p>2、来自于搜索引擎爬虫的访问数据。</p>
+<p>3、其他特征的数据。</p>
+<p>以前某些WAF为了不影响站点的SEO优化，将User-Agent为某些搜索引擎（如谷歌）的请求当作白名单处理，不检测和拦截。伪造HTTP请求的User-Agent非常容易，只需要将HTTP请求包中的User-Agent修改为谷歌搜索引擎的User-Agent即可畅通无阻。</p>
+<h4 id="数据获取方式存在缺陷"><a href="#数据获取方式存在缺陷" class="headerlink" title="数据获取方式存在缺陷"></a>数据获取方式存在缺陷</h4><p>1、某些WAF无法全面支持GET、POST、Cookie等各类请求包的检测，当GET请求的攻击数据包无法绕过时，转换成POST可能就绕过去了。或者，若POST以 <strong>Content-Type: application/x-www-form-urlencoded</strong> 无法绕过时，转换成上传包格式的 <strong>Content-Type: multipart/form-data</strong> 也许就可以绕过了。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/18.png" alt="18"></p>
+<p>当然关于文件上传的话，可以试试将关键字换行分离试试看。下面看个例子：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/17.png" alt="17"></p>
+<p>对于网站来说，这样写是可以解析的，但是站在WAF的设计者的立场，他们可能并不知道，这个是可以这样写的。当用正则表达式去获取上传的文件名时，正则表达式就匹配不到了，所以上传就被绕过了。</p>
+<p>2、某些WAF从数据包中提取检测特征的方式存在缺陷，如正则表达式不完善，某些攻击数据因为某些干扰字符的存在而无法被提取，常见的如%0a、%0b、%0c、%0d、%09、%0a等。之前某论坛流传的一个fuzz过某狗的脚本，代码主要如下：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/16.png" alt="16"></p>
+<p>主要上面代码中有两个关键fuzz的内容， <strong>fuzz_zs</strong> 和 <strong>fuzz_ch</strong> ，其实主要来说还是利用mysql的一些特性，bypass一些正则表达式针对关键字的检查，例如 <strong>union</strong> 、 <strong>select</strong> 之类的。</p>
+<h4 id="数据处理不恰当"><a href="#数据处理不恰当" class="headerlink" title="数据处理不恰当"></a>数据处理不恰当</h4><h5 id="1、-00截断"><a href="#1、-00截断" class="headerlink" title="1、%00截断"></a>1、%00截断</h5><p>对于 <strong>%00</strong> 进行URL解码，实际上解码出来的就是C语言中的NULL字符，如果WAF对获取到的数据存储和处理不当，那么 <strong>%00</strong> 解码后会将后面的数据截断，造成后面的数据没有经过检测。</p>
+<p><img src="/2018/11/10/关于WAF的那些事/20.jpg" alt="20"></p>
+<p>WAF在获取到参数id的值并解码后，参数值将被截断成<code>1/*</code>，因此没有命中规则，从而放过了。</p>
+<h5 id="2、-amp-字符处理"><a href="#2、-amp-字符处理" class="headerlink" title="2、&amp;字符处理"></a>2、&amp;字符处理</h5><p>某些WAF在对HTTP请求数据包中的参数进行检测时，使用 <strong>&amp;</strong> 字符对多个参数进行分割，然后分别进行检测，如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/1.php?p1=1&amp;p2=2&amp;p3=3</span><br></pre></td></tr></table></figure>
+<p>这些WAF会使用&amp;符号分割p1、p2和p3，然后对其参数值进行检测。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p1=1</span><br><span class="line">p2=2</span><br><span class="line">p3=3</span><br></pre></td></tr></table></figure>
+<p>但是，如果遇到这种构造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/1.php?p1=1+union/*%26x1=1*/+select/*%26x2=1*/1,2,3+from+admin</span><br></pre></td></tr></table></figure>
+<p>WAF会将以上参数分割成如下3部分：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p1=1+union/*</span><br><span class="line">x1=1*/+select/*</span><br><span class="line">x2=1*/1,2,3+from+admin</span><br></pre></td></tr></table></figure>
+<p>由于目标服务器就只有一个参数 <strong>p1</strong> ，然后 <strong>x1</strong> 和 <strong>x2</strong> 是不存在的， <strong>%26</strong> 是 <strong>&amp;</strong> 符号的 <strong>url编码</strong> ，如果WAF针对上述的三个参数进行分别的检测，是不会报注入的。这里巧妙就巧妙在利用两个参数拼接注释符号将不存在的 <strong>x1</strong> 和 <strong>x2</strong> 注释了。所以最后实际上进入数据库查询的语句也就只有。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">p1=1+union+select1,2,3+from+admin</span><br></pre></td></tr></table></figure>
+<h4 id="数据清洗不恰当"><a href="#数据清洗不恰当" class="headerlink" title="数据清洗不恰当"></a>数据清洗不恰当</h4><p>当攻击者提交的参数值中存在大量干扰数据时，如大量空格、TAB、换行、%0c、注释等，一般waf都是清洗之后再进行规则匹配，因为如果干扰字符串过多的话检测需要消耗大量的资源和性能，所以清洗后可以提升性能降低匹配规则的复杂度，筛选出真实的攻击数据进行检测，以提高检查性能，节省资源。如果WAF对数据的清洗不恰当，会导致真实的攻击数据被清洗，剩余的数据无法被检测出攻击行为。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/test/Article.php?id=9999-&quot;/*&quot; union all select 1,2,3,4,5 as &quot;*/&quot; from mysql.user</span><br></pre></td></tr></table></figure>
+<p>由于waf会结合一些数据库的特性来清洗数据，对于<code>/*</code>来说，它只是一个字符串，对于<code>*/</code>来说，它也是一个字符串，更是一个别名，但是对于WAF来说，它会认为这是多行注释符，当waf把上面的payload清洗为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9999-&quot;&quot; from mysql.user</span><br></pre></td></tr></table></figure>
+<p>针对规则库进行匹配，如果没有命中规则，执行原始语句：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9999-&quot;/*&quot; union all select 1,2,3,4,5 as &quot;*/&quot; from mysql.user</span><br></pre></td></tr></table></figure>
+<p>数据库的注释一般是 # – /**/等。</p>
+<h4 id="规则通用性问题"><a href="#规则通用性问题" class="headerlink" title="规则通用性问题"></a>规则通用性问题</h4><p>通用型的WAF，一般无法获知后端使用的是哪些WEB容器、什么数据库、以及使用的什么脚本语言。每一种WEB容器、数据库以及编程语言，它们都有自己的特性，想使用通用的WAF规则去匹配和拦截，是非常难的。通用型WAF在考虑到它们一些共性的同时，也必须兼顾它们的特性，否则就很容易被一些特性给Bypass！</p>
+<p>比如对SQL注入数据进行清洗时，WAF一般不能知道后端数据库是MySQL还是SQL Server。那么对于MySQL的<code>/*!50001Select*/</code>来说，这是一个Select的命令，但是对于SQL Server来说，这只不过是一个注释而已，注释的内容为<code>!50001Select</code>。看个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9999&apos; and 1=(select top 1 name as # from master.sysdatabases)--</span><br></pre></td></tr></table></figure>
+<p>经过waf之后会被当成，waf将后端数据库认为是Mysql，由于在Mysql中 <strong>#</strong> 是注释，经过数据清洗，无法命中规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9999&apos; and 1=(select top 1 name as</span><br></pre></td></tr></table></figure>
+<p>但是实际上，这里的 <strong>#</strong> 只是一个字符，充当一个别名的角色而已。如果后端数据库是SQL Server，这样的语句是没问题的。但是通用型WAF怎么能知道后端是SQL Server呢？</p>
+<h4 id="为性能和业务妥协"><a href="#为性能和业务妥协" class="headerlink" title="为性能和业务妥协"></a>为性能和业务妥协</h4><p>要全面兼容各类Web Server及各类数据库的WAF是非常难的，为了普适性，需要放宽一些检查条件，暴力的过滤方式会影响业务。对于通用性较强的软WAF来说，不得不考虑到各种机器和系统的性能，故对于一些超大数据包、超长数据可能会跳过不检测。</p>
+<p>例如下图中的例子：</p>
+<p><img src="/2018/11/10/关于WAF的那些事/23.png" alt="23"></p>
+<p>从容师傅分享的例子中有个非常暴力的方法，直接用大数据包打挂WAF。。。用这个注释中包含超长查询字符串，导致安全狗在识别的过程中挂掉了，连带着整个机器 Service Unavailable：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/*666666666666666666666666666666666666666666666666666666666666666 </span><br><span class="line">66666666666666666666666666666666666666666666666666666666666666666 </span><br><span class="line">66666666666666666666666666666666666666666666666666666666666666666 </span><br><span class="line">66666666666666666666666666666666666666666666666666666666666666666 </span><br><span class="line">66666666666666666666666666666666666666666666666666666666666666666 </span><br><span class="line">66666666666666666666666666666666666666666666666666666666666666666 6666666666666666666666666666666666666666*/</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/11/10/关于WAF的那些事/24.png" alt="24"></p>
+<h4 id="本身缺陷"><a href="#本身缺陷" class="headerlink" title="本身缺陷"></a>本身缺陷</h4><p>比如某WAF，默认情况下只能获取前100个参数进行检测，当提交第101个参数时，那么，将无法对攻击者提交的第100个以后的参数进行有效安全检测，从而绕过安全防御。（ <strong>CVE-2018-9230</strong> ）</p>
+<p><img src="/2018/11/10/关于WAF的那些事/22.png" alt="21"></p>
+<h2 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h2><p>感谢了二向箔的live，基于live基础上，针对自己已知和以前看到的总结了一下Bypass WAF。当然如果侵权的话，请联系我，我删除，这部分有自己的学习总结，也有别人的一些思路。当然自己也很感谢从容师傅的文章，让我之前能够bypass很多waf。</p>
+<h1 id="Refer"><a href="#Refer" class="headerlink" title="Refer"></a>Refer</h1><p><a href="https://mp.weixin.qq.com/s/IAqNUgOqZPkFywL90lpeTw" target="_blank" rel="noopener">记一次文件上传 Bypass WAF实战</a></p>
+<p><a href="https://xz.aliyun.com/t/368" target="_blank" rel="noopener">我的WafBypass之道（SQL注入）</a></p>
+<p><a href="https://www.cnblogs.com/xiaozi/p/9132737.html" target="_blank" rel="noopener">Bypass 360主机卫士SQL注入防御（多姿势）</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>l1nk3r</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://www.lmxspace.com/2018/11/10/关于WAF的那些事/" title="关于WAF的那些事">http://www.lmxspace.com/2018/11/10/关于WAF的那些事/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/waf/" rel="tag"><i class="fa fa-tag"></i> waf</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/07/重新认识反序列化-Phar/" rel="next" title="重新认识反序列化-Phar">
+                <i class="fa fa-chevron-left"></i> 重新认识反序列化-Phar
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="l1nk3r" />
+            
+              <p class="site-author-name" itemprop="name">l1nk3r</p>
+              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">tags</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01什么是waf"><span class="nav-text">0x01什么是waf</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念简述"><span class="nav-text">概念简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么WAF可被绕过"><span class="nav-text">为什么WAF可被绕过</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-waf绕过方式"><span class="nav-text">0x02 waf绕过方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、Web容器的特性"><span class="nav-text">1、Web容器的特性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特殊的百分号"><span class="nav-text">特殊的百分号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unicode编码"><span class="nav-text">unicode编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HPP-HTTP-Parameter-Pollution-HTTP参数污染"><span class="nav-text">HPP(HTTP Parameter Pollution): HTTP参数污染</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#畸形HTTP请求"><span class="nav-text">畸形HTTP请求</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、-Web应用层的问题"><span class="nav-text">2、    Web应用层的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#编码绕过"><span class="nav-text">编码绕过</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多数据来源的问题"><span class="nav-text">多数据来源的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、WAF自身的问题"><span class="nav-text">3、WAF自身的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#白名单机制"><span class="nav-text">白名单机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据获取方式存在缺陷"><span class="nav-text">数据获取方式存在缺陷</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据处理不恰当"><span class="nav-text">数据处理不恰当</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、-00截断"><span class="nav-text">1、%00截断</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、-amp-字符处理"><span class="nav-text">2、&amp;字符处理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据清洗不恰当"><span class="nav-text">数据清洗不恰当</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#规则通用性问题"><span class="nav-text">规则通用性问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为性能和业务妥协"><span class="nav-text">为性能和业务妥协</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本身缺陷"><span class="nav-text">本身缺陷</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-总结"><span class="nav-text">0x03 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
+                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
