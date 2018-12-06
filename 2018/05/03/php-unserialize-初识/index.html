@@ -134,7 +134,7 @@
 <meta property="og:image" content="http://www.lmxspace.com/2018/05/03/php-unserialize-初识/7.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/05/03/php-unserialize-初识/8.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/05/03/php-unserialize-初识/9.png">
-<meta property="og:updated_time" content="2018-09-02T14:02:31.800Z">
+<meta property="og:updated_time" content="2018-11-22T10:00:21.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php-unserialize-初识">
 <meta name="twitter:description" content="第一章 写在开头在OWASP TOP10中，反序列化已经榜上有名，但是究竟什么是反序列化，我觉得应该进下心来好好思考下。我觉得学习的时候，所有的问题都应该问3个问题：what、why、how。what：什么是反序列化，why：为什么会出现反序列化漏洞，how：反序列化漏洞如何利用。 从事工作也一年了，也遇到过反序列化漏洞，发现啊，反序列化漏洞真的黑盒很难发现，即使发现了也好难利用。但是有时候反序列">
@@ -391,7 +391,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-09-02 22:02:31" itemprop="dateModified" datetime="2018-09-02T22:02:31+08:00">2018-09-02</time>
+                <time title="Modified: 2018-11-22 18:00:21" itemprop="dateModified" datetime="2018-11-22T18:00:21+08:00">2018-11-22</time>
               
             
           </span>
@@ -526,7 +526,7 @@
 <p>然后运行demo代码，会在同目录下生成一个poc.php</p>
 <p><img src="/2018/05/03/php-unserialize-初识/5.png" alt="5"></p>
 <h1 id="第四章-反序列化漏洞的利用"><a href="#第四章-反序列化漏洞的利用" class="headerlink" title="第四章 反序列化漏洞的利用"></a>第四章 反序列化漏洞的利用</h1><h2 id="1-利用构造函数等"><a href="#1-利用构造函数等" class="headerlink" title="1.利用构造函数等"></a>1.利用构造函数等</h2><p>php在使用unserialize()后会导致<code>__wakeup()</code> 或<code>__destruct()</code>的直接调用，中间无需其他过程。因此最理想的情况就是一些漏洞/危害代码在<code>__wakeup()</code> 或<code>__destruct()</code>中，从而当我们控制序列化字符串时可以去直接触发它们。</p>
-<p>但是如果在反序列化的过程中，在<code>__wakeup()</code> 或<code>__destruct()</code>不存在可以利用的恶意代码呢。那又该如何呢，其实吧我觉得反序列化漏洞，就是类似于类似于PWN中的ROP，有时候反序列化一个对象时，由它调用的__wakeup()中又去调用了其他的对象，由此可以溯源而上，利用一次次的“gadget”找到漏洞点。</p>
+<p>但是如果在反序列化的过程中，在<code>__wakeup()</code> 或<code>__destruct()</code>不存在可以利用的恶意代码呢。那又该如何呢，其实吧我觉得反序列化漏洞，就是类似于类似于PWN中的ROP，有时候反序列化一个对象时，由它调用的<code>__wakeup()</code>中又去调用了其他的对象，由此可以溯源而上，利用一次次的“gadget”找到漏洞点。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">pocdemo</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($test)</span></span>&#123;</span><br><span class="line">        $fp = fopen(<span class="string">"shell.php"</span>,<span class="string">"w"</span>) ;</span><br><span class="line">        fwrite($fp,$test);</span><br><span class="line">        fclose($fp);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">l1nk3r</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $test = <span class="string">'123'</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;</span><br><span class="line">        $obj = <span class="keyword">new</span> pocdemo(<span class="keyword">$this</span>-&gt;test);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$test = file_get_contents(<span class="string">'./ser.txt'</span>);</span><br><span class="line">unserialize($test);</span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">"shell.php"</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>这里代码主要是通过get方法通过test传入序列化好的字符串，然后在反序列化的时候自动调用<code>__wakeup()</code>函数，在<code>__wakeup()</code>函数中通过new pocdemo()会自动调用对象pocdemo中的<code>__construct()</code>，从而把<code>&lt;?php phpinfo(); ?&gt;</code>写入到shell.php中。</p>
 <p>poc代码：</p>
@@ -697,7 +697,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-count">27</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -724,7 +724,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">categories</span>
                   </a>
                 </div>
