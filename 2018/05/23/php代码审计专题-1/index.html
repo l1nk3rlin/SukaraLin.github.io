@@ -1,121 +1,12 @@
 <!DOCTYPE html>
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html lang=zh>
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-  
-  
-    
-    
-  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
-
-
-
-
-
-
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '6.4.1',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-  
-
-
-
-
-  <meta name="description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。">
 <meta name="keywords" content="php,文件包含">
 <meta property="og:type" content="article">
 <meta property="og:title" content="php代码审计专题(1)">
@@ -123,336 +14,146 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/1.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/2.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/3.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/4.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/5.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/7.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/8.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/9.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/10.png">
-<meta property="og:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/11.png">
-<meta property="og:updated_time" content="2018-09-02T14:02:39.226Z">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/74b0j.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7f19c.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/s4y2k.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/yiq5c.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/uh2yh.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6yi80.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/30tpa.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/okq3a.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/3y4nx.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6gxav.png">
+<meta property="og:updated_time" content="2019-03-12T09:07:14.359Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php代码审计专题(1)">
 <meta name="twitter:description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。">
-<meta name="twitter:image" content="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/1.png">
-
-
-
-
-
-
-  <link rel="canonical" href="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/"/>
-
-
-
-<script type="text/javascript" id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
-  <title>php代码审计专题(1) | l1nk3r's blog</title>
-  
-
-
-
-
-
-
-
-
-
-  <noscript>
-  <style type="text/css">
-    .use-motion .motion-element,
-    .use-motion .brand,
-    .use-motion .menu-item,
-    .sidebar-inner,
-    .use-motion .post-block,
-    .use-motion .pagination,
-    .use-motion .comments,
-    .use-motion .post-header,
-    .use-motion .post-body,
-    .use-motion .collection-title { opacity: initial; }
-
-    .use-motion .logo,
-    .use-motion .site-title,
-    .use-motion .site-subtitle {
-      opacity: initial;
-      top: initial;
-    }
-
-    .use-motion {
-      .logo-line-before i { left: initial; }
-      .logo-line-after i { right: initial; }
-    }
-  </style>
-</noscript>
-
+<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/74b0j.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>php代码审计专题(1)</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-  
+<body class="max-width mx-auto px3 ltr">
     
-  
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/05/24/记一次恶意安卓app分析/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/05/15/从web-for-pentest看php代码审计/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&text=php代码审计专题(1)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&is_video=false&description=php代码审计专题(1)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=php代码审计专题(1)&body=Check out this article: http://www.lmxspace.com/2018/05/23/php代码审计专题-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&name=php代码审计专题(1)&description=&lt;h1 id=&#34;0x01前提概要&#34;&gt;&lt;a href=&#34;#0x01前提概要&#34; class=&#34;headerlink&#34; title=&#34;0x01前提概要&#34;&gt;&lt;/a&gt;0x01前提概要&lt;/h1&gt;&lt;p&gt;嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">l1nk3r's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
     </div>
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01前提概要"><span class="toc-number">1.</span> <span class="toc-text">0x01前提概要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02函数介绍"><span class="toc-number">2.</span> <span class="toc-text">0x02函数介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02漏洞场景"><span class="toc-number">3.</span> <span class="toc-text">0x02漏洞场景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-LFI-Local-File-Inclusion"><span class="toc-number">3.1.</span> <span class="toc-text">1. LFI(Local File Inclusion)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-RFI-Remote-File-Inclusion"><span class="toc-number">3.2.</span> <span class="toc-text">2. RFI(Remote File Inclusion)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-包含姿势总结"><span class="toc-number">3.3.</span> <span class="toc-text">3. 包含姿势总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-php伪协议"><span class="toc-number">3.3.1.</span> <span class="toc-text">3.1 php伪协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#php-input"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">php://input</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php-filter"><span class="toc-number">3.3.1.2.</span> <span class="toc-text">php://filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#phar"><span class="toc-number">3.3.1.3.</span> <span class="toc-text">phar://</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zip"><span class="toc-number">3.3.1.4.</span> <span class="toc-text">zip://</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-URI-schema"><span class="toc-number">3.3.1.5.</span> <span class="toc-text">data:URI schema</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-包含sessions"><span class="toc-number">3.3.2.</span> <span class="toc-text">3.2 包含sessions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-包含日志"><span class="toc-number">3.3.3.</span> <span class="toc-text">3.3 包含日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#访问日志"><span class="toc-number">3.3.3.1.</span> <span class="toc-text">访问日志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSH-log"><span class="toc-number">3.3.3.2.</span> <span class="toc-text">SSH log</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4包含上传文件"><span class="toc-number">3.3.4.</span> <span class="toc-text">3.4包含上传文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03绕过姿势"><span class="toc-number">4.</span> <span class="toc-text">0x03绕过姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-指定前缀"><span class="toc-number">4.1.</span> <span class="toc-text">1. 指定前缀</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录遍历"><span class="toc-number">4.1.1.</span> <span class="toc-text">目录遍历</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-编码绕过"><span class="toc-number">4.2.</span> <span class="toc-text">2. 编码绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-指定后缀"><span class="toc-number">4.3.</span> <span class="toc-text">3. 指定后缀</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#远程文件包含的利用"><span class="toc-number">4.3.1.</span> <span class="toc-text">远程文件包含的利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-长度截断"><span class="toc-number">4.4.</span> <span class="toc-text">4. 长度截断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-00字节截断"><span class="toc-number">4.5.</span> <span class="toc-text">5. %00字节截断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-防御方案"><span class="toc-number">5.</span> <span class="toc-text">0x04 防御方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Refer"><span class="toc-number">6.</span> <span class="toc-text">Refer</span></a></li></ol>
+    </div>
+  </span>
 </div>
 
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        php代码审计专题(1)
+    </h1>
 
 
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">l1nk3r's blog</span>
+      </span>
       
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-friends">
-    <a href="/Friends" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
-  </li>
+    <div class="postdate">
+        <time datetime="2018-05-23T13:46:45.000Z" itemprop="datePublished">2018-05-23</time>
+    </div>
+
 
       
-      
-    </ul>
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/php/">php</a>, <a class="tag-link" href="/tags/文件包含/">文件包含</a>
+    </div>
+
+
+    </div>
+  </header>
   
 
-  
-
-  
-</nav>
-
-
-
-  
-
-
-
-</div>
-    </header>
-
-    
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="l1nk3r's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">php代码审计专题(1)
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-05-23 21:46:45" itemprop="dateCreated datePublished" datetime="2018-05-23T21:46:45+08:00">2018-05-23</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2018-09-02 22:02:39" itemprop="dateModified" datetime="2018-09-02T22:02:39+08:00">2018-09-02</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/代码审计/" itemprop="url" rel="index"><span itemprop="name">代码审计</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2018/05/23/php代码审计专题-1/" class="leancloud_visitors" data-flag-title="php代码审计专题(1)">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">Views: </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h1 id="0x01前提概要"><a href="#0x01前提概要" class="headerlink" title="0x01前提概要"></a>0x01前提概要</h1><p>嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。</p>
+  <div class="content" itemprop="articleBody">
+    <h1 id="0x01前提概要"><a href="#0x01前提概要" class="headerlink" title="0x01前提概要"></a>0x01前提概要</h1><p>嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。</p>
 <a id="more"></a> 
 <h1 id="0x02函数介绍"><a href="#0x02函数介绍" class="headerlink" title="0x02函数介绍"></a>0x02函数介绍</h1><ul>
 <li><a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.require.php" target="_blank" rel="noopener">require</a>：<code>require</code> 和 <code>include</code> 几乎完全一样，除了处理失败的方式不同之外。<strong>require</strong> 在出错时产生 <strong>E_COMPILE_ERROR</strong> 级别的错误。换句话说将导致脚本中止而 <a href="https://link.jianshu.com?t=http://php.net/manual/zh/function.include.php" target="_blank" rel="noopener">include</a> 只产生警告（<strong>E_WARNING</strong>），脚本会继续运行。</li>
@@ -468,25 +169,25 @@
 </ol>
 <h2 id="1-LFI-Local-File-Inclusion"><a href="#1-LFI-Local-File-Inclusion" class="headerlink" title="1. LFI(Local File Inclusion)"></a>1. LFI(Local File Inclusion)</h2><p>本地文件包含，顾名思义就是只能打开，并且包含本地文件的漏洞。大部分情况下，我们遇到的漏洞都是LFI。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> ($_GET[<span class="string">'file'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2018/05/23/php代码审计专题-1/1.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/74b0j.png" alt="img"></p>
 <h2 id="2-RFI-Remote-File-Inclusion"><a href="#2-RFI-Remote-File-Inclusion" class="headerlink" title="2. RFI(Remote File Inclusion)"></a>2. RFI(Remote File Inclusion)</h2><p>远程文件包含漏洞。是指能够包含远程服务器上的文件并执行。由于远程服务器的文件是我们可控的，因此漏洞一旦存在危害性会很大。但是RFI的条件比LFI的条件苛刻点需要在PHP.ini中作出如下配置：</p>
 <ol>
 <li>allow_url_fopen = On</li>
 <li>allow_url_include = On</li>
 </ol>
 <p>两个配置选项均需要为On，才能远程包含文件成功。</p>
-<p><img src="/2018/05/23/php代码审计专题-1/2.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/7f19c.png" alt="img"></p>
 <h2 id="3-包含姿势总结"><a href="#3-包含姿势总结" class="headerlink" title="3. 包含姿势总结"></a>3. 包含姿势总结</h2><h3 id="3-1-php伪协议"><a href="#3-1-php伪协议" class="headerlink" title="3.1 php伪协议"></a>3.1 php伪协议</h3><h4 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h4><p>利用条件：</p>
 <ol>
 <li>allow_url_include = On。</li>
 <li>对allow_url_fopen不做要求。</li>
 </ol>
-<p><img src="/2018/05/23/php代码审计专题-1/3.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/s4y2k.png" alt="img"></p>
 <h4 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h4><p>利用条件：没有前置条件</p>
 <p>姿势：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php://filter/read=convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
-<p><img src="/2018/05/23/php代码审计专题-1/4.png" alt="img"></p>
-<p><img src="/2018/05/23/php代码审计专题-1/5.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/yiq5c.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/uh2yh.png" alt="img"></p>
 <p>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码一下就行。虽然不能直接获取到shell等，但能读取敏感文件危害也是挺大的。其他姿势：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php://filter/convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
 <p>效果跟前面一样，少了read等关键字。在绕过一些waf时也许有用。</p>
@@ -495,12 +196,12 @@
 <li>php版本大于等于php5.3.0</li>
 </ol>
 <p>姿势：</p>
-<p>假设有个文件index.txt，其内容为<code>&lt;?php phpinfo(); ?&gt;</code>，打包成zip压缩包，如下：<img src="/2018/05/23/php代码审计专题-1/7.png" alt="img"></p>
+<p>假设有个文件index.txt，其内容为<code>&lt;?php phpinfo(); ?&gt;</code>，打包成zip压缩包，如下：<img src="http://po8p59xe5.bkt.clouddn.com/blog/6yi80.png" alt="img"></p>
 <p>指定绝对路径</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phar://Applications/MxSrvs/www/index.txt.zip/index.txt</span><br></pre></td></tr></table></figure>
 <p>使用相对路径（这里index.txt.zip就在当前目录下）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phar://index.txt.zip/index.txt</span><br></pre></td></tr></table></figure>
-<p><img src="/2018/05/23/php代码审计专题-1/8.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/30tpa.png" alt="img"></p>
 <h4 id="zip"><a href="#zip" class="headerlink" title="zip://"></a>zip://</h4><p>利用条件：</p>
 <ol>
 <li>php版本大于等于php5.3.0</li>
@@ -517,19 +218,19 @@
 </ol>
 <p>姿势一：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain,&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
-<p><img src="/2018/05/23/php代码审计专题-1/9.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/okq3a.png" alt="img"></p>
 <p>执行命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain,&lt;?php system(&apos;whoami&apos;);?&gt;</span><br></pre></td></tr></table></figure>
 <p>姿势二：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b</span><br></pre></td></tr></table></figure>
 <p>加号<code>+</code>的url编码为<code>%2b</code>，<code>PD9waHAgcGhwaW5mbygpOz8+</code>的base64解码为：<code>&lt;?php phpinfo();?&gt;</code></p>
-<p><img src="/2018/05/23/php代码审计专题-1/10.png" alt="img"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/3y4nx.png" alt="img"></p>
 <p>执行命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain;base64,PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</span><br></pre></td></tr></table></figure>
 <p>其中<code>PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</code>的base64解码为：<code>&lt;?php system(&#39;whoami&#39;);?&gt;</code></p>
 <h3 id="3-2-包含sessions"><a href="#3-2-包含sessions" class="headerlink" title="3.2 包含sessions"></a>3.2 包含sessions</h3><p>利用条件：session文件路径已知，且其中内容部分可控。</p>
 <p>姿势：</p>
-<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<img src="/2018/05/23/php代码审计专题-1/11.png" alt="img"></p>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<img src="http://po8p59xe5.bkt.clouddn.com/blog/6gxav.png" alt="img"></p>
 <p>常见的php-session存放位置：</p>
 <ol>
 <li>/var/lib/php/sess_PHPSESSID</li>
@@ -634,553 +335,98 @@
 <h1 id="Refer"><a href="#Refer" class="headerlink" title="Refer"></a>Refer</h1><p><a href="https://xz.aliyun.com/t/29" target="_blank" rel="noopener">PHP文件包含漏洞</a></p>
 <p><a href="https://github.com/lucyoa/ctf-wiki/tree/master/web/file-inclusion" target="_blank" rel="noopener">Local File Inclusion</a></p>
 
-      
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
     </div>
 
-    
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01前提概要"><span class="toc-number">1.</span> <span class="toc-text">0x01前提概要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02函数介绍"><span class="toc-number">2.</span> <span class="toc-text">0x02函数介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02漏洞场景"><span class="toc-number">3.</span> <span class="toc-text">0x02漏洞场景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-LFI-Local-File-Inclusion"><span class="toc-number">3.1.</span> <span class="toc-text">1. LFI(Local File Inclusion)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-RFI-Remote-File-Inclusion"><span class="toc-number">3.2.</span> <span class="toc-text">2. RFI(Remote File Inclusion)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-包含姿势总结"><span class="toc-number">3.3.</span> <span class="toc-text">3. 包含姿势总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-php伪协议"><span class="toc-number">3.3.1.</span> <span class="toc-text">3.1 php伪协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#php-input"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">php://input</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php-filter"><span class="toc-number">3.3.1.2.</span> <span class="toc-text">php://filter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#phar"><span class="toc-number">3.3.1.3.</span> <span class="toc-text">phar://</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#zip"><span class="toc-number">3.3.1.4.</span> <span class="toc-text">zip://</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-URI-schema"><span class="toc-number">3.3.1.5.</span> <span class="toc-text">data:URI schema</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-包含sessions"><span class="toc-number">3.3.2.</span> <span class="toc-text">3.2 包含sessions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-包含日志"><span class="toc-number">3.3.3.</span> <span class="toc-text">3.3 包含日志</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#访问日志"><span class="toc-number">3.3.3.1.</span> <span class="toc-text">访问日志</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SSH-log"><span class="toc-number">3.3.3.2.</span> <span class="toc-text">SSH log</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4包含上传文件"><span class="toc-number">3.3.4.</span> <span class="toc-text">3.4包含上传文件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03绕过姿势"><span class="toc-number">4.</span> <span class="toc-text">0x03绕过姿势</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-指定前缀"><span class="toc-number">4.1.</span> <span class="toc-text">1. 指定前缀</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录遍历"><span class="toc-number">4.1.1.</span> <span class="toc-text">目录遍历</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-编码绕过"><span class="toc-number">4.2.</span> <span class="toc-text">2. 编码绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-指定后缀"><span class="toc-number">4.3.</span> <span class="toc-text">3. 指定后缀</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#远程文件包含的利用"><span class="toc-number">4.3.1.</span> <span class="toc-text">远程文件包含的利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-长度截断"><span class="toc-number">4.4.</span> <span class="toc-text">4. 长度截断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-00字节截断"><span class="toc-number">4.5.</span> <span class="toc-text">5. %00字节截断</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-防御方案"><span class="toc-number">5.</span> <span class="toc-text">0x04 防御方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Refer"><span class="toc-number">6.</span> <span class="toc-text">Refer</span></a></li></ol>
+    </div>
 
-    
-    
-    
-
-    
-
-    
-
-    
-      <div>
-        <ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>Post author:  </strong>l1nk3r</li>
-  <li class="post-copyright-link">
-    <strong>Post link: </strong>
-    <a href="http://www.lmxspace.com/2018/05/23/php代码审计专题-1/" title="php代码审计专题(1)">http://www.lmxspace.com/2018/05/23/php代码审计专题-1/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&text=php代码审计专题(1)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&is_video=false&description=php代码审计专题(1)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=php代码审计专题(1)&body=Check out this article: http://www.lmxspace.com/2018/05/23/php代码审计专题-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&title=php代码审计专题(1)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2018/05/23/php代码审计专题-1/&name=php代码审计专题(1)&description=&lt;h1 id=&#34;0x01前提概要&#34;&gt;&lt;a href=&#34;#0x01前提概要&#34; class=&#34;headerlink&#34; title=&#34;0x01前提概要&#34;&gt;&lt;/a&gt;0x01前提概要&lt;/h1&gt;&lt;p&gt;嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
-      </div>
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
-          
-            <a href="/tags/文件包含/" rel="tag"><i class="fa fa-tag"></i> 文件包含</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/05/15/从web-for-pentest看php代码审计/" rel="next" title="从web-for-pentest看php代码审计">
-                <i class="fa fa-chevron-left"></i> 从web-for-pentest看php代码审计
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/24/记一次恶意安卓app分析/" rel="prev" title="记一次恶意安卓app分析">
-                记一次恶意安卓app分析 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
 
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.jpg"
-                alt="l1nk3r" />
-            
-              <p class="site-author-name" itemprop="name">l1nk3r</p>
-              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">32</span>
-                    <span class="site-state-item-name">posts</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">10</span>
-                    <span class="site-state-item-name">categories</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">29</span>
-                    <span class="site-state-item-name">tags</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                  
-                </span>
-              
-                <span class="links-of-author-item">
-                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  
-                </span>
-              
-                <span class="links-of-author-item">
-                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  
-                </span>
-              
-            </div>
-          
-
-          
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0x01前提概要"><span class="nav-text">0x01前提概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02函数介绍"><span class="nav-text">0x02函数介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x02漏洞场景"><span class="nav-text">0x02漏洞场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-LFI-Local-File-Inclusion"><span class="nav-text">1. LFI(Local File Inclusion)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-RFI-Remote-File-Inclusion"><span class="nav-text">2. RFI(Remote File Inclusion)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-包含姿势总结"><span class="nav-text">3. 包含姿势总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-php伪协议"><span class="nav-text">3.1 php伪协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#php-input"><span class="nav-text">php://input</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#php-filter"><span class="nav-text">php://filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phar"><span class="nav-text">phar://</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#zip"><span class="nav-text">zip://</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#data-URI-schema"><span class="nav-text">data:URI schema</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-包含sessions"><span class="nav-text">3.2 包含sessions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-包含日志"><span class="nav-text">3.3 包含日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#访问日志"><span class="nav-text">访问日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SSH-log"><span class="nav-text">SSH log</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4包含上传文件"><span class="nav-text">3.4包含上传文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x03绕过姿势"><span class="nav-text">0x03绕过姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-指定前缀"><span class="nav-text">1. 指定前缀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目录遍历"><span class="nav-text">目录遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编码绕过"><span class="nav-text">2. 编码绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-指定后缀"><span class="nav-text">3. 指定后缀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#远程文件包含的利用"><span class="nav-text">远程文件包含的利用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-长度截断"><span class="nav-text">4. 长度截断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-00字节截断"><span class="nav-text">5. %00字节截断</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#0x04-防御方案"><span class="nav-text">0x04 防御方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Refer"><span class="nav-text">Refer</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-        <div class="back-to-top">
-          <i class="fa fa-arrow-up"></i>
-          
-            <span id="scrollpercent"><span>0</span>%</span>
-          
-        </div>
-      
-
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
-  </aside>
 
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
-
-  
-
-  
+  </div>
 </div>
 
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
     
-
-    
-	
-    
-
-    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 l1nk3r
   </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-  <script>
-    
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
-        .done(function ({ results }) {
-          if (results.length > 0) {
-            var counter = results[0];
-            
-              var $element = $(document.getElementById(url));
-              $element.find('.leancloud-visitors-count').text(counter.time + 1);
-            
-            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
-            
-            .fail(function ({ responseJSON }) {
-                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
-            })
-          } else {
-            
-              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
-                .done(function () {
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(1);
-                })
-                .fail(function () {
-                  console.log('Failed to create');
-                });
-            
-          }
-        })
-      .fail(function ({ responseJSON }) {
-        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
-      });
-    }
-    
-
-    $(function() {
-      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
-        .done(function ({ api_server }) {
-          var Counter = function (method, url, data) {
-            return $.ajax({
-              method: method,
-              url: `https://${api_server}/1.1${url}`,
-              headers: {
-                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
-                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
-                'Content-Type': 'application/json',
-              },
-              data: data,
-            });
-          };
-          
-          addCount(Counter);
-          
-        })
-    });
-  </script>
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
 
 </body>
 </html>
-<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

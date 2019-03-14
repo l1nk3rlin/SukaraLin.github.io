@@ -1,121 +1,12 @@
 <!DOCTYPE html>
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html lang=zh>
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-  
-  
-    
-    
-  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
-
-
-
-
-
-
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '6.4.1',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-  
-
-
-
-
-  <meta name="description" content="0x01 概述其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x01 概述其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。">
 <meta name="keywords" content="NFA,DOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ReDOS初探">
@@ -123,321 +14,143 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 概述其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/2.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/1.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/3.gif">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/4.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/5.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/6.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/7.png">
-<meta property="og:updated_time" content="2019-02-16T08:16:49.094Z">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/rqy4s.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/klwd9.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/uthyl.gif">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zsxvy.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/tnn9l.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/p6ely.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/vzq1z.png">
+<meta property="og:updated_time" content="2019-03-12T09:07:14.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReDOS初探">
 <meta name="twitter:description" content="0x01 概述其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。">
-<meta name="twitter:image" content="http://www.lmxspace.com/2019/02/16/ReDOS初探/2.png">
-
-
-
-
-
-
-  <link rel="canonical" href="http://www.lmxspace.com/2019/02/16/ReDOS初探/"/>
-
-
-
-<script type="text/javascript" id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
-  <title>ReDOS初探 | l1nk3r's blog</title>
-  
-
-
-
-
-
-
-
-
-
-  <noscript>
-  <style type="text/css">
-    .use-motion .motion-element,
-    .use-motion .brand,
-    .use-motion .menu-item,
-    .sidebar-inner,
-    .use-motion .post-block,
-    .use-motion .pagination,
-    .use-motion .comments,
-    .use-motion .post-header,
-    .use-motion .post-body,
-    .use-motion .collection-title { opacity: initial; }
-
-    .use-motion .logo,
-    .use-motion .site-title,
-    .use-motion .site-subtitle {
-      opacity: initial;
-      top: initial;
-    }
-
-    .use-motion {
-      .logo-line-before i { left: initial; }
-      .logo-line-after i { right: initial; }
-    }
-  </style>
-</noscript>
-
+<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/rqy4s.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>ReDOS初探</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-  
+<body class="max-width mx-auto px3 ltr">
     
-  
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/11/Java-web学习之路-序列化和反序列化/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/13/ThinkPHP-request函数远程代码执行/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2019/02/16/ReDOS初探/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&text=ReDOS初探"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&is_video=false&description=ReDOS初探"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ReDOS初探&body=Check out this article: http://www.lmxspace.com/2019/02/16/ReDOS初探/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&name=ReDOS初探&description=&lt;h2 id=&#34;0x01-概述&#34;&gt;&lt;a href=&#34;#0x01-概述&#34; class=&#34;headerlink&#34; title=&#34;0x01 概述&#34;&gt;&lt;/a&gt;0x01 概述&lt;/h2&gt;&lt;p&gt;其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">l1nk3r's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
     </div>
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-概述"><span class="toc-number">1.</span> <span class="toc-text">0x01 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-知识铺垫"><span class="toc-number">2.</span> <span class="toc-text">0x02 知识铺垫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-漏洞样例"><span class="toc-number">3.</span> <span class="toc-text">0x03 漏洞样例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
 </div>
 
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ReDOS初探
+    </h1>
 
 
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">l1nk3r's blog</span>
+      </span>
       
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-friends">
-    <a href="/Friends" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
-  </li>
+    <div class="postdate">
+        <time datetime="2019-02-16T08:10:16.000Z" itemprop="datePublished">2019-02-16</time>
+    </div>
+
 
       
-      
-    </ul>
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/DOS/">DOS</a>, <a class="tag-link" href="/tags/NFA/">NFA</a>
+    </div>
+
+
+    </div>
+  </header>
   
 
-  
-
-  
-</nav>
-
-
-
-  
-
-
-
-</div>
-    </header>
-
-    
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2019/02/16/ReDOS初探/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="l1nk3r's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">ReDOS初探
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-02-16 16:10:16 / Modified: 16:16:49" itemprop="dateCreated datePublished" datetime="2019-02-16T16:10:16+08:00">2019-02-16</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/漏洞利用/" itemprop="url" rel="index"><span itemprop="name">漏洞利用</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2019/02/16/ReDOS初探/" class="leancloud_visitors" data-flag-title="ReDOS初探">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">Views: </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="0x01-概述"><a href="#0x01-概述" class="headerlink" title="0x01 概述"></a>0x01 概述</h2><p>其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。</p>
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-概述"><a href="#0x01-概述" class="headerlink" title="0x01 概述"></a>0x01 概述</h2><p>其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。</p>
 <a id="more"></a> 
 <h2 id="0x02-知识铺垫"><a href="#0x02-知识铺垫" class="headerlink" title="0x02 知识铺垫"></a>0x02 知识铺垫</h2><p>所谓的 <strong>ReDOS(Regular expression Denial of Service) 正则表达式拒绝服务攻击</strong> 。实际上开发人员使用了正则表达式来对用户输入的数据进行有效性校验, 当编写校验的正则表达式存在缺陷或者不严谨时, 攻击者可以构造特殊的字符串来大量消耗服务器的系统资源，造成服务器的服务中断或停止。<br>正则表达式是什么，其实大家应该都知道，或者都用到过，但是这里需要提及一些东西就是正则表达式的引擎。这里首先涉及到一个概念： <strong>有限状态自动机</strong> 。</p>
 <blockquote>
@@ -490,14 +203,14 @@
 </tbody>
 </table>
 <p>我们来看一个demo。</p>
-<p><img src="/2019/02/16/ReDOS初探/2.png" alt="2"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/rqy4s.png" alt="2"></p>
 <p>简单说明一下这个<code>^(a+)+$</code>正则的作用是什么：</p>
 <p>^：匹配输入字符串的开始位置，也就是说从下面<code>str_list</code>字符串中的最开头开始匹配。</p>
 <p>a：就是字符a，这里不多做说明</p>
 <p>+：<strong>“+”(懒惰)</strong>   重复一次或更多次，例如”aaaaaaaa” 匹配字符串中所有的a。</p>
 <p>$：\$会匹配行或字符串的结尾。</p>
 <p>那么我们通过一段代码进行一下验证</p>
-<p><img src="/2019/02/16/ReDOS初探/1.png" alt="1"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/klwd9.png" alt="1"></p>
 <p>根据<a href="https://www.checkmarx.com/wp-content/uploads/2015/03/ReDoS-Attacks.pdf" target="_blank" rel="noopener">Regular Expression Denial of Service</a>这个个PPT里面，总结了一下：</p>
 <ul>
 <li>重复分组构造</li>
@@ -558,18 +271,18 @@
 <p>之前Ph师傅的 <strong>code-breaking</strong> 题目里面就有一题 <strong>prefwaf</strong> ，这题实际上就涉及到这个问题，首先源码是这样的。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_php</span><span class="params">($data)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> preg_match(<span class="string">'/&lt;\?.*[(`;?&gt;].*/is'</span>, $data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">empty</span>($_FILES)) &#123;</span><br><span class="line">    <span class="keyword">die</span>(show_source(<span class="keyword">__FILE__</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$user_dir = <span class="string">'data/'</span> . md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]);</span><br><span class="line">$data = file_get_contents($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>]);</span><br><span class="line"><span class="keyword">if</span> (is_php($data)) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"bad request"</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    @mkdir($user_dir, <span class="number">0755</span>);</span><br><span class="line">    $path = $user_dir . <span class="string">'/'</span> . random_int(<span class="number">0</span>, <span class="number">10</span>) . <span class="string">'.php'</span>;</span><br><span class="line">    move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>], $path);</span><br><span class="line"></span><br><span class="line">    header(<span class="string">"Location: $path"</span>, <span class="keyword">true</span>, <span class="number">303</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其实这里很明显我们要写入webshell，但是要绕过 <strong>is_php</strong> 函数中的 <strong>/&lt;\?.*[(`;?&gt;].*/is</strong> 正则表达式，假设我们输入的字符是 <strong>&lt;?php phpinfo();//aaaaa</strong> ，那么这个字符串匹配流程我们看一下这个动图。</p>
-<p><img src="/2019/02/16/ReDOS初探/3.gif" alt="3"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/uthyl.gif" alt="3"></p>
 <p>我们看到，到第4步开始由于<code>?.*</code>是贪婪模式匹配，因此抓取到了这个字符串也就是 <strong>//aaaaa</strong> 的末尾，而立实际上还有部分内容是 <strong>[(`;?&gt;]</strong> 等特殊字符，也就是说这部分代码里面如果存在这些字符就匹配成功，而该NFA引擎的正则表达式目前没有找到，因此它从第5步开始回溯，先吐出一个<code>a</code>，输入变成第5步显示的<code>//aaaa</code>，但仍然匹配不上正则，继续吐出<code>a</code>，变成<code>//aaa</code>，仍然匹配不上……。直到第12步回溯的 <strong>;</strong> 匹配上了字符 <strong>[(`;?&gt;]</strong> 中的 <strong>;</strong> 。</p>
-<p><img src="/2019/02/16/ReDOS初探/4.png" alt="4"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/zsxvy.png" alt="4"></p>
 <p>然后 <strong>第13步</strong> 又匹配 <strong>.*</strong> ，执行贪婪匹配，通过 <strong>;</strong> 将回溯源 <strong>&lt;?php phpinfo();</strong> 全部抓了出来，并返回匹配成功。</p>
-<p><img src="/2019/02/16/ReDOS初探/5.png" alt="5"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/tnn9l.png" alt="5"></p>
 <p>PHP为了防止正则表达式的拒绝服务攻击（reDOS），给pcre设定了一个回溯次数上限<code>pcre.backtrack_limit</code>。我们可以通过<code>var_dump(ini_get(&#39;pcre.backtrack_limit&#39;));</code>的方式查看当前环境下的上限。</p>
-<p><img src="/2019/02/16/ReDOS初探/6.png" alt="6"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/p6ely.png" alt="6"></p>
 <p>这里的回溯上限是1000000，也就是说我们看看超过回溯上限的执行结果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php &gt; var_dump(preg_match(&apos;/&lt;\?.*[(`;?&gt;].*/is&apos;,&apos;&lt;?php phpinfo();//&apos;.str_repeat(&apos;a&apos;,1000000)));</span><br><span class="line">bool(false)</span><br></pre></td></tr></table></figure>
 <p><code>preg_match</code>返回的非1和0，而是false。<code>preg_match</code>函数返回false表示此次执行失败了，我们可以调用<code>var_dump(preg_last_error() === PREG_BACKTRACK_LIMIT_ERROR);</code>，发现失败的原因的确是回溯次数超出了限制。</p>
 <p>这里修复的话，php.net针对<a href="http://php.net/manual/en/function.preg-match.php" target="_blank" rel="noopener">这个函数</a>提及到了修复建议。</p>
-<p><img src="/2019/02/16/ReDOS初探/7.png" alt="7"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/vzq1z.png" alt="7"></p>
 <p>如果用<code>preg_match</code>对字符串进行匹配，一定要使用<code>===</code>全等号来判断返回值，如：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_php</span><span class="params">($data)</span></span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> preg_match(<span class="string">'/&lt;\?.*[(`;?&gt;].*/is'</span>, $data);  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(is_php($input) === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// fwrite($f, $input); ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这样，即使正则执行失败返回false，也不会进入if语句。</p>
@@ -577,553 +290,98 @@
 <p><a href="https://www.checkmarx.com/wp-content/uploads/2015/03/ReDoS-Attacks.pdf" target="_blank" rel="noopener">Regular Expression Denial of Service</a></p>
 <p><a href="https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html" target="_blank" rel="noopener">PHP利用PCRE回溯次数限制绕过某些安全限制</a></p>
 
-      
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
     </div>
 
-    
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-概述"><span class="toc-number">1.</span> <span class="toc-text">0x01 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-知识铺垫"><span class="toc-number">2.</span> <span class="toc-text">0x02 知识铺垫</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-漏洞样例"><span class="toc-number">3.</span> <span class="toc-text">0x03 漏洞样例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
 
-    
-    
-    
-
-    
-
-    
-
-    
-      <div>
-        <ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>Post author:  </strong>l1nk3r</li>
-  <li class="post-copyright-link">
-    <strong>Post link: </strong>
-    <a href="http://www.lmxspace.com/2019/02/16/ReDOS初探/" title="ReDOS初探">http://www.lmxspace.com/2019/02/16/ReDOS初探/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2019/02/16/ReDOS初探/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&text=ReDOS初探"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&is_video=false&description=ReDOS初探"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ReDOS初探&body=Check out this article: http://www.lmxspace.com/2019/02/16/ReDOS初探/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&title=ReDOS初探"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2019/02/16/ReDOS初探/&name=ReDOS初探&description=&lt;h2 id=&#34;0x01-概述&#34;&gt;&lt;a href=&#34;#0x01-概述&#34; class=&#34;headerlink&#34; title=&#34;0x01 概述&#34;&gt;&lt;/a&gt;0x01 概述&lt;/h2&gt;&lt;p&gt;其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
-      </div>
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/NFA/" rel="tag"><i class="fa fa-tag"></i> NFA</a>
-          
-            <a href="/tags/DOS/" rel="tag"><i class="fa fa-tag"></i> DOS</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/01/13/ThinkPHP-request函数远程代码执行/" rel="next" title="ThinkPHP request函数远程代码执行">
-                <i class="fa fa-chevron-left"></i> ThinkPHP request函数远程代码执行
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/11/Java-web学习之路-序列化和反序列化/" rel="prev" title="Java web学习之路-序列化和反序列化">
-                Java web学习之路-序列化和反序列化 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
 
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.jpg"
-                alt="l1nk3r" />
-            
-              <p class="site-author-name" itemprop="name">l1nk3r</p>
-              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">32</span>
-                    <span class="site-state-item-name">posts</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">10</span>
-                    <span class="site-state-item-name">categories</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">29</span>
-                    <span class="site-state-item-name">tags</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                  
-                </span>
-              
-                <span class="links-of-author-item">
-                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  
-                </span>
-              
-                <span class="links-of-author-item">
-                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  
-                </span>
-              
-            </div>
-          
-
-          
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-概述"><span class="nav-text">0x01 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-知识铺垫"><span class="nav-text">0x02 知识铺垫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-漏洞样例"><span class="nav-text">0x03 漏洞样例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-        <div class="back-to-top">
-          <i class="fa fa-arrow-up"></i>
-          
-            <span id="scrollpercent"><span>0</span>%</span>
-          
-        </div>
-      
-
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
-  </aside>
 
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
-
-  
-
-  
+  </div>
 </div>
 
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
     
-
-    
-	
-    
-
-    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 l1nk3r
   </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-  <script>
-    
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
-        .done(function ({ results }) {
-          if (results.length > 0) {
-            var counter = results[0];
-            
-              var $element = $(document.getElementById(url));
-              $element.find('.leancloud-visitors-count').text(counter.time + 1);
-            
-            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
-            
-            .fail(function ({ responseJSON }) {
-                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
-            })
-          } else {
-            
-              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
-                .done(function () {
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(1);
-                })
-                .fail(function () {
-                  console.log('Failed to create');
-                });
-            
-          }
-        })
-      .fail(function ({ responseJSON }) {
-        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
-      });
-    }
-    
-
-    $(function() {
-      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
-        .done(function ({ api_server }) {
-          var Counter = function (method, url, data) {
-            return $.ajax({
-              method: method,
-              url: `https://${api_server}/1.1${url}`,
-              headers: {
-                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
-                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
-                'Content-Type': 'application/json',
-              },
-              data: data,
-            });
-          };
-          
-          addCount(Counter);
-          
-        })
-    });
-  </script>
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
 
 </body>
 </html>
-<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+

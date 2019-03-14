@@ -1,121 +1,12 @@
 <!DOCTYPE html>
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-Hans">
+<html lang=zh>
 <head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-  
-  
-    
-    
-  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
-  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
-
-
-
-
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
-
-
-
-
-
-
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '6.4.1',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-  
-
-
-
-
-  <meta name="description" content="0x01 概述2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x01 概述2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。">
 <meta name="keywords" content="漏洞复现,php">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ThinkPHP request函数远程代码执行">
@@ -123,958 +14,325 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 概述2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/1.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/2.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/3.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/4.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/5.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/6.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/7.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/8.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/9.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/10.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/11.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/12.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/13.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/14.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/15.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/16.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/17.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/18.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/19.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/20.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/22.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/24.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/25.png">
-<meta property="og:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/21.png">
-<meta property="og:updated_time" content="2019-01-12T16:08:05.617Z">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/h6rua.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/sn5ko.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/f1vu6.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/uxbwp.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/jo3dd.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/txjtu.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/enx25.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/disj6.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6vpje.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zig7p.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/tdm2c.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/usdob.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/vfrwx.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/i71f2.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/cxofl.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/gge8s.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/tplrq.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6f25s.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/y37y3.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/x21ga.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/aymty.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/cz6hc.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/qe1f0.png">
+<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/2zowr.png">
+<meta property="og:updated_time" content="2019-03-12T09:07:14.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThinkPHP request函数远程代码执行">
 <meta name="twitter:description" content="0x01 概述2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。">
-<meta name="twitter:image" content="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/1.png">
-
-
-
-
-
-
-  <link rel="canonical" href="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/"/>
-
-
-
-<script type="text/javascript" id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
-  <title>ThinkPHP request函数远程代码执行 | l1nk3r's blog</title>
-  
-
-
-
-
-
-
-
-
-
-  <noscript>
-  <style type="text/css">
-    .use-motion .motion-element,
-    .use-motion .brand,
-    .use-motion .menu-item,
-    .sidebar-inner,
-    .use-motion .post-block,
-    .use-motion .pagination,
-    .use-motion .comments,
-    .use-motion .post-header,
-    .use-motion .post-body,
-    .use-motion .collection-title { opacity: initial; }
-
-    .use-motion .logo,
-    .use-motion .site-title,
-    .use-motion .site-subtitle {
-      opacity: initial;
-      top: initial;
-    }
-
-    .use-motion {
-      .logo-line-before i { left: initial; }
-      .logo-line-after i { right: initial; }
-    }
-  </style>
-</noscript>
-
+<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/h6rua.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>ThinkPHP request函数远程代码执行</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-  
+<body class="max-width mx-auto px3 ltr">
     
-  
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/02/16/ReDOS初探/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/02/2018年终总结/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&text=ThinkPHP request函数远程代码执行"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&is_video=false&description=ThinkPHP request函数远程代码执行"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ThinkPHP request函数远程代码执行&body=Check out this article: http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&name=ThinkPHP request函数远程代码执行&description=&lt;h2 id=&#34;0x01-概述&#34;&gt;&lt;a href=&#34;#0x01-概述&#34; class=&#34;headerlink&#34; title=&#34;0x01 概述&#34;&gt;&lt;/a&gt;0x01 概述&lt;/h2&gt;&lt;p&gt;2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">l1nk3r's blog</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
     </div>
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-概述"><span class="toc-number">1.</span> <span class="toc-text">0x01 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-漏洞分析"><span class="toc-number">2.</span> <span class="toc-text">0x02 漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-动态调试"><span class="toc-number">3.</span> <span class="toc-text">0x03 动态调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-扩展"><span class="toc-number">4.</span> <span class="toc-text">0x04 扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-总结"><span class="toc-number">5.</span> <span class="toc-text">0x05 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+  </span>
 </div>
 
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        ThinkPHP request函数远程代码执行
+    </h1>
 
 
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">l1nk3r's blog</span>
+      </span>
       
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-    <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-friends">
-    <a href="/Friends" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />Friends</a>
-  </li>
+    <div class="postdate">
+        <time datetime="2019-01-12T16:06:06.000Z" itemprop="datePublished">2019-01-13</time>
+    </div>
+
 
       
-      
-    </ul>
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/php/">php</a>, <a class="tag-link" href="/tags/漏洞复现/">漏洞复现</a>
+    </div>
+
+
+    </div>
+  </header>
   
 
-  
-
-  
-</nav>
-
-
-
-  
-
-
-
-</div>
-    </header>
-
-    
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="l1nk3r">
-      <meta itemprop="description" content="愿你出走半生，归来仍是少年">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="l1nk3r's blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">ThinkPHP request函数远程代码执行
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2019-01-13 00:06:06 / Modified: 00:08:05" itemprop="dateCreated datePublished" datetime="2019-01-13T00:06:06+08:00">2019-01-13</time>
-            
-
-            
-              
-
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/漏洞分析/" itemprop="url" rel="index"><span itemprop="name">漏洞分析</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2019/01/13/ThinkPHP-request函数远程代码执行/" class="leancloud_visitors" data-flag-title="ThinkPHP request函数远程代码执行">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">Views: </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="0x01-概述"><a href="#0x01-概述" class="headerlink" title="0x01 概述"></a>0x01 概述</h2><p>2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。</p>
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-概述"><a href="#0x01-概述" class="headerlink" title="0x01 概述"></a>0x01 概述</h2><p>2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。</p>
 <a id="more"></a> 
 <h2 id="0x02-漏洞分析"><a href="#0x02-漏洞分析" class="headerlink" title="0x02 漏洞分析"></a>0x02 漏洞分析</h2><p>根据ThinkPHP的补丁发现，修复部分在 <strong><a href="https://github.com/top-think/framework/commit/4a4b5e64fa4c46f851b4004005bff5f3196de003#diff-d971bc61249787ff68eeb622c554fc47" target="_blank" rel="noopener">library/think/Request.php</a></strong> 文件中。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/1.png" alt="1"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/h6rua.png" alt="1"></p>
 <p>漏洞的修复点是 <strong>method</strong> 这个函数，我们可以逆这回去看看，哪里调用了这个函数，相关调用方法出现在 <strong>library/think/Request.php:541-603</strong> 的 <strong>isGet</strong> 、 <strong>isPost</strong> 、 <strong>isPut</strong> 、 <strong>isDelete</strong> 、 <strong>isHead</strong> 、 <strong>isPatch</strong> 、 <strong>isOptions</strong> 中，也就是说实际上这个函数会在判断请求方式的时候进行调用。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/2.png" alt="2"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/sn5ko.png" alt="2"></p>
 <p>从修复代码来看，漏洞触发点应该是下图中 <strong>第8行-第9行</strong> 这个部分。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/3.png" alt="3"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/f1vu6.png" alt="3"></p>
 <p><strong>第8行</strong> 代码有个 <strong>var_method</strong> 常量，这个常量的定义在 <strong>application/config.php</strong> 文件中， <strong>var_method</strong> 对应的值是 <strong>_method</strong> 。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/4.png" alt="4"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/uxbwp.png" alt="4"></p>
 <p>也就是说，如果我们通过POST方式传入 <code>_method=xxx</code> 的情况下，代码会将xxx转换为大写并赋值给<code>$this-&gt;method</code>。然后 <strong>第9行</strong> 调用<code>$this-&gt;{$this-&gt;method}($_POST)</code>，也就是调用<code>$this-&gt;XXX($POST)</code>，这就说明了攻击者在这个地方首先调用的函数可控，其次传入的数据也可控。</p>
 <p>根据已知payload，这里的 <strong>_method=___construct</strong> ，也就是说 <strong>___construct</strong> 函数也有问题，跟进一下 <strong>___construct</strong> 函数，函数位置在 <strong>library/think/Request.php:135-148</strong> 中。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($options = [])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">foreach</span> ($options <span class="keyword">as</span> $name =&gt; $item) &#123;</span><br><span class="line"><span class="keyword">if</span> (property_exists(<span class="keyword">$this</span>, $name)) &#123;</span><br><span class="line"><span class="keyword">$this</span>-&gt;$name = $item;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (is_null(<span class="keyword">$this</span>-&gt;filter)) &#123;</span><br><span class="line"><span class="keyword">$this</span>-&gt;filter = Config::get(<span class="string">'default_filter'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 保存 php://input</span></span><br><span class="line"><span class="keyword">$this</span>-&gt;input = file_get_contents(<span class="string">'php://input'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对传入的 <strong>$options</strong> 数组进行遍历，然后 <strong>第4行</strong> 调用了 <strong>property_exists</strong> 进行判断， <strong>property_exists</strong> 函数的作用是检查对象或类是否具有该属性，也就是说当 <strong>$options</strong> 的键名为该类属性时，则将该类同名的属性赋值为 <strong>$options</strong> 中该键的对应值。这里 <strong>第8行</strong> 代码中针对 <strong>$this-&gt;filter</strong> 进行了判断，如果不存在，让其等于 <strong>Config::get(‘default_filter’)</strong> 的结果，而 <strong>default_filter</strong> 定义在 <strong>application/config.php:44</strong> 中，其值默认为空。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/5.png" alt="5"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/jo3dd.png" alt="5"></p>
 <p>而filter存放的是全局过滤规则。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/6.png" alt="6"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/txjtu.png" alt="6"></p>
 <p>所以核心关键在于 <strong>method</strong> 这个函数在 <strong>POST</strong> 方法下可控，所以这里需要全局搜索一下除了那些http请求类型定义以外，还有哪里调用了这个函数，在 <strong>library/think/Request.php:634-661</strong> 调用了这个函数。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/7.png" alt="7"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/enx25.png" alt="7"></p>
 <p>我们看到如果 <strong>$this-&gt;mergeParam</strong> 为空的情况下，调用 <strong>$this-&gt;method(true)</strong> ，而 <strong>true === $method</strong> 情况下调用的是 <strong>server(‘REQUEST_METHOD’)</strong> 。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">true</span> === $method) &#123;</span><br><span class="line"><span class="comment">// 获取原始请求类型</span></span><br><span class="line"><span class="keyword">return</span> <span class="keyword">$this</span>-&gt;server(<span class="string">'REQUEST_METHOD'</span>) ?: <span class="string">'GET'</span>;</span><br></pre></td></tr></table></figure>
 <p>跟进 <strong>server</strong> 函数，函数实现在 <strong>library/think/Request.php:862</strong> ,这里的 <strong>$name</strong> 实际上就是 <strong>REQUEST_METHOD</strong> 。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">server</span><span class="params">($name = <span class="string">''</span>, $default = null, $filter = <span class="string">''</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">empty</span>(<span class="keyword">$this</span>-&gt;server)) &#123;</span><br><span class="line"><span class="keyword">$this</span>-&gt;server = $_SERVER;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (is_array($name)) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">$this</span>-&gt;server = array_merge(<span class="keyword">$this</span>-&gt;server, $name);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">$this</span>-&gt;input(<span class="keyword">$this</span>-&gt;server, <span class="keyword">false</span> === $name ? <span class="keyword">false</span> : strtoupper($name), $default, $filter);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>经过处理之后，最后会调用 <strong>$this-&gt;input</strong> 函数进行处理，跟进 <strong>input</strong> 函数，函数位置在 <strong>library/think/Request.php:999</strong> ，这里 <strong>第10行</strong> 代码调用 <strong>getFilter</strong> 函数获取过滤器。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/8.png" alt="8"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/disj6.png" alt="8"></p>
 <p>跟进一下 <strong>getFilter</strong> 函数，这里的 <strong>$filter=’’</strong> ，而 <strong>$default=null</strong> 。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">getFilter</span><span class="params">($filter, $default)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (is_null($filter)) &#123;</span><br><span class="line">$filter = [];</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">$filter = $filter ?: <span class="keyword">$this</span>-&gt;filter;</span><br><span class="line"><span class="keyword">if</span> (is_string($filter) &amp;&amp; <span class="keyword">false</span> === strpos($filter, <span class="string">'/'</span>)) &#123;</span><br><span class="line">$filter = explode(<span class="string">','</span>, $filter);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">$filter = (<span class="keyword">array</span>) $filter;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$filter[] = $default;</span><br><span class="line"><span class="keyword">return</span> $filter;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>所以这里的代码会运行到 <strong>第6行</strong> ，进行三元运算，也就是说最终 <strong>$filter</strong> 会被赋值给 <strong>$this-&gt;filter</strong> ，最后返回 <strong>$filter</strong> 。</p>
 <p>紧接着判断$data是否是数组，然后调用 <strong>filterValue</strong> 函数进行处理。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (is_array($data)) &#123;</span><br><span class="line">array_walk_recursive($data, [<span class="keyword">$this</span>, <span class="string">'filterValue'</span>], $filter);</span><br><span class="line">reset($data);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">$this</span>-&gt;filterValue($data, $name, $filter);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($type) &amp;&amp; $data !== $default) &#123;</span><br><span class="line"><span class="comment">// 强制类型转换</span></span><br><span class="line"><span class="keyword">$this</span>-&gt;typeCast($data, $type);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> $data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>跟进 <strong>filterValue</strong> 函数，在 <strong>第7行</strong> 看到了一个熟悉的函数<strong>call_user_func</strong> ，而 <strong>$filter</strong> 和 <strong>$value</strong> 均可控。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/9.png" alt="9"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/6vpje.png" alt="9"></p>
 <p>也就是说最后我们需要找到自动触发调用param()函数的地方即可，而在原生 <strong>thinkphp</strong> 框架下，文件位置在 <strong>library/think/App.php:126</strong> ，也就是说原生框架的情况下，如果开启了debug模式，可以直接命令执行。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/10.png" alt="10"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/zig7p.png" alt="10"></p>
 <h2 id="0x03-动态调试"><a href="#0x03-动态调试" class="headerlink" title="0x03 动态调试"></a>0x03 动态调试</h2><p>payload如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public/index.php?s=captcha</span><br><span class="line"></span><br><span class="line">_method=__construct&amp;filter[]=system&amp;server[REQUEST_METHOD]=ls -al</span><br></pre></td></tr></table></figure>
 <p>在开启 <strong>debug</strong> 状态之后，在 <strong>param</strong> 下一个断点<code>_method=__construct</code>，<code>filter[]=system</code>，</p>
 <p><code>server[REQUEST_METHOD]=whoami</code>。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/11.png" alt="11"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/tdm2c.png" alt="11"></p>
 <p>跟进param函数。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/12.png" alt="12"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/usdob.png" alt="12"></p>
 <p>跟进method函数。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/13.png" alt="13"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/vfrwx.png" alt="13"></p>
 <p>跟进server函数，这里input的函数输入分别是</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">name=REQUEST_METHOD</span><br><span class="line">default=null</span><br><span class="line">filter=&quot;&quot;</span><br><span class="line">this-&gt;server=REQUEST_METHOD=whoami</span><br></pre></td></tr></table></figure>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/14.png" alt="14"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/i71f2.png" alt="14"></p>
 <p>跟进input函数中getFilter函数，处理结果返回filter数组，其中filter[0]=system。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/15.png" alt="15"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/cxofl.png" alt="15"></p>
 <p>而 <strong>$data</strong> 就是我们刚刚的 <strong>$this-&gt;server</strong> ，对应的值也就是whoami，而 <strong>filter[0]=system</strong> 。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/16.png" alt="16"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/gge8s.png" alt="16"></p>
 <p>跟进filterValue函数，最后成功运行了。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/17.png" alt="17"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/tplrq.png" alt="17"></p>
 <h2 id="0x04-扩展"><a href="#0x04-扩展" class="headerlink" title="0x04 扩展"></a>0x04 扩展</h2><p>由于正式系统的情况下，使用debug模式的很少，因此需要找一下不需要debug模式下触发点，而漏洞发现者的思路有点像之前 <strong>ThinkPHP</strong> 远程代码执行那个思路。</p>
 <p>payload：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public/index.php?s=captcha</span><br><span class="line"></span><br><span class="line">_method=__construct&amp;filter[]=system&amp;method=get&amp;server[REQUEST_METHOD]=ls -al</span><br></pre></td></tr></table></figure>
 <p>直接动态调试吧，漏洞调用链是这样的。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/18.png" alt="18"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/6f25s.png" alt="18"></p>
 <p>先看看 <strong>app.php:139</strong> 位置，其中var_pathino 默认值为s，也就是说我们通过 <strong>s</strong> 参数注册了一个 <strong>\think\captcha\CaptchaController</strong> 的路由，至于为什么会是这样，可以翻一翻我之前的<a href="http://www.lmxspace.com/2018/12/12/Thinkphp-5-0%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">Thinkphp-5-0远程代码执行漏洞</a>，里面针对路由怎么调用进行了详细的说明。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/19.png" alt="19"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/y37y3.png" alt="19"></p>
 <p>而在 <strong>vendor/topthink/think-captcha/src/helper.php</strong> 文件中针对captcha这个功能进行了路由注册，所以才能够调用。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/20.png" alt="20"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/x21ga.png" alt="20"></p>
 <p>而这里的返回type为什么是method，需要考究一下。在 <strong>app.php:116</strong> 处的 <strong>routeCheck</strong> 函数处下一个断点，跟进 <strong>routeCheck</strong> ，在 <strong>thinkphp/library/think/App.php:643</strong> 处调用 <strong>check</strong> 函数，跟进 <strong>check</strong> 函数 <strong>thinkphp/library/think/Route.php:857</strong> 调用了 <strong>method</strong> 函数。而 <strong>method</strong> 函数之前我们说过存在变量覆盖的问题，通过覆盖之后使得 <strong>$method=get</strong> ，然后再取出 <strong>self::$rules[\$method]</strong> 的值给 <strong>$rules</strong> 。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/22.png" alt="22"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/aymty.png" alt="22"></p>
 <p>然后继续往下走 <strong>thinkphp/library/think/Route.php:873</strong> ，此时使得<code>$rules[$item]</code>的值为captcha路由数组，就可以进一步调用到<code>self::parseRule</code>函数。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/24.png" alt="24"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/cz6hc.png" alt="24"></p>
 <p>跟进一下此时传递进来的 <strong>$route</strong> 的值为 <strong>\think\captcha\CaptchaController@index</strong> ，经过处理之后 <strong>routeCheck</strong> 函数处理之后 <strong>type=method</strong> 。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/25.png" alt="25"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/qe1f0.png" alt="25"></p>
 <p>前面我们传入的 <strong>type</strong> 为 <strong>method</strong> ，所以进入到 <strong>app:exec()</strong> 中，会选择 <strong>method</strong> 这个 <strong>case</strong> 进行逻辑处理，而这个 <strong>case</strong> 正好调用了 <strong>param</strong> 这个函数，那么后面的流程自然就和 <strong>0x02部分</strong> 一样了。</p>
-<p><img src="/2019/01/13/ThinkPHP-request函数远程代码执行/21.png" alt="21"></p>
+<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/2zowr.png" alt="21"></p>
 <h2 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h2><p>目前来看，漏洞触发需要两个前置条件，一种情况下如果采用thinkphp原生框架，需要在debug模式下才能够触发。另一种情况是找到一些第三方组件，并且该组件注册了thinkphp的路由，因为这步操作的影响就是改变了上文提到的<code>self::$rules</code>的值，而thinkphp自带的一些第三方组件下，好像也只有captcha这个组件，学习了。</p>
 <p>和同事在讨论过程中，发现下面这个poc用来验证比较准确点。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public/index.php?s=captcha</span><br><span class="line"></span><br><span class="line">_method=__construct&amp;method=get&amp;filter[]=var_dump&amp;server[REQUEST_METHOD]=this_is_a_test</span><br></pre></td></tr></table></figure>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://paper.seebug.org/787/#_4" target="_blank" rel="noopener">ThinkPHP5 核心类 Request 远程代码漏洞分析</a></p>
 
-      
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
     </div>
 
-    
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-概述"><span class="toc-number">1.</span> <span class="toc-text">0x01 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-漏洞分析"><span class="toc-number">2.</span> <span class="toc-text">0x02 漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-动态调试"><span class="toc-number">3.</span> <span class="toc-text">0x03 动态调试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-扩展"><span class="toc-number">4.</span> <span class="toc-text">0x04 扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-总结"><span class="toc-number">5.</span> <span class="toc-text">0x05 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
 
-    
-    
-    
-
-    
-
-    
-
-    
-      <div>
-        <ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>Post author:  </strong>l1nk3r</li>
-  <li class="post-copyright-link">
-    <strong>Post link: </strong>
-    <a href="http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/" title="ThinkPHP request函数远程代码执行">http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&text=ThinkPHP request函数远程代码执行"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&is_video=false&description=ThinkPHP request函数远程代码执行"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=ThinkPHP request函数远程代码执行&body=Check out this article: http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&title=ThinkPHP request函数远程代码执行"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2019/01/13/ThinkPHP-request函数远程代码执行/&name=ThinkPHP request函数远程代码执行&description=&lt;h2 id=&#34;0x01-概述&#34;&gt;&lt;a href=&#34;#0x01-概述&#34; class=&#34;headerlink&#34; title=&#34;0x01 概述&#34;&gt;&lt;/a&gt;0x01 概述&lt;/h2&gt;&lt;p&gt;2019年1月11日爆了一个thinkphp 5.0.*远程rce的漏洞，跟进学习一下。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
-      </div>
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/漏洞复现/" rel="tag"><i class="fa fa-tag"></i> 漏洞复现</a>
-          
-            <a href="/tags/php/" rel="tag"><i class="fa fa-tag"></i> php</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/01/02/2018年终总结/" rel="next" title="2018年终总结">
-                <i class="fa fa-chevron-left"></i> 2018年终总结
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/02/16/ReDOS初探/" rel="prev" title="ReDOS初探">
-                ReDOS初探 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-  </div>
 
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
-
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.jpg"
-                alt="l1nk3r" />
-            
-              <p class="site-author-name" itemprop="name">l1nk3r</p>
-              <p class="site-description motion-element" itemprop="description">愿你出走半生，归来仍是少年</p>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">32</span>
-                    <span class="site-state-item-name">posts</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  <a href="/categories/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">10</span>
-                    <span class="site-state-item-name">categories</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  <a href="/tags/index.html">
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">29</span>
-                    <span class="site-state-item-name">tags</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  <a href="https://github.com/sukaralin" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                  
-                </span>
-              
-                <span class="links-of-author-item">
-                  <a href="mailto:sukaralin@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                  
-                </span>
-              
-                <span class="links-of-author-item">
-                  <a href="https://weibo.com/SukaraLin" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
-                  
-                </span>
-              
-            </div>
-          
-
-          
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </section>
-
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-概述"><span class="nav-text">0x01 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-漏洞分析"><span class="nav-text">0x02 漏洞分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-动态调试"><span class="nav-text">0x03 动态调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-扩展"><span class="nav-text">0x04 扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-总结"><span class="nav-text">0x05 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
-
-      
-        <div class="back-to-top">
-          <i class="fa fa-arrow-up"></i>
-          
-            <span id="scrollpercent"><span>0</span>%</span>
-          
-        </div>
-      
-
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
-  </aside>
 
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">l1nk3r</span>
-
-  
-
-  
+  </div>
 </div>
 
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
     
-
-    
-	
-    
-
-    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 l1nk3r
   </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=6.4.1"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.4.1"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-  <script>
-    
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
-        .done(function ({ results }) {
-          if (results.length > 0) {
-            var counter = results[0];
-            
-              var $element = $(document.getElementById(url));
-              $element.find('.leancloud-visitors-count').text(counter.time + 1);
-            
-            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
-            
-            .fail(function ({ responseJSON }) {
-                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
-            })
-          } else {
-            
-              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
-                .done(function () {
-                  var $element = $(document.getElementById(url));
-                  $element.find('.leancloud-visitors-count').text(1);
-                })
-                .fail(function () {
-                  console.log('Failed to create');
-                });
-            
-          }
-        })
-      .fail(function ({ responseJSON }) {
-        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
-      });
-    }
-    
-
-    $(function() {
-      $.get('https://app-router.leancloud.cn/2/route?appId=' + "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz")
-        .done(function ({ api_server }) {
-          var Counter = function (method, url, data) {
-            return $.ajax({
-              method: method,
-              url: `https://${api_server}/1.1${url}`,
-              headers: {
-                'X-LC-Id': "B9FGnsb12m0SgeUt1Ks30osH-gzGzoHsz",
-                'X-LC-Key': "VJzXbdTqOCo8jcVFjXNw7fRX",
-                'Content-Type': 'application/json',
-              },
-              data: data,
-            });
-          };
-          
-          addCount(Counter);
-          
-        })
-    });
-  </script>
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
 
 </body>
 </html>
-<!-- 页面点击小红心 --> <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
