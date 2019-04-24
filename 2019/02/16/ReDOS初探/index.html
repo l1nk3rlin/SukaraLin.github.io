@@ -14,18 +14,18 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 概述其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/rqy4s.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/klwd9.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/uthyl.gif">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zsxvy.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/tnn9l.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/p6ely.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/vzq1z.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.345Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/rqy4s.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/klwd9.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/uthyl.gif">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/zsxvy.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/tnn9l.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/p6ely.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/vzq1z.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:38.781Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ReDOS初探">
 <meta name="twitter:description" content="0x01 概述其实也是在做一次Code Review项目的时候，发现了一个ReDos的问题，但是由于惰性，没记录一下。最近比较有空了，所以抽个时间记录一下。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/rqy4s.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/rqy4s.png">
     
     
         
@@ -203,14 +203,14 @@
 </tbody>
 </table>
 <p>我们来看一个demo。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/rqy4s.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/rqy4s.png" alt="2"></p>
 <p>简单说明一下这个<code>^(a+)+$</code>正则的作用是什么：</p>
 <p>^：匹配输入字符串的开始位置，也就是说从下面<code>str_list</code>字符串中的最开头开始匹配。</p>
 <p>a：就是字符a，这里不多做说明</p>
 <p>+：<strong>“+”(懒惰)</strong>   重复一次或更多次，例如”aaaaaaaa” 匹配字符串中所有的a。</p>
 <p>$：\$会匹配行或字符串的结尾。</p>
 <p>那么我们通过一段代码进行一下验证</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/klwd9.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/klwd9.png" alt="1"></p>
 <p>根据<a href="https://www.checkmarx.com/wp-content/uploads/2015/03/ReDoS-Attacks.pdf" target="_blank" rel="noopener">Regular Expression Denial of Service</a>这个个PPT里面，总结了一下：</p>
 <ul>
 <li>重复分组构造</li>
@@ -271,18 +271,18 @@
 <p>之前Ph师傅的 <strong>code-breaking</strong> 题目里面就有一题 <strong>prefwaf</strong> ，这题实际上就涉及到这个问题，首先源码是这样的。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_php</span><span class="params">($data)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> preg_match(<span class="string">'/&lt;\?.*[(`;?&gt;].*/is'</span>, $data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">empty</span>($_FILES)) &#123;</span><br><span class="line">    <span class="keyword">die</span>(show_source(<span class="keyword">__FILE__</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$user_dir = <span class="string">'data/'</span> . md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]);</span><br><span class="line">$data = file_get_contents($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>]);</span><br><span class="line"><span class="keyword">if</span> (is_php($data)) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"bad request"</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    @mkdir($user_dir, <span class="number">0755</span>);</span><br><span class="line">    $path = $user_dir . <span class="string">'/'</span> . random_int(<span class="number">0</span>, <span class="number">10</span>) . <span class="string">'.php'</span>;</span><br><span class="line">    move_uploaded_file($_FILES[<span class="string">'file'</span>][<span class="string">'tmp_name'</span>], $path);</span><br><span class="line"></span><br><span class="line">    header(<span class="string">"Location: $path"</span>, <span class="keyword">true</span>, <span class="number">303</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其实这里很明显我们要写入webshell，但是要绕过 <strong>is_php</strong> 函数中的 <strong>/&lt;\?.*[(`;?&gt;].*/is</strong> 正则表达式，假设我们输入的字符是 <strong>&lt;?php phpinfo();//aaaaa</strong> ，那么这个字符串匹配流程我们看一下这个动图。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/uthyl.gif" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/uthyl.gif" alt="3"></p>
 <p>我们看到，到第4步开始由于<code>?.*</code>是贪婪模式匹配，因此抓取到了这个字符串也就是 <strong>//aaaaa</strong> 的末尾，而立实际上还有部分内容是 <strong>[(`;?&gt;]</strong> 等特殊字符，也就是说这部分代码里面如果存在这些字符就匹配成功，而该NFA引擎的正则表达式目前没有找到，因此它从第5步开始回溯，先吐出一个<code>a</code>，输入变成第5步显示的<code>//aaaa</code>，但仍然匹配不上正则，继续吐出<code>a</code>，变成<code>//aaa</code>，仍然匹配不上……。直到第12步回溯的 <strong>;</strong> 匹配上了字符 <strong>[(`;?&gt;]</strong> 中的 <strong>;</strong> 。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/zsxvy.png" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/zsxvy.png" alt="4"></p>
 <p>然后 <strong>第13步</strong> 又匹配 <strong>.*</strong> ，执行贪婪匹配，通过 <strong>;</strong> 将回溯源 <strong>&lt;?php phpinfo();</strong> 全部抓了出来，并返回匹配成功。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/tnn9l.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/tnn9l.png" alt="5"></p>
 <p>PHP为了防止正则表达式的拒绝服务攻击（reDOS），给pcre设定了一个回溯次数上限<code>pcre.backtrack_limit</code>。我们可以通过<code>var_dump(ini_get(&#39;pcre.backtrack_limit&#39;));</code>的方式查看当前环境下的上限。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/p6ely.png" alt="6"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/p6ely.png" alt="6"></p>
 <p>这里的回溯上限是1000000，也就是说我们看看超过回溯上限的执行结果。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php &gt; var_dump(preg_match(&apos;/&lt;\?.*[(`;?&gt;].*/is&apos;,&apos;&lt;?php phpinfo();//&apos;.str_repeat(&apos;a&apos;,1000000)));</span><br><span class="line">bool(false)</span><br></pre></td></tr></table></figure>
 <p><code>preg_match</code>返回的非1和0，而是false。<code>preg_match</code>函数返回false表示此次执行失败了，我们可以调用<code>var_dump(preg_last_error() === PREG_BACKTRACK_LIMIT_ERROR);</code>，发现失败的原因的确是回溯次数超出了限制。</p>
 <p>这里修复的话，php.net针对<a href="http://php.net/manual/en/function.preg-match.php" target="_blank" rel="noopener">这个函数</a>提及到了修复建议。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/vzq1z.png" alt="7"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/vzq1z.png" alt="7"></p>
 <p>如果用<code>preg_match</code>对字符串进行匹配，一定要使用<code>===</code>全等号来判断返回值，如：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">is_php</span><span class="params">($data)</span></span>&#123;  </span><br><span class="line">    <span class="keyword">return</span> preg_match(<span class="string">'/&lt;\?.*[(`;?&gt;].*/is'</span>, $data);  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(is_php($input) === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">// fwrite($f, $input); ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这样，即使正则执行失败返回false，也不会进入if语句。</p>
@@ -363,6 +363,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

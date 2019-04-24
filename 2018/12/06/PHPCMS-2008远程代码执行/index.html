@@ -14,27 +14,27 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 前提这个漏洞的起因是阿里云抓到的黑产样本，前台RCE的漏洞，但是PHPCMS 2008这个版本有点老，所以这个漏洞可以用来学习。  阿里云安全于11月5日捕获到该漏洞的多个利用样本，分析后因未联系上PHPCMS官方，已报告给国家信息安全漏洞共享平台，且在cve公共漏洞库中编号为CVE-2018-19127。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7omfz.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/r2qjj.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/mosy9.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/qf8el.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/t58od.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ij0gv.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/rqsh2.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/on6cn.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/netid.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/qlye8.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zut02.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/pspg6.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/fbjr5.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/r8yxu.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/qhb5c.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/9xot0.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.346Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/7omfz.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/r2qjj.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/mosy9.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/qf8el.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/t58od.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ij0gv.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/rqsh2.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/on6cn.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/netid.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/qlye8.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/zut02.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/pspg6.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/fbjr5.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/r8yxu.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/qhb5c.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/9xot0.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:24.594Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHPCMS 2008远程代码执行">
 <meta name="twitter:description" content="0x01 前提这个漏洞的起因是阿里云抓到的黑产样本，前台RCE的漏洞，但是PHPCMS 2008这个版本有点老，所以这个漏洞可以用来学习。  阿里云安全于11月5日捕获到该漏洞的多个利用样本，分析后因未联系上PHPCMS官方，已报告给国家信息安全漏洞共享平台，且在cve公共漏洞库中编号为CVE-2018-19127。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7omfz.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/7omfz.png">
     
     
         
@@ -170,7 +170,7 @@
 <h2 id="0x02-分析"><a href="#0x02-分析" class="headerlink" title="0x02 分析"></a>0x02 分析</h2><p>首先先看看捕获到的payload</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/type.php?template=tag_()&#123;&#125;;@unlink(_FILE_);assert($_POST[<span class="number">1</span>]);&#123;<span class="comment">//../rss</span></span><br></pre></td></tr></table></figure>
 <p>看到这个payload，那么漏洞触发点应该在 <strong>type.php</strong> 文件中，话不多说，先看看代码吧。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/7omfz.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/7omfz.png" alt="1"></p>
 <p>这里的漏洞触发点实际是 <strong>第20行</strong> 的代码。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> template(<span class="string">'phpcms'</span>, $template);</span><br></pre></td></tr></table></figure>
 <p>根据 <strong>payload</strong> 也就是说需要这里的 <strong>$template</strong> 变量可控。但是实际上代码 <strong>第6行</strong> 已经将 <strong>$template</strong> 变量赋值了一个初始值 <strong>type</strong> ，也就是说这个漏洞实际上是绕过了这个地方的变量赋值。</p>
@@ -180,41 +180,41 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">empty</span>($template)) $template = <span class="string">'type'</span>;</span><br></pre></td></tr></table></figure>
 <p>好了 <strong>$template</strong> 变量可控的原理找到了之后，我们继续看看漏洞触发原因。</p>
 <p>这里我们跟进一下 <strong>template</strong> 函数，相关函数出现在 <strong>include/global.func.php:772</strong> ，我们看一下实际代码。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/r2qjj.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/r2qjj.png" alt="2"></p>
 <p>我们看到 <strong>第二行</strong> 存在一个常量 <strong>TPL_CACHEPATH</strong> ，跟进一下这个常量的定义，相关位置在 <strong>include/config.inc.php:56</strong> 。也就是说这个常量的实际作用是定义了模版的缓存物理路径。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/mosy9.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/mosy9.png" alt="2"></p>
 <p>然后我们继续往下看，<strong>第4行</strong> if判断中也有一个常量 <strong>TPL_REFRESH</strong> ，跟进一下这个常量定义，相关位置在 <strong>include/config.inc.php:57</strong>。这个常量用来判断模版缓存是否自动更新，默认值是1。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/qf8el.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/qf8el.png" alt="2"></p>
 <p>然后实际上这个 <strong>if判断</strong> 里剩下的内容就是判断文件是否存在，以及一些修改时间的判断。这里如果这个if语句做的是逻辑的与运算，换句话来说if判断中的 <strong>两个条件必须都成立</strong> 的情况下才能进入到这个循环体中进行相关操作。换句话来说，也就是该系统不能将模版缓存自动更新功能关闭，恰巧该功能是默认值为1。</p>
 <p>那我们继续往下看，看看这个if条件达成之后，会继续做什么操作，相关代码如下：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require_once</span> PHPCMS_ROOT.<span class="string">'include/template.func.php'</span>;</span><br><span class="line">template_compile($module, $template, $istag);</span><br></pre></td></tr></table></figure>
 <p>这里如果进入if语句之后，会先包含 <strong>include/template.func.php</strong> 这个文件，在调用 <strong>template_compile</strong> 函数。继续跟进 <strong>template_compile</strong> 函数，相关函数位置在 <strong>include/template.func.php:2</strong> </p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/t58od.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/t58od.png" alt="5"></p>
 <p>这里我们看到了一个很直观的函数 <strong>file_put_contents</strong> ，这个函数经常会导致任意文件写入的漏洞。也就是说如果 <strong>第13行</strong> 代码中的 <strong>$content</strong> 可控的情况下就会导致任意文件写入的问题。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$content = ($istag || substr($template, <span class="number">0</span>, <span class="number">4</span>) == <span class="string">'tag_'</span>) ? <span class="string">'&lt;?php function _tag_'</span>.$module.<span class="string">'_'</span>.$template.<span class="string">'($data, $number, $rows, $count, $page, $pages, $setting)&#123; global $PHPCMS,$MODULE,$M,$CATEGORY,$TYPE,$AREA,$GROUP,$MODEL,$templateid,$_userid,$_username;@extract($setting);?&gt;'</span>.template_parse($content, <span class="number">1</span>).<span class="string">'&lt;?php &#125; ?&gt;'</span> : template_parse($content);</span><br></pre></td></tr></table></figure>
 <p>这里进行了逻辑与运算，原来 <strong>$istag</strong> 初始化了为0，也就是 <strong>substr($template, 0, 4) == ‘tag_’</strong> 的结果必须为true。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$content = ($istag || substr($template, <span class="number">0</span>, <span class="number">4</span>) == <span class="string">'tag_'</span>)</span><br></pre></td></tr></table></figure>
 <p>要使得 <strong>substr($template, 0, 4) == ‘tag_’</strong> 的结果必须为true，很简单，只需要 <strong>$template</strong> 变量中以 <strong>tag_</strong> 开头。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ij0gv.png" alt="6"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ij0gv.png" alt="6"></p>
 <p>我们回过头梳理一下过程。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/rqsh2.png" alt="7"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/rqsh2.png" alt="7"></p>
 <h2 id="0x03-动态分析"><a href="#0x03-动态分析" class="headerlink" title="0x03 动态分析"></a>0x03 动态分析</h2><p>这里可以看到传入 <strong>template=tag_(){};@unlink(FILE);assert($_POST[1]);{//../rss</strong> ，这里的 <strong>$template</strong> 通过变量注册已经不会再赋值初始值 <strong>type</strong> 了。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/on6cn.png" alt="8"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/on6cn.png" alt="8"></p>
 <p>我们看到 <strong>$template</strong> 已经传入到漏洞触发点了。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/netid.png" alt="8"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/netid.png" alt="8"></p>
 <p>然后我们可以看到这里的 <strong>$compiledtplfile</strong> 变量通过赋值 <strong>payload</strong> 实际上是判断了 <strong>data/cache_template/rss.tpl.php</strong> 文件是否存在。而实际上确实该文件不存在，所以这里的if判断过去了，并且成功将 <strong>$template</strong> 带入到 <strong>template_compile</strong> 函数中了。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/qlye8.png" alt="8"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/zut02.png" alt="11"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/qlye8.png" alt="8"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/zut02.png" alt="11"></p>
 <p>这里我们可以看到 <strong>template_compile</strong> 函数中利用payload成功经过了 <strong>$content</strong> 变量的判断，并且将 <strong>$template</strong> 的内容写到了<strong>data/cache_template/rss.tpl.php</strong> 文件中。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/pspg6.png" alt="11"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/fbjr5.png" alt="13"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/pspg6.png" alt="11"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/fbjr5.png" alt="13"></p>
 <h2 id="0x04-修复建议"><a href="#0x04-修复建议" class="headerlink" title="0x04 修复建议"></a>0x04 修复建议</h2><p>临时最简单直接的修复建议就是把 <strong>TPL_REFRESH</strong> 的定义改成 <strong>0</strong> 。当然这样修改之后会导致功能无法使用。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/r8yxu.png" alt="14"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/r8yxu.png" alt="14"></p>
 <p>当然也可以更新到最新。</p>
 <h2 id="0x05-后记"><a href="#0x05-后记" class="headerlink" title="0x05 后记"></a>0x05 后记</h2><p>由于这个漏洞环境因为mysql版本的问题，他默认数据文件是的type=，需要替换成ENGINE=，这样才能用。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/qhb5c.png" alt="15"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/qhb5c.png" alt="15"></p>
 <p>我已经修改<a href="http://www.lmxspace.com/phpcms.zip">好了一稿</a>，但是还是有点问题，有需要的时候安装的时候可以不要勾选下图这个广告模块数据，一样可以用来复现。不得不说，务实派的黑产感觉永远走在技术应用的最前端。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/9xot0.png" alt="15"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/9xot0.png" alt="15"></p>
 
   </div>
 </article>
@@ -292,6 +292,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

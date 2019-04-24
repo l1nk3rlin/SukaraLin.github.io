@@ -14,14 +14,14 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="最近在学习php，刚好看到一串代码，代码内容，大概是这样。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/iob7f.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/fw7g1.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/kpfpx.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.343Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/iob7f.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/fw7g1.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/kpfpx.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:36.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP运算优先级小Tips">
 <meta name="twitter:description" content="最近在学习php，刚好看到一串代码，代码内容，大概是这样。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/iob7f.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/iob7f.png">
     
     
         
@@ -150,13 +150,13 @@
 <a id="more"></a> 
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@$a = $_GET[<span class="string">'a'</span>];</span><br><span class="line">@$b = $_GET[<span class="string">'b'</span>];</span><br><span class="line">$c = is_numeric($a) <span class="keyword">and</span> is_numeric($b);</span><br><span class="line"><span class="keyword">if</span>($c)&#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"hello world"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"sb"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>  首先php中的is_numeric()函数是用来检查变量是否是数字和数字字符串，如果是，则返回TRUE的布尔值，如果不是则返回FALSE。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/iob7f.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/iob7f.png" alt="1"></p>
 <p>  那么我们看到即使传入的参数b为字符串，结果也是返回为真的hello world。我们加几个var_dump()看下结果</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/fw7g1.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/fw7g1.png" alt="2"></p>
 <p>  按照常理来说，应该最后的出来的结果应该是sb才对。然后在运算比较中我们发现有“=”和“and”，在PHP中“=”的优先级大于“and”。因此当a传入为的变量为数字或者数字串的是否，a为TRUE，且将TRUE赋值给了c。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">@$a = $_GET[<span class="string">'a'</span>];</span><br><span class="line">@$b = $_GET[<span class="string">'b'</span>];</span><br><span class="line">$c = (is_numeric($a) <span class="keyword">and</span> is_numeric($b));</span><br><span class="line">var_dump(is_numeric($a));</span><br><span class="line">var_dump(is_numeric($b));</span><br><span class="line">var_dump($c);</span><br><span class="line"><span class="keyword">if</span>($c)&#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"hello world"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"sb"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>  我们将c后变量括号起来之后发现运算结果不一样了。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/kpfpx.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/kpfpx.png" alt="3"></p>
 <p>  这姑且算是PHP的一个特性，做个记录，怕以后如果自己写，忘记了。</p>
 
   </div>
@@ -232,6 +232,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

@@ -14,25 +14,25 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。正经写文章是不可能写文章的，只能靠水文章了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/yh3yj.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/qt42t.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/45f6x.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ktcbb.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/nqies.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/l4yi3.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/kws0i.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/r09ar.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/z5ybv.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/w50t6.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7vr0d.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/mrq2w.jpg">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/120ot.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/hptkt.jpg">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.347Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/yh3yj.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/qt42t.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/45f6x.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ktcbb.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/nqies.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/l4yi3.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/kws0i.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/r09ar.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/z5ybv.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/w50t6.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/7vr0d.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/mrq2w.jpg">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/120ot.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/hptkt.jpg">
+<meta property="og:updated_time" content="2019-04-10T04:41:50.088Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次恶意安卓app分析">
 <meta name="twitter:description" content="一、概述嘤嘤嘤，今天某位同事拿了个app过来，简单的做个分析，发现还有一些奇怪的行为的。正经写文章是不可能写文章的，只能靠水文章了。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/yh3yj.jpg">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/yh3yj.jpg">
     
     
         
@@ -161,20 +161,20 @@
 <a id="more"></a> 
 <h2 id="0x01-异常权限列表"><a href="#0x01-异常权限列表" class="headerlink" title="0x01 异常权限列表"></a>0x01 异常权限列表</h2><p>某些权限对于这个app来说有点异常</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">android.permission.RECEIVE_USER_PRESENT</span><br><span class="line">android.permission.INTERNET</span><br><span class="line">android.permission.WAKE_LOCK</span><br><span class="line">android.permission.READ_PHONE_STATE                       //读取电话状态</span><br><span class="line">android.permission.WRITE_EXTERNAL_STORAGE</span><br><span class="line">android.permission.READ_EXTERNAL_STORAGE</span><br><span class="line">android.permission.WRITE_SETTINGS                   //读写系统设置项</span><br><span class="line">android.permission.VIBRATE</span><br><span class="line">android.permission.MOUNT_UNMOUNT_FILESYSTEMS</span><br><span class="line">android.permission.ACCESS_NETWORK_STATE</span><br><span class="line">android.permission.ACCESS_WIFI_STATE</span><br><span class="line">android.permission.SYSTEM_ALERT_WINDOW</span><br><span class="line">android.permission.ACCESS_COARSE_LOCATION            //获取粗略的位置（通过wifi、基站）</span><br><span class="line">android.permission.CHANGE_WIFI_STATE</span><br><span class="line">android.permission.WRITE_EXTERNAL_STORAGE</span><br><span class="line">android.permission.CHANGE_NETWORK_STATE</span><br><span class="line">android.permission.GET_TASKS             //获取有关当前或最近运行的任务信息</span><br></pre></td></tr></table></figure>
-<h2 id="0x02-获取手机sim卡序列号"><a href="#0x02-获取手机sim卡序列号" class="headerlink" title="0x02 获取手机sim卡序列号"></a>0x02 获取手机sim卡序列号</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/yh3yj.jpg" alt="1"></p>
-<h2 id="0x03-读取通讯录"><a href="#0x03-读取通讯录" class="headerlink" title="0x03 读取通讯录"></a>0x03 读取通讯录</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/qt42t.jpg" alt="2"></p>
-<h2 id="0x04-文件遍历"><a href="#0x04-文件遍历" class="headerlink" title="0x04 文件遍历"></a>0x04 文件遍历</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/45f6x.png" alt="3"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ktcbb.jpg" alt="6"></p>
-<h2 id="0x05-文件删除"><a href="#0x05-文件删除" class="headerlink" title="0x05 文件删除"></a>0x05 文件删除</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/nqies.jpg" alt="4"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/l4yi3.png" alt="5"></p>
-<h2 id="0x06-电话监听"><a href="#0x06-电话监听" class="headerlink" title="0x06 电话监听"></a>0x06 电话监听</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/kws0i.jpg" alt="7"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/r09ar.jpg" alt="8"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/z5ybv.png" alt="9"></p>
-<h2 id="0x07-获取基站一些信息（例如定位）"><a href="#0x07-获取基站一些信息（例如定位）" class="headerlink" title="0x07 获取基站一些信息（例如定位）"></a>0x07 获取基站一些信息（例如定位）</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/w50t6.jpg" alt="10"></p>
-<h2 id="0x08-文件写入"><a href="#0x08-文件写入" class="headerlink" title="0x08 文件写入"></a>0x08 文件写入</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/7vr0d.png" alt="11"></p>
-<h2 id="0x09-获取地理位置"><a href="#0x09-获取地理位置" class="headerlink" title="0x09 获取地理位置"></a>0x09 获取地理位置</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/mrq2w.jpg" alt="12"></p>
-<h2 id="0x10-搜集用户手机IMEI码、电话号码、系统版本号等信息"><a href="#0x10-搜集用户手机IMEI码、电话号码、系统版本号等信息" class="headerlink" title="0x10 搜集用户手机IMEI码、电话号码、系统版本号等信息"></a>0x10 搜集用户手机IMEI码、电话号码、系统版本号等信息</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/120ot.png" alt="14"></p>
-<h2 id="0x11-网络行为"><a href="#0x11-网络行为" class="headerlink" title="0x11 网络行为"></a>0x11 网络行为</h2><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/hptkt.jpg" alt="15"></p>
+<h2 id="0x02-获取手机sim卡序列号"><a href="#0x02-获取手机sim卡序列号" class="headerlink" title="0x02 获取手机sim卡序列号"></a>0x02 获取手机sim卡序列号</h2><p><img src="http://l1nk3r.xmutsec.com/blog/yh3yj.jpg" alt="1"></p>
+<h2 id="0x03-读取通讯录"><a href="#0x03-读取通讯录" class="headerlink" title="0x03 读取通讯录"></a>0x03 读取通讯录</h2><p><img src="http://l1nk3r.xmutsec.com/blog/qt42t.jpg" alt="2"></p>
+<h2 id="0x04-文件遍历"><a href="#0x04-文件遍历" class="headerlink" title="0x04 文件遍历"></a>0x04 文件遍历</h2><p><img src="http://l1nk3r.xmutsec.com/blog/45f6x.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ktcbb.jpg" alt="6"></p>
+<h2 id="0x05-文件删除"><a href="#0x05-文件删除" class="headerlink" title="0x05 文件删除"></a>0x05 文件删除</h2><p><img src="http://l1nk3r.xmutsec.com/blog/nqies.jpg" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/l4yi3.png" alt="5"></p>
+<h2 id="0x06-电话监听"><a href="#0x06-电话监听" class="headerlink" title="0x06 电话监听"></a>0x06 电话监听</h2><p><img src="http://l1nk3r.xmutsec.com/blog/kws0i.jpg" alt="7"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/r09ar.jpg" alt="8"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/z5ybv.png" alt="9"></p>
+<h2 id="0x07-获取基站一些信息（例如定位）"><a href="#0x07-获取基站一些信息（例如定位）" class="headerlink" title="0x07 获取基站一些信息（例如定位）"></a>0x07 获取基站一些信息（例如定位）</h2><p><img src="http://l1nk3r.xmutsec.com/blog/w50t6.jpg" alt="10"></p>
+<h2 id="0x08-文件写入"><a href="#0x08-文件写入" class="headerlink" title="0x08 文件写入"></a>0x08 文件写入</h2><p><img src="http://l1nk3r.xmutsec.com/blog/7vr0d.png" alt="11"></p>
+<h2 id="0x09-获取地理位置"><a href="#0x09-获取地理位置" class="headerlink" title="0x09 获取地理位置"></a>0x09 获取地理位置</h2><p><img src="http://l1nk3r.xmutsec.com/blog/mrq2w.jpg" alt="12"></p>
+<h2 id="0x10-搜集用户手机IMEI码、电话号码、系统版本号等信息"><a href="#0x10-搜集用户手机IMEI码、电话号码、系统版本号等信息" class="headerlink" title="0x10 搜集用户手机IMEI码、电话号码、系统版本号等信息"></a>0x10 搜集用户手机IMEI码、电话号码、系统版本号等信息</h2><p><img src="http://l1nk3r.xmutsec.com/blog/120ot.png" alt="14"></p>
+<h2 id="0x11-网络行为"><a href="#0x11-网络行为" class="headerlink" title="0x11 网络行为"></a>0x11 网络行为</h2><p><img src="http://l1nk3r.xmutsec.com/blog/hptkt.jpg" alt="15"></p>
 <h1 id="二、总结"><a href="#二、总结" class="headerlink" title="二、总结"></a>二、总结</h1><p>最后发现，它会对模拟器进行检查，如果是模拟器不让启动。上面这些都是一些奇怪的行为，不是这个app应该有的。反正大家别随便下载安卓app，毕竟安卓的生态，哎。</p>
 
   </div>
@@ -250,6 +250,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

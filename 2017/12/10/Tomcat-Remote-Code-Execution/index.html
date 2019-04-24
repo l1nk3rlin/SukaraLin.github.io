@@ -14,21 +14,21 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01概述&amp;emsp;&amp;emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ig7av.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/0satn.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/6xlcq.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/xpjxk.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/lzq3r.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/c8qjp.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/9z7ni.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/iyx57.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/nxwz3.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ftrg8.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.336Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ig7av.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/0satn.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/6xlcq.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/xpjxk.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/lzq3r.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/c8qjp.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/9z7ni.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/iyx57.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/nxwz3.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ftrg8.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:46.766Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat-Remote-Code-Execution">
 <meta name="twitter:description" content="0x01概述&amp;emsp;&amp;emsp;2017年9月19日，Apache Tomcat官方确认并修复了两个高危漏洞,该漏洞受影响版本为7.0-7.80之间，在一定条件下，攻击者可以利用这两个漏洞，获取用户服务器上JSP文件的源代码，或是通过精心构造的攻击请求，向用户服务器上传恶意JSP文件，通过上传的JSP文件，可在用户服务器上执行任意代码，从而导致数据泄露或获取服务器权限，存在高安全风险。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ig7av.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/ig7av.png">
     
     
         
@@ -162,21 +162,21 @@
 <li>影响范围：CVE-2017-12615影响范围： Apache Tomcat 7 8 9 全版本</li>
 </ul>
 <h1 id="0x03漏洞环境搭建"><a href="#0x03漏洞环境搭建" class="headerlink" title="0x03漏洞环境搭建"></a>0x03漏洞环境搭建</h1><p>&emsp;&emsp;在/conf/web.xml文件中加入false，开启PUT模式。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ig7av.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ig7av.png" alt="1"></p>
 <h1 id="0x04原理分析"><a href="#0x04原理分析" class="headerlink" title="0x04原理分析"></a>0x04原理分析</h1><p>&emsp;&emsp;我们可以看到PUT模式默认是关闭的。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/0satn.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/0satn.png" alt="2"></p>
 <p>&emsp;&emsp;从这里可以看到处理jsp文件和静态文件涉及到了及到 DefaultServlet和 JspServlet。<br>&emsp;&emsp;DefaultServlet作用是处理静态文件，而JspServlet是用来处理jsp和jspx的请求。本次漏洞的根本原因是因为JspServlet不支持PUT，而DefaultServlet支持PUT方法，通过构造特殊后缀名字段绕过JspServlet,让DefaultServlet来处理这个文件，从而达到上传的效果。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/6xlcq.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/6xlcq.png" alt="3"></p>
 <p>&emsp;&emsp;定位DefaultServlet.java，重点看doPut，若readonly为true，直接抛出error，所以要触发漏洞必须将，readonly设置为false。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/xpjxk.png" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/xpjxk.png" alt="4"></p>
 <p>&emsp;&emsp;而且看到调用了resources.bind。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/lzq3r.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/lzq3r.png" alt="5"></p>
 <p>&emsp;&emsp;往下看看FileDirContext.java中的bind函数。调用rebind创建文件。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/c8qjp.png" alt="6"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/9z7ni.png" alt="7"></p>
-<h1 id="0x05漏洞复现"><a href="#0x05漏洞复现" class="headerlink" title="0x05漏洞复现"></a>0x05漏洞复现</h1><p><img src="http://po8p59xe5.bkt.clouddn.com/blog/iyx57.png" alt="8"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/nxwz3.png" alt="9"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ftrg8.png" alt="10"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/c8qjp.png" alt="6"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/9z7ni.png" alt="7"></p>
+<h1 id="0x05漏洞复现"><a href="#0x05漏洞复现" class="headerlink" title="0x05漏洞复现"></a>0x05漏洞复现</h1><p><img src="http://l1nk3r.xmutsec.com/blog/iyx57.png" alt="8"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/nxwz3.png" alt="9"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ftrg8.png" alt="10"></p>
 <h1 id="0x06修复建议"><a href="#0x06修复建议" class="headerlink" title="0x06修复建议"></a>0x06修复建议</h1><p>&emsp;&emsp;禁用PUT！</p>
 <h1 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h1><p><a href="https://xianzhi.aliyun.com/forum/read.php?tid=2135&amp;displayMode=1&amp;page=1&amp;toread=1#tpc" target="_blank" rel="noopener">https://xianzhi.aliyun.com/forum/read.php?tid=2135&amp;displayMode=1&amp;page=1&amp;toread=1#tpc</a></p>
 
@@ -253,6 +253,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

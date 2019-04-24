@@ -7,25 +7,25 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="0x01 起因事情的起因是下午遇到了 preg_replace 函数，我们都知道 preg_replace 函数可能会导致命令执行。现在我们来一些情况。">
-<meta name="keywords" content="远程代码执行,php">
+<meta name="keywords" content="php,远程代码执行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一个有趣的preg_replace函数">
 <meta property="og:url" content="http://www.lmxspace.com/2018/08/12/一个有趣的preg-replace函数/index.html">
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="0x01 起因事情的起因是下午遇到了 preg_replace 函数，我们都知道 preg_replace 函数可能会导致命令执行。现在我们来一些情况。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/iuaxy.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/rgcoa.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/956qq.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/3wub9.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/uh7ln.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/mohcy.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7k4dd.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.342Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/iuaxy.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/rgcoa.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/956qq.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/3wub9.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/uh7ln.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/mohcy.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/7k4dd.png">
+<meta property="og:updated_time" content="2019-04-10T04:41:22.957Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个有趣的preg_replace函数">
 <meta name="twitter:description" content="0x01 起因事情的起因是下午遇到了 preg_replace 函数，我们都知道 preg_replace 函数可能会导致命令执行。现在我们来一些情况。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/iuaxy.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/iuaxy.png">
     
     
         
@@ -155,16 +155,16 @@
 <h1 id="0x02-经过"><a href="#0x02-经过" class="headerlink" title="0x02 经过"></a>0x02 经过</h1><h2 id="踩坑1"><a href="#踩坑1" class="headerlink" title="踩坑1:"></a>踩坑1:</h2><p>测试代码大概是这样的：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span> ($_GET <span class="keyword">as</span> $regex =&gt; $value) &#123;</span><br><span class="line">    preg_replace(<span class="string">'/('</span> . $regex . <span class="string">')/ei'</span>,<span class="string">'strtolower("\\1")'</span>,$value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>测试过程中发现通过浏览器的方式传入数据的时候，会将 <strong>.</strong>  <strong>+</strong> 等特殊字符转换为 <strong>_</strong> 。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/iuaxy.png" alt="1"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/rgcoa.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/iuaxy.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/rgcoa.png" alt="2"></p>
 <p>这里涉及到了php的一个特性</p>
 <p>php自身在解析请求的时候，如果参数名字中包含空格、<code>.</code>、<code>[</code>等字符，会将他们转换成<code>_</code>。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = $_GET;</span><br><span class="line">var_dump($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/956qq.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/956qq.png" alt="3"></p>
 <p>经过我的fuzz，结果如下图：</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/3wub9.png" alt="11"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/3wub9.png" alt="11"></p>
 <h2 id="踩坑2："><a href="#踩坑2：" class="headerlink" title="踩坑2："></a>踩坑2：</h2><p>那我们知道 <strong>preg_replace</strong> 的 <strong>/e</strong> 修正符会将 <strong>replacement</strong> 参数当作 <strong>php</strong> 代码，并且以 <strong>eval</strong> 函数的方式执行，前提是 <strong>subject</strong> 中有 <strong>pattern</strong> 的匹配。既然是这样我们看一张图。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/uh7ln.png" alt="6"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/uh7ln.png" alt="6"></p>
 <p>图中实际上通过 <strong>eval</strong> 执行的是 <strong>strtolower</strong> 函数。分别实际执行的是：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">strtolower(<span class="string">"JUST TEST"</span>);</span><br><span class="line">strtolower(<span class="string">"PHPINFO()"</span>);</span><br><span class="line">strtolower(<span class="string">"&#123;$&#123;PHPINFO()&#125;&#125;"</span>);</span><br></pre></td></tr></table></figure>
 <p>第三个之所以可以执行代码，是因为我们通过<a href="http://php.net/manual/zh/language.types.string.php#language.types.string.parsing.complex" target="_blank" rel="noopener">复杂（花括号）语法</a>的方式来让其代码执行。</p>
@@ -189,8 +189,8 @@
 <p>我们知道这里是通过 <strong>get</strong> 方式获取到 <strong>\$regex</strong>  和 <strong>\$value</strong> 的，要想在 <strong>replacement</strong> 部分通过 <strong>\1</strong> 截取到 <strong>pattern</strong> 正则匹配命中 <strong>\$value</strong> 中的数据，并且携带 <strong>\$</strong> 、 <strong>{</strong> 、 <strong>(</strong> 这里就涉及到正则表达式的使用了。</p>
 <p>这里我选择了 <strong>\S</strong> ，也就是匹配任意的非空白字符，那么最后的payload长这样</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\S*()=&#123;$&#123;phpinfo()&#125;&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/mohcy.png" alt="9"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/7k4dd.png" alt="9"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/mohcy.png" alt="9"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/7k4dd.png" alt="9"></p>
 <h1 id="0x04-后记"><a href="#0x04-后记" class="headerlink" title="0x04 后记"></a>0x04 后记</h1><p>其实还有点小问题，我这边没有写，不过大家可以看看这个<a href="https://xz.aliyun.com/t/2557" target="_blank" rel="noopener">深入研究preg_replace与代码执行</a>。</p>
 
   </div>
@@ -266,6 +266,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

