@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x01 概述首先，CNVD收录了由中国民生银行股份有限公司报送的Oracle WebLogic wls9-async反序列化远程命令执行漏洞（CNVD-C-2019-48814）。攻击者利用该漏洞，可在未授权的情况下远程执行命令。从相关信息来看。  部分版本WebLogic中默认包含的wls9_async_response包，为WebLogic Server提供异步通讯服务。由于该WAR包在反序">
+<meta name="keywords" content="java,漏洞分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNVD-C-2019-48814 wls9-async 反序列化分析">
+<meta property="og:url" content="http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/index.html">
+<meta property="og:site_name" content="l1nk3r&#39;s blog">
+<meta property="og:description" content="0x01 概述首先，CNVD收录了由中国民生银行股份有限公司报送的Oracle WebLogic wls9-async反序列化远程命令执行漏洞（CNVD-C-2019-48814）。攻击者利用该漏洞，可在未授权的情况下远程执行命令。从相关信息来看。  部分版本WebLogic中默认包含的wls9_async_response包，为WebLogic Server提供异步通讯服务。由于该WAR包在反序">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/eqg9d.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/mhbir.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/yb57e.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/qhan7.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/rw8ls.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/ed0wv.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/42lqo.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/g5sb1.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/xcjb3.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/w18r5.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/r56rx.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/jqiu7.png">
+<meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/5jmo2.png">
+<meta property="og:updated_time" content="2019-04-25T07:52:01.368Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CNVD-C-2019-48814 wls9-async 反序列化分析">
+<meta name="twitter:description" content="0x01 概述首先，CNVD收录了由中国民生银行股份有限公司报送的Oracle WebLogic wls9-async反序列化远程命令执行漏洞（CNVD-C-2019-48814）。攻击者利用该漏洞，可在未授权的情况下远程执行命令。从相关信息来看。  部分版本WebLogic中默认包含的wls9_async_response包，为WebLogic Server提供异步通讯服务。由于该WAR包在反序">
+<meta name="twitter:image" content="http://l1nk3r.xmutsec.com/blog/eqg9d.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>CNVD-C-2019-48814 wls9-async 反序列化分析</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/03/23/Java-web学习之路-反射机制/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&text=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&is_video=false&description=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CNVD-C-2019-48814 wls9-async 反序列化分析&body=Check out this article: http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&name=CNVD-C-2019-48814 wls9-async 反序列化分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-概述"><span class="toc-number">1.</span> <span class="toc-text">0x01 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-wls9-async-response组件情况"><span class="toc-number">2.</span> <span class="toc-text">0x02 wls9_async_response组件情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-新思路"><span class="toc-number">3.</span> <span class="toc-text">0x03 新思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-弹个计算器"><span class="toc-number">4.</span> <span class="toc-text">0x03 弹个计算器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-小结"><span class="toc-number">5.</span> <span class="toc-text">0x04 小结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        CNVD-C-2019-48814 wls9-async 反序列化分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">l1nk3r's blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-04-25T07:42:34.000Z" itemprop="datePublished">2019-04-25</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/java/">java</a>, <a class="tag-link" href="/tags/漏洞分析/">漏洞分析</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-概述"><a href="#0x01-概述" class="headerlink" title="0x01 概述"></a>0x01 概述</h2><p>首先，CNVD收录了由中国民生银行股份有限公司报送的Oracle WebLogic wls9-async反序列化远程命令执行漏洞（CNVD-C-2019-48814）。攻击者利用该漏洞，可在未授权的情况下远程执行命令。从相关信息来看。</p>
+<blockquote>
+<p>部分版本WebLogic中默认包含的wls9_async_response包，为WebLogic Server提供异步通讯服务。由于该WAR包在反序列化处理输入信息时存在缺陷，攻击者可以发送精心构造的恶意 HTTP 请求，获得目标服务器的权限，在未授权的情况下远程执行命令。</p>
+</blockquote>
+<p>也就是说漏洞出现在 <strong>wls9_async_response.war</strong> 这个包里面，来详细看一看。</p>
+<h2 id="0x02-wls9-async-response组件情况"><a href="#0x02-wls9-async-response组件情况" class="headerlink" title="0x02 wls9_async_response组件情况"></a>0x02 wls9_async_response组件情况</h2><p>首先先看一下 <strong>bea_wls9_async_response.war!/WEB-INF/web.xml</strong> 内容，我们发现这里的所有请求都是交给 <strong>weblogic.wsee.async.AsyncResponseBean</strong> 方法继续处理。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/eqg9d.png" alt=""></p>
+<p>而在 <strong>bea_wls9_async_response.war!/WEB-INF/weblogic-webservices.xml</strong> 文件中，这里定义了目前流传的一些poc请求路径。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/mhbir.png" alt=""></p>
+<p>那这里需要跟进一下 <strong>weblogic.wsee.async.AsyncResponseBean</strong> 这个方法，这个方法的位置在 <strong>/weblogic.jar!/weblogic/wsee/async/AsyncResponseBean.class</strong> ，头部import的包如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.jws.WebService;</span><br><span class="line"><span class="keyword">import</span> javax.jws.soap.SOAPBinding;</span><br><span class="line"><span class="keyword">import</span> javax.jws.soap.SOAPBinding.Style;</span><br><span class="line"><span class="keyword">import</span> javax.jws.soap.SOAPBinding.Use;</span><br><span class="line"><span class="keyword">import</span> javax.xml.rpc.JAXRPCException;</span><br><span class="line"><span class="keyword">import</span> weblogic.jws.WLDeployment;</span><br><span class="line"><span class="keyword">import</span> weblogic.jws.WLHttpTransport;</span><br><span class="line"><span class="keyword">import</span> weblogic.jws.WLHttpsTransport;</span><br><span class="line"><span class="keyword">import</span> weblogic.jws.WLJmsTransport;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.async.AsyncUtil.SavedServiceInfo;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.deploy.VersioningHelper;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.jws.container.Request;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.message.WlMessageContext;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.util.DirectInvokeUtil;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.util.Verbose;</span><br><span class="line"><span class="keyword">import</span> weblogic.wsee.ws.WsSkel;</span><br></pre></td></tr></table></figure>
+<p>这里关注到了几个 <strong>soap</strong> 相关的包，从poc中可知触发原因应该是由 于<strong>soap注入 </strong>引起的反序列化漏洞，但是在 <strong>AsyncResponseBean</strong> 中只有 <strong>handleFault</strong>  和 <strong>handleResult</strong> 方法。跟进这两个方法确实没有找到反序列化相关的触发点，然后实际上昨晚这里我卡壳了好久，因为看poc很像 <strong>CVE-2017-10271(XMLDecoder反序列化漏洞)</strong> ，然后早上起来就看到了这篇<a href="https://xz.aliyun.com/t/4895" target="_blank" rel="noopener">《CNTA-2019-0014 wls9-async 反序列化 rce 分析 》</a>，给我开阔了一个新思路。</p>
+<h2 id="0x03-新思路"><a href="#0x03-新思路" class="headerlink" title="0x03 新思路"></a>0x03 新思路</h2><p>在Servlet拦截器下个断点，<br>位置在weblogic.jar!/weblogic/wsee/server/servlet/BaseWSServlet.class，从前的import包中可知应该与soap有关系。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/yb57e.png" alt=""></p>
+<p>跟进一下 <strong>weblogic.jar!/weblogic/wsee/server/servlet/SoapProcessor.class</strong> </p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/qhan7.png" alt=""></p>
+<p>继续跟入 <strong>getMethod</strong> 方法，<br>跟到了 weblogic.jar!/weblogic/servlet/internal/ServletRequestImpl.class ，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">this</span>.inputHelper.getRequestParser().getMethod();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续跟入 getRequestParser方法，<br>位置在weblogic.jar!/weblogic/servlet/internal/ServletRequestImpl.class</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> HttpRequestParser <span class="title">getRequestParser</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">this</span>.parser;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面都没啥用，继续step into又来到了 <strong>weblogic.wsee.server.servlet.SoapProcessor#process</strong> 中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">process</span><span class="params">(HttpServletRequest var1, HttpServletResponse var2, BaseWSServlet var3)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"><span class="keyword">if</span> (<span class="string">"POST"</span>.equalsIgnoreCase(var1.getMethod())) &#123;</span><br><span class="line"><span class="keyword">this</span>.handlePost(var3, var1, var2);</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后一直跟进，跟进到<br>weblogic.jar!/weblogic/wsee/ws/dispatch/server/ServerDispatcher.class 的第85行 </p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/rw8ls.png" alt=""></p>
+<p>继续跟进到 <strong>weblogic.jar!/weblogic/wsee/ws/dispatch/server/ServerDispatcher.class</strong> 的第93行，跟进 <strong>handleRequest(weblogic.jar!/weblogic/wsee/handler/HandlerIterator.class)</strong> ，我在下面代码处下个断点。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Handler var4 = <span class="keyword">this</span>.handlers.get(<span class="keyword">this</span>.index)</span><br></pre></td></tr></table></figure>
+<p>这里有很多 <strong>handler</strong> ，最让我感兴趣的是 <strong>AsyncResponseHandler</strong> 。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/ed0wv.png" alt=""></p>
+<p>但是随着我进一步的step into，我发现触发点并不是这里。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/42lqo.png" alt=""></p>
+<p>跟进到了 <strong>WorkAreaServerHandler</strong> 这个handler之后，我发现了新大陆。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/g5sb1.png" alt=""></p>
+<p>WorkAreaServerHandler(weblogic.jar!/weblogic/wsee/workarea/WorkAreaServerHandler.class)，这里会从我们提交的poc中获取数据。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/xcjb3.png" alt=""></p>
+<p>跟进一下 <strong>receiveRequest</strong> 方法，<br>位置在wlclient.jar!/weblogic/workarea/WorkContextLocalMap.class中。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/w18r5.png" alt=""></p>
+<p>继续跟进一下 <strong>readEntry</strong> ，<br>位置在wlclient.jar!/weblogic/workarea/spi/WorkContextEntryImpl.class中。<br><img src="http://l1nk3r.xmutsec.com/blog/r56rx.png" alt=""></p>
+<p>跟进一下 <strong>readUTF</strong> ，<br>位置在weblogic.jar!/weblogic/wsee/workarea/WorkContextXmlInputAdapter.class，嘿嘿嘿结果出来了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">readUTF</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"><span class="keyword">return</span> (String)<span class="keyword">this</span>..readObject();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>果然是 <strong>xmlDecoder</strong> 发序列化，我们在这里下一个断点，最后看一下调用链。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/jqiu7.png" alt=""></p>
+<h2 id="0x03-弹个计算器"><a href="#0x03-弹个计算器" class="headerlink" title="0x03 弹个计算器"></a>0x03 弹个计算器</h2><p>不弹计算器都是刷流氓。</p>
+<p><img src="http://l1nk3r.xmutsec.com/blog/5jmo2.png" alt=""></p>
+<h2 id="0x04-小结"><a href="#0x04-小结" class="headerlink" title="0x04 小结"></a>0x04 小结</h2><p>这个漏洞藏的太深了，跟的过程中step into ，step over跟吐了，只能说发现的人太细心了，另外拿0day日站太骚了，还是客户报的，网上现在流传的poc实际上并不能攻击那些之前打了补丁的weblogic，没记错话之前的补丁已经黑名单过滤了一些标签。<br>Oracle是一家很懒的公司，漏洞修复都是采用黑名单的方式，也就是说这个洞即使被修复了，也有可能存在绕过的可能性，建议没有用的话还是删掉这个war包吧。</p>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/Friends/">Friends</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-概述"><span class="toc-number">1.</span> <span class="toc-text">0x01 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-wls9-async-response组件情况"><span class="toc-number">2.</span> <span class="toc-text">0x02 wls9_async_response组件情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-新思路"><span class="toc-number">3.</span> <span class="toc-text">0x03 新思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-弹个计算器"><span class="toc-number">4.</span> <span class="toc-text">0x03 弹个计算器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-小结"><span class="toc-number">5.</span> <span class="toc-text">0x04 小结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&text=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&is_video=false&description=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CNVD-C-2019-48814 wls9-async 反序列化分析&body=Check out this article: http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&title=CNVD-C-2019-48814 wls9-async 反序列化分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://www.lmxspace.com/2019/04/25/CNVD-C-2019-48814-wls9-async-反序列化分析/&name=CNVD-C-2019-48814 wls9-async 反序列化分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 l1nk3r
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+          <a href="http://www.miitbeian.gov.cn/">闽ICP备19007817号</a> 
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
