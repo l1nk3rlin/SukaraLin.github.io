@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/jqiu7.png">
 <meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/5jmo2.png">
 <meta property="og:image" content="http://l1nk3r.xmutsec.com/blog/axupa.png">
-<meta property="og:updated_time" content="2019-04-25T14:16:05.334Z">
+<meta property="og:updated_time" content="2019-04-26T05:43:12.066Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CNVD-C-2019-48814 wls9-async 反序列化分析">
 <meta name="twitter:description" content="0x01 概述首先，CNVD收录了由中国民生银行股份有限公司报送的Oracle WebLogic wls9-async反序列化远程命令执行漏洞（CNVD-C-2019-48814）。攻击者利用该漏洞，可在未授权的情况下远程执行命令。从相关信息来看。  部分版本WebLogic中默认包含的wls9_async_response包，为WebLogic Server提供异步通讯服务。由于该WAR包在反序">
@@ -87,6 +87,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" href="/2019/04/26/Spring-Cloud-Config-Server-任意文件读取分析/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2019/03/23/Java-web学习之路-反射机制/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -193,7 +195,7 @@
 <p><img src="http://l1nk3r.xmutsec.com/blog/w18r5.png" alt=""></p>
 <p>继续跟进一下 <strong>readEntry</strong> ，<br>位置在wlclient.jar!/weblogic/workarea/spi/WorkContextEntryImpl.class中。<br><img src="http://l1nk3r.xmutsec.com/blog/r56rx.png" alt=""></p>
 <p>跟进一下 <strong>readUTF</strong> ，<br>位置在weblogic.jar!/weblogic/wsee/workarea/WorkContextXmlInputAdapter.class，嘿嘿嘿结果出来了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">readUTF</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"><span class="keyword">return</span> (String)<span class="keyword">this</span>..readObject();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">readUTF</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"><span class="keyword">return</span> (String)<span class="keyword">this</span>.xmlDecoder.readObject();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>果然是 <strong>xmlDecoder</strong> 发序列化，我们在这里下一个断点，最后看一下调用链。</p>
 <p><img src="http://l1nk3r.xmutsec.com/blog/jqiu7.png" alt=""></p>
 <h2 id="0x03-弹个计算器"><a href="#0x03-弹个计算器" class="headerlink" title="0x03 弹个计算器"></a>0x03 弹个计算器</h2><p>不弹计算器都是刷流氓。</p>
